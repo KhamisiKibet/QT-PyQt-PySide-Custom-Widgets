@@ -743,36 +743,36 @@ def loadJsonStyle(self):
     file = open('style.json',)
     data = json.load(file)
 
-    buttonObject.wasFound = False
-    buttonObject.wasThemed = False
+    self.wasFound = False
+    self.wasThemed = False
 
     if "buttons" in data:
         for button in data['buttons']:
             # print(json.dumps(button["fallBackStyle"]))
 
             if "name" in button and len(button["name"]) > 0:
-                if buttonObject.objectName() == button["name"]:
+                if self.objectName() == button["name"]:
                     if "theme" in button and len(button["theme"]) > 0:
-                        buttonObject.setObjectTheme(button["theme"])
+                        self.setObjectTheme(button["theme"])
 
                     if "customTheme" in button and len(button["customTheme"]) > 0:
                         for x in button["customTheme"]:
                             # print(x)
                             if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
-                                buttonObject.setObjectCustomTheme(x["color1"], x["color2"])
+                                self.setObjectCustomTheme(x["color1"], x["color2"])
 
                     if "animateOn" in button and len(button["animateOn"]) > 0:
-                        buttonObject.setObjectAnimateOn(button["animateOn"])
+                        self.setObjectAnimateOn(button["animateOn"])
 
                     if "animation" in button and len(button["animation"]) > 0:
-                        buttonObject.setObjectAnimation(button["animation"])
+                        self.setObjectAnimation(button["animation"])
 
                     if "animationDuration" in button and int(button['animationDuration']) > 0:
-                        buttonObject._animation.setDuration(int(button["animationDuration"]))
+                        self._animation.setDuration(int(button["animationDuration"]))
 
                     if "animationEasingCurve" in button and len(button['animationEasingCurve']) > 0:
                         easingCurve = returnAnimationEasingCurve(button['animationEasingCurve'])          
-                        buttonObject._animation.setEasingCurve(easingCurve)
+                        self._animation.setEasingCurve(easingCurve)
 
 
                     fallBackStyle = ""
@@ -789,25 +789,25 @@ def loadJsonStyle(self):
 
                     # print(fallBackStyle)
 
-                    buttonObject.wasThemed = True
+                    self.wasThemed = True
 
                     if len(fallBackStyle) > 0:
-                        buttonObject.setObjectFallBackStyle(fallBackStyle)
+                        self.setObjectFallBackStyle(fallBackStyle)
 
                     if len(defaultStyle) > 0:
-                        buttonObject.setObjectDefaultStyle(defaultStyle)
+                        self.setObjectDefaultStyle(defaultStyle)
 
                     if len(fallBackStyle) > 0:
-                        buttonObject.setStyleSheet(defaultStyle + fallBackStyle)
+                        self.setStyleSheet(defaultStyle + fallBackStyle)
                     elif "theme" in button and len(button["theme"]) > 0:
                         # 
-                        applyAnimationThemeStyle(buttonObject, button["theme"])
+                        applyAnimationThemeStyle(self, button["theme"])
                     elif "customTheme" in button and len(button["customTheme"]) > 0:
                         for x in button["customTheme"]:
                             if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
-                                applyCustomAnimationThemeStyle(buttonObject, x["color1"], x["color2"])
+                                applyCustomAnimationThemeStyle(self, x["color1"], x["color2"])
                     else: 
-                        buttonObject.wasThemed = False
+                        self.wasThemed = False
 
 
                     ########################################################################
@@ -837,7 +837,7 @@ def loadJsonStyle(self):
                                 else:
                                     animation = ""
 
-                                iconify(buttonObject, icon = btnIcon, color = color, size = size, animation = animation, animateOn = animateOn)
+                                iconify(self, icon = btnIcon, color = color, size = size, animation = animation, animateOn = animateOn)
 
 
                     ########################################################################
@@ -881,7 +881,7 @@ def loadJsonStyle(self):
                                 yOffset = 0
 
                             applyButtonShadow(
-                                buttonObject, 
+                                self, 
                                 color= shadowColor, 
                                 applyShadowOn= applyShadowOn, 
                                 animateShadow = animateShadow, 
@@ -893,7 +893,7 @@ def loadJsonStyle(self):
 
 
 
-                    buttonObject.wasFound = True
+                    self.wasFound = True
 
     if "QStackedWidget" in data:
         for stackedWidget in data['QStackedWidget']:
