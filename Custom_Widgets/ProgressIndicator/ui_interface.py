@@ -12,7 +12,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from custom_elements import FormProgressIndicator
+from Custom_Widgets.widgets import FormProgressIndicator
 
 
 class Ui_MainWindow(object):
