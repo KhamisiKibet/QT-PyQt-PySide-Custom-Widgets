@@ -13,7 +13,7 @@ from PySide2.QtCore import *
 import random
 ########################################################################
 # IMPORT GUI FILE
-from ui_interface import *
+from Custom_Widgets.ProgressIndicator.ui_interface import *
 ########################################################################
 
 ########################################################################
