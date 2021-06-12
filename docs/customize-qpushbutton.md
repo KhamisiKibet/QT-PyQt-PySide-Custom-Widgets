@@ -258,3 +258,59 @@ applyButtonShadow(
 )
 
 ```
+
+### A. Applying QPushButton Style from a json file
+The easiest way to style your QPushButtons using QT-PyQt-PySide-Custom-Widgets is to use a Json file.
+
+Create a Json file inside your project folder, name it "style.json".
+Follow the following steps to style your buttons:
+
+Create a button object that will contain a list of all the buttons you want to style.
+
+```json
+{
+	"buttons": [
+		{
+			"name": "button1"
+		},
+		{
+			"name": "button2"
+		},
+		{
+			"name": "button3"
+		}
+	]
+}
+```
+Now assuming your UI has a QPushButton named "myButton",
+
+##### Apply Theme 
+We are going to apply the pre-set theme number "2" to "myButton".
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"theme": "2"
+		}
+	]
+}
+```
+You can also apply the custom theme of your choice by passing two colors.
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"customTheme": [
+				{
+				"color1": "#000",
+				"color2": "rgb(37, 150, 190)"
+				}
+			]
+		}
+	]
+}
+```
