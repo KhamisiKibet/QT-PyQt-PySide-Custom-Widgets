@@ -105,6 +105,17 @@ You can also select a different preset theme to be applied to the button during 
 # Apply theme 2 colors to your button during the animation
 applyAnimationThemeStyle(myButton, 2)
 ```
+Apply the default button style that will be applied during and after the animation.
+
+```python
+myButton.setObjectDefaultStyle("your css style")
+```
+
+Set the style that will be applied to the button only after the animation is over.
+
+```python
+myButton.setObjectFallBackStyle("you css style")
+```
 
 #### QPushButton Icon 
 
@@ -147,7 +158,7 @@ Animate buton icon:
 You can choose to animate the button icon on hover or click events. There are two types of icon animations: breathe
 				 spinn
 	
-	Animate on hover:
+Animate on hover:
 
 ```python
 # Apply button icon
@@ -314,3 +325,603 @@ You can also apply the custom theme of your choice by passing two colors.
 	]
 }
 ```
+
+Set the default style that will be applied to the button during and after the animation process.
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"defaultStyle": [
+				"border-style: solid;",
+				"border-width: 2px;",
+			    "border-radius: 3px;",
+				"color: #d3dae3;",
+				"padding: 5px;"
+			]
+		}
+	]
+}
+```
+
+Set the style that will be applied the button after the animation is done playing.
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"fallBackStyle": [
+				"background-color: green"
+			]
+		}
+	]
+}
+```
+
+#### Animate button background and border
+The default value is "both", which will animate the backround color and border.
+
+Animate border alone:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"animation": "border"
+		}
+	]
+}
+```
+
+Animate background alone:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"animation": "background"
+		}
+	]
+}
+```
+
+The default trigger event for animation is hover.
+Animate on click event:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"animateOn": "click"
+		}
+	]
+}
+```
+
+Animate on hover event:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"animateOn": "hover"
+		}
+	]
+}
+```
+
+Set the background and border style animation duration.
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"animationDuration": 1000
+		}
+	]
+}
+```
+
+#### Apply button icon and icon animation
+
+Select icon:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"iconify": [
+				{
+					"icon": "dash:admin-generic"
+				}
+			]
+		}
+	]
+}
+```
+
+Set icon color:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"iconify": [
+				{
+					"color": "white"
+				}
+			]
+		}
+	]
+}
+```
+
+Set icon size:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"iconify": [
+				{
+					"size": 32
+				}
+			]
+		}
+	]
+}
+```
+
+Set icon animation(spin or breathe):
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"iconify": [
+				{
+					"animation": "breathe"
+				}
+			]
+		}
+	]
+}
+```
+
+Set icon animation trigger event (click or hover):
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"iconify": [
+				{
+					"animateOn": "hover"
+				}
+			]
+		}
+	]
+}
+```
+
+Full Iconify Json object:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"iconify": [
+				{
+					"icon": "dash:admin-generic",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "hover"
+				}
+			]
+		}
+	]
+}
+```
+
+#### Apply an animate button shadow
+
+Set shadow color:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"color": "white"
+				}
+			]
+		}
+	]
+}
+```
+Set shadow blur radius:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"blurRadius": 100
+				}
+			]
+		}
+	]
+}
+```
+Set shadow x and y offset:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"xOffset": 2,
+					"yOffset": 2
+				}
+			]
+		}
+	]
+}
+```
+
+Animate shadow:
+The default value is False
+
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"animateShadow": true
+				}
+			]
+		}
+	]
+}
+```
+
+Set shadow animation trigger event:
+If left empty or not specified, the shadow will be applied on button object creation.
+
+Apply shadow on click:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"applyShadowOn": "click"
+				}
+			]
+		}
+	]
+}
+```
+
+Apply shadow on hover:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"applyShadowOn": "hover"
+				}
+			]
+		}
+	]
+}
+```
+
+Set the shadow animation duration:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"animateShadowDuration": 500
+				}
+			]
+		}
+	]
+}
+```
+
+Full json shadow stylesheet:
+
+```json
+{
+	"buttons": [
+		{
+			"name": "myButton",
+			"shadow":[
+				{
+					"color": "white",
+					"animateShadow": true,
+					"applyShadowOn": "hover",
+					"animateShadowDuration": 500,
+					"blurRadius": 100,
+					"xOffset": 2,
+					"yOffset": 2
+				}
+			]
+		}
+	]
+}
+```
+
+####Loading the json style from "style.json" file to the UI
+
+To apply the Json stylesheet to your button, use:
+```python
+loadJsonStyle(myButton) #Apply button style from json
+```
+The above statement only applies the syle to ne button. If you want to apply the style to multiple buttons, you can use the for-loop.
+For example, assuming that you have a group of QPushButton inside a QFrame called "myFrame",
+you can apply the style to all buttona as follows:
+
+```python
+######################################################################
+## APPLY BUTTON STYLE FROM JSON FILE
+########################################################################
+# Load the stylesheet for all buttons inside myFrame
+for w in myFrame.findChildren(QPushButton):
+    # load the stylesheet for button w from the json file
+    loadJsonStyle(w) 
+    # check if the button stylesheet was found inside the Json file
+    if not w.wasThemed:
+        # If no style was found, you can apply another style
+        applyAnimationThemeStyle(w, 2) #Apply theme 2 to the button
+        # OR
+        # Appply your own custom theme
+        applyCustomAnimationThemeStyle(w, "red", "yellow") #Apply custom theme to the button
+```
+
+Another way you can apply the JSon style to multiple buttons is by creating a python list object containing the names of all buttons.
+
+```python
+######################################################################
+## APPLY BUTTON STYLE FROM JSON FILE
+########################################################################
+# Create a list containint all the buttons you want to style
+myButtons = [myButton1, myButton2, myButton3, ...]
+# Load the stylesheet for all buttons in the list
+for w in myButtons:
+    # load the stylesheet for button w from the json file
+    loadJsonStyle(w) 
+    # check if the button stylesheet was found inside the Json file
+    if not w.wasThemed:
+        # If no style was found, you can apply another style
+        applyAnimationThemeStyle(w, 2) #Apply theme 2 to the button
+        # OR
+        # Appply your own custom theme
+        applyCustomAnimationThemeStyle(w, "red", "yellow") #Apply custom theme to the button
+```
+
+## Json Stylesheet Sample
+This is a Json style example. Replace the button names with your own button names.
+
+```json
+{
+	"buttons": [
+		{
+			"name": "pushButton",
+			"customTheme": [
+				{
+				"color1": "#2596be",
+				"color2": "rgb(37, 150, 190)"
+				}
+			],
+			"iconify": [
+				{
+					"icon": "dash:admin-generic",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "hover"
+				}
+			]
+		},
+		{
+			"name": "pushButton_2",
+			"theme": "2",
+			"animateOn": "click",
+			"shadow":[
+				{
+					"color": "white",
+					"applyShadowOn": "click",
+					"animateShadow": true,
+					"animateShadowDuration": 500,
+					"blurRadius": 100
+				}
+			],
+			"iconify": [
+				{
+					"icon": "feather:loader",
+					"color": "white",
+					"size": 32,
+					"animation": "spin",
+					"animateOn": "hover"
+				}
+			]
+		},
+		{
+			"name": "pushButton_3",
+			"theme": "3",
+			"animation": "border",
+			"animateOn": "hover",
+			"iconify": [
+				{
+					"icon": "font-awesome:brands:amazon",
+					"color": "white",
+					"size": 32,
+					"animation": "spin",
+					"animateOn": "click"
+				}
+			],
+			"shadow":[
+				{
+					"color": "white",
+					"animateShadow": true,
+					"animateShadowDuration": 500,
+					"blurRadius": 100,
+					"xOffset": 2,
+					"yOffset": 2
+				}
+			]
+		},
+		{
+			"name": "pushButton_4",
+			"theme": "4",
+			"animation": "background",
+			"iconify": [
+				{
+					"icon": "font-awesome:brands:google-play",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "click"
+				}
+			]
+		},
+		{
+			"name": "pushButton_5",
+			"theme": "5",
+			"animationDuration": 1000,
+			"iconify": [
+				{
+					"icon": "font-awesome:brands:bitcoin",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "click"
+				}
+			],
+			"shadow":[
+				{
+					"color": "#2596BE",
+					"applyShadowOn": "hover",
+					"animateShadow": true,
+					"animateShadowDuration": 500,
+					"blurRadius": 100,
+					"xOffset": 0,
+					"yOffset": 0
+				}
+			]
+		},
+		{
+			"name": "pushButton_6",
+			"theme": "6",
+			"animationEasingCurve": "InSine",
+			"animateOn": "click",
+			"iconify": [
+				{
+					"icon": "font-awesome:brands:grav",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "click"
+				}
+			]
+		},
+		{
+			"name": "pushButton_7",
+			"theme": "7",
+			"animation": "border",
+			"fallBackStyle": [
+				"background-color: green"
+			],
+			"defaultStyle": [
+				"border-style: solid;",
+				"border-width: 2px;",
+			    "border-radius: 3px;",
+				"color: #d3dae3;",
+				"padding: 5px;"
+			],
+			"iconify": [
+				{
+					"icon": "font-awesome:brands:node",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "hover"
+				}
+			]
+		},
+		{
+			"name": "pushButton_8",
+			"theme": "8",
+			"animationEasingCurve": "OutInBack",
+			"animationDuration": 1000,
+			"iconify": [
+				{
+					"icon": "font-awesome:solid:heart",
+					"color": "red",
+					"size": 32,
+					"animation": "spin",
+					"animateOn": "click"
+				}
+			]
+		},
+		{
+			"name": "pushButton_9",
+			"theme": "9",
+			"animation": "border",
+			"iconify": [
+				{
+					"icon": "material-design:youtube",
+					"color": "red",
+					"size": 32,
+					"animation": "spin",
+					"animateOn": "hover"
+				}
+			]
+		}
+
+	]
+}
+```
+
+# These Videos will help you understand more:
+
+[CUSTOMIZE QPUSH BUTTON ANIMATIONS | SHADOW | BORDER | BACKGROUND | ICON | MODERN GUI | DESIGN](https://youtu.be/qwShmLzYv4s)
+[Animate QPushButton | Install Font Libraries | Using ICONIFY Library | Pyqt | PySide | Modern GUI](https://youtu.be/y9qQXn836K0)
+
+#Nav
+[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)
+
