@@ -153,7 +153,7 @@ The full Iconfy statement can be written as follows:
 #### QPushButton Shadow
 You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets extension.
 	
-	Apply Shadow:
+Apply Shadow:
 ```python
 	applyButtonShadow(
         myButton, #button name
@@ -162,7 +162,7 @@ You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets ext
 
 ```
 
-	Shadow blur radius:
+Shadow blur radius:
 ```python
 	applyButtonShadow(
         myButton, #button name
@@ -171,7 +171,7 @@ You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets ext
 
 ```
 
-	Shadow x and y offset:
+Shadow x and y offset:
 ```python
 	applyButtonShadow(
         myButton, #button name
@@ -182,7 +182,7 @@ You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets ext
 
 ```
 
-	Animate shadow:
+Animate shadow:
 ```python
 	applyButtonShadow(
         myButton, #button name
@@ -192,7 +192,7 @@ You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets ext
 
 ```
 
-	Choose an even to animate the shadow(hover or click)
+Choose an even to animate the shadow(hover or click)
 ```python
 	applyButtonShadow(
         myButton, #button name
@@ -202,17 +202,17 @@ You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets ext
 
 ```
 
-	Change animation duration
+Change animation duration
 ```python
 	applyButtonShadow(
         myButton, #button name
         # Default value is hover
-        animateShadowDuration = 500,  #Animate button shadow on click
+        animateShadowDuration = 1000,  #Animate duration(1 sec)
     )
 
 ```
 
-	The full QPushButton shadow statement can be written as follows
+The full QPushButton shadow statement can be written as follows:
 ```python
 	applyButtonShadow(
         myButton, 
