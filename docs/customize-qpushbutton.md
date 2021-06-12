@@ -78,7 +78,7 @@ Hint: Pass two different colors if you want to apply a background gradient to yo
 
 QT-PyQt-PySide-Custom-Widgets uses iconify library to apply and animate button icons. In case you had not installed Iconify library then it should have been installed alongside QT-PyQt-PySide-Custom-Widgets library.
 
-The following video will help you understand more about Iconify and how to get Icon Names from Iconify browser.
+The following video will help you understand more about Iconify and how to get Icon Names from Iconify browser. Click on the image below to start watch.
 
 [![Iconify Video](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/3.png?raw=true)](https://youtu.be/y9qQXn836K0)
 
@@ -88,9 +88,149 @@ Apply button icon:
 	# Apply button icon
     iconify(
         myButton, #button name
-        icon = "font-awesome:solid:cloud-download-alt", #icon
+        icon = "font-awesome:solid:cloud-download-alt" #icon
     )
 ```
+Changing Icon Color:
+
+```python
+	# Apply button icon
+    iconify(
+        myButton, #button name
+        color= "#fff" #color
+    )
+```
+
+Changing Icon Size:
+
+```python
+	# Apply button icon
+    iconify(
+        myButton, #button name
+        size = 64,  #icon size
+    )
+```
+
+Animate buton icon:
+You can choose to animate the button icon on hover or click events. There are two types of icon animations: breathe
+				 spinn
+	
+	Animate on hover:
+
+```python
+		# Apply button icon
+	    iconify(
+	        myButton, #button name
+	        animateOn = "hover", #Animate button on click
+	        animation = "spin" #Spin animation
+	    )
+```
+
+	Animate on click:
+
+```python
+		# Apply button icon
+	    iconify(
+	        myButton, #button name
+	        animateOn = "click", #Animate button on click
+	        animation = "breathe" #Breathe animation
+	    )
+```
+The full Iconfy statement can be written as follows:
+```python
+	iconify(
+		# Button name must be passed
+        myButton, 
+        # Optional values
+        icon = "font-awesome:solid:cloud-download-alt", 
+        color = "orange", 
+        size = 64, 
+        animation = "spin", 
+        animateOn = "click"
+    )
+```
+
+#### QPushButton Shadow
+You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets extension.
+	
+	Apply Shadow:
+```python
+	applyButtonShadow(
+        myButton, #button name
+        color= "#fff" #shadow color
+    )
+
+```
+
+	Shadow blur radius:
+```python
+	applyButtonShadow(
+        myButton, #button name
+        blurRadius = 100 #shadow blur radius
+    )
+
+```
+
+	Shadow x and y offset:
+```python
+	applyButtonShadow(
+        myButton, #button name
+        # Default value is zero
+        xOffset = 5, #x-offset
+        yOffset = 5 #y-offset
+    )
+
+```
+
+	Animate shadow:
+```python
+	applyButtonShadow(
+        myButton, #button name
+        # Default value is false
+        animateShadow = True #Animate button shadow
+    )
+
+```
+
+	Choose an even to animate the shadow(hover or click)
+```python
+	applyButtonShadow(
+        myButton, #button name
+        # Default value is hover
+        applyShadowOn= "click"  #Animate button shadow on click
+    )
+
+```
+
+	Change animation duration
+```python
+	applyButtonShadow(
+        myButton, #button name
+        # Default value is hover
+        animateShadowDuration = 500,  #Animate button shadow on click
+    )
+
+```
+
+	The full QPushButton shadow statement can be written as follows
+```python
+	applyButtonShadow(
+        myButton, 
+        color= "#fff", 
+        applyShadowOn= "hover", 
+        animateShadow = True, 
+        blurRadius = 100, 
+        animateShadowDuration = 500,
+        xOffset = 0,
+        yOffset = 0
+    )
+
+```
+
+
+
+
+
 
 
 
