@@ -22,4 +22,4 @@ You should see the following interface:
 ![alt text](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true)
 
 # How to use it.
-Read the full documentation plus video guides here https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/
+Read the full documentation plus video guides [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)
