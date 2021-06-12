@@ -685,7 +685,7 @@ Full json shadow stylesheet:
 }
 ```
 
-####Loading the json style from "style.json" file to the UI
+#### Loading the json style from "style.json" file to the UI
 
 To apply the Json stylesheet to your button, use:
 ```python
