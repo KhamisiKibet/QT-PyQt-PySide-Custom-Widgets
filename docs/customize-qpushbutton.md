@@ -922,6 +922,6 @@ This is a Json style example. Replace the button names with your own button name
 [CUSTOMIZE QPUSH BUTTON ANIMATIONS | SHADOW | BORDER | BACKGROUND | ICON | MODERN GUI | DESIGN](https://youtu.be/qwShmLzYv4s)
 [Animate QPushButton | Install Font Libraries | Using ICONIFY Library | Pyqt | PySide | Modern GUI](https://youtu.be/y9qQXn836K0)
 
-#Nav
+# Nav
 [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)
 
