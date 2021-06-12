@@ -13,12 +13,12 @@ You can create a QPushButton object directly from your python file or use the QT
 From Python file:
 ```python 
 	
-	# CREATE BUTTON
-	myButton = QPushButton(parent)
-	# Button name
-	myButton.setObjectName(u"myButton")
-	# Add button to layout(if you have a layout)
-	myLayout.addWidget(myButton)
+# CREATE BUTTON
+myButton = QPushButton(parent)
+# Button name
+myButton.setObjectName(u"myButton")
+# Add button to layout(if you have a layout)
+myLayout.addWidget(myButton)
 
 ```
 From QT Designer App
@@ -33,8 +33,8 @@ Export the Python Code (Example shown below)
 Import QT-PyQt-PySide-Custom-Widgets to any python file containing the QPushButton widget you want to customize.
 ```python
 	
-	# IMPORT QT-PyQt-PySide-Custom-Widgets 
-	from Custom_Widgets.widgets import *
+# IMPORT QT-PyQt-PySide-Custom-Widgets 
+from Custom_Widgets.widgets import *
 
 ```
 If you created your user interface using QT Designer, remember to also import  QT-PyQt-PySide-Custom-Widgets to the user interface python file everytime you update the interface file from QT Designer.
@@ -50,27 +50,27 @@ Using QT-PyQt-PySide-Custom-Widgets, you can style your buttons using a JSon fil
 QT-PyQt-PySide-Custom-Widgets has 13 preset themes that you can apply to your button as shown below:
 
 ```python
-	# Appy pre-set theme to your button
-	# Theme number can range from 1 to 13
-	myButton.setObjectTheme(2) #theme number 2
+# Appy pre-set theme to your button
+# Theme number can range from 1 to 13
+myButton.setObjectTheme(2) #theme number 2
 
 ```
 You can also create your own custom button theme by passing the colors of your choice as shown:
 
 ```python
-	# Appy custom theme to your button
-	# Pass two colors of your choice
-	myButton.setObjectCustomTheme("#fff", "#000")
+# Appy custom theme to your button
+# Pass two colors of your choice
+myButton.setObjectCustomTheme("#fff", "#000")
 
 ```
 Hint: Pass two different colors if you want to apply a background gradient to your button as 	   shown above.
 	  Pass two similar colors if you want your button to have a uniform background color as shown below.
 
 ```python
-	# Appy custom theme to your button
-	# Pass two colors of your choice
-	# Uniform background color(white)
-	myButton.setObjectCustomTheme("#fff", "#fff")
+# Appy custom theme to your button
+# Pass two colors of your choice
+# Uniform background color(white)
+myButton.setObjectCustomTheme("#fff", "#fff")
 
 ```
 
@@ -85,30 +85,30 @@ The following video will help you understand more about Iconify and how to get I
 Apply button icon:
 
 ```python
-	# Apply button icon
-    iconify(
-        myButton, #button name
-        icon = "font-awesome:solid:cloud-download-alt" #icon
-    )
+# Apply button icon
+iconify(
+    myButton, #button name
+    icon = "font-awesome:solid:cloud-download-alt" #icon
+)
 ```
 Changing Icon Color:
 
 ```python
-	# Apply button icon
-    iconify(
-        myButton, #button name
-        color= "#fff" #color
-    )
+# Apply button icon
+iconify(
+    myButton, #button name
+    color= "#fff" #color
+)
 ```
 
 Changing Icon Size:
 
 ```python
-	# Apply button icon
-    iconify(
-        myButton, #button name
-        size = 64,  #icon size
-    )
+# Apply button icon
+iconify(
+    myButton, #button name
+    size = 64,  #icon size
+)
 ```
 
 Animate buton icon:
@@ -118,36 +118,36 @@ You can choose to animate the button icon on hover or click events. There are tw
 	Animate on hover:
 
 ```python
-		# Apply button icon
-	    iconify(
-	        myButton, #button name
-	        animateOn = "hover", #Animate button on click
-	        animation = "spin" #Spin animation
-	    )
+# Apply button icon
+iconify(
+    myButton, #button name
+    animateOn = "hover", #Animate button on click
+    animation = "spin" #Spin animation
+)
 ```
 
 	Animate on click:
 
 ```python
-		# Apply button icon
-	    iconify(
-	        myButton, #button name
-	        animateOn = "click", #Animate button on click
-	        animation = "breathe" #Breathe animation
-	    )
+# Apply button icon
+iconify(
+    myButton, #button name
+    animateOn = "click", #Animate button on click
+    animation = "breathe" #Breathe animation
+)
 ```
 The full Iconfy statement can be written as follows:
 ```python
-	iconify(
-		# Button name must be passed
-        myButton, 
-        # Optional values
-        icon = "font-awesome:solid:cloud-download-alt", 
-        color = "orange", 
-        size = 64, 
-        animation = "spin", 
-        animateOn = "click"
-    )
+iconify(
+	# Button name must be passed
+    myButton, 
+    # Optional values
+    icon = "font-awesome:solid:cloud-download-alt", 
+    color = "orange", 
+    size = 64, 
+    animation = "spin", 
+    animateOn = "click"
+)
 ```
 
 #### QPushButton Shadow
@@ -155,75 +155,75 @@ You can apply and animate button shadows using QT-PyQt-PySide-Custom-Widgets ext
 	
 Apply Shadow:
 ```python
-	applyButtonShadow(
-        myButton, #button name
-        color= "#fff" #shadow color
-    )
+applyButtonShadow(
+    myButton, #button name
+    color= "#fff" #shadow color
+)
 
 ```
 
 Shadow blur radius:
 ```python
-	applyButtonShadow(
-        myButton, #button name
-        blurRadius = 100 #shadow blur radius
-    )
+applyButtonShadow(
+    myButton, #button name
+    blurRadius = 100 #shadow blur radius
+)
 
 ```
 
 Shadow x and y offset:
 ```python
-	applyButtonShadow(
-        myButton, #button name
-        # Default value is zero
-        xOffset = 5, #x-offset
-        yOffset = 5 #y-offset
-    )
+applyButtonShadow(
+    myButton, #button name
+    # Default value is zero
+    xOffset = 5, #x-offset
+    yOffset = 5 #y-offset
+)
 
 ```
 
 Animate shadow:
 ```python
-	applyButtonShadow(
-        myButton, #button name
-        # Default value is false
-        animateShadow = True #Animate button shadow
-    )
+applyButtonShadow(
+    myButton, #button name
+    # Default value is false
+    animateShadow = True #Animate button shadow
+)
 
 ```
 
 Choose an even to animate the shadow(hover or click)
 ```python
-	applyButtonShadow(
-        myButton, #button name
-        # Default value is hover
-        applyShadowOn= "click"  #Animate button shadow on click
-    )
+applyButtonShadow(
+    myButton, #button name
+    # Default value is hover
+    applyShadowOn= "click"  #Animate button shadow on click
+)
 
 ```
 
 Change animation duration
 ```python
-	applyButtonShadow(
-        myButton, #button name
-        # Default value is hover
-        animateShadowDuration = 1000,  #Animate duration(1 sec)
-    )
+applyButtonShadow(
+    myButton, #button name
+    # Default value is hover
+    animateShadowDuration = 1000,  #Animate duration(1 sec)
+)
 
 ```
 
 The full QPushButton shadow statement can be written as follows:
 ```python
-	applyButtonShadow(
-        myButton, 
-        color= "#fff", 
-        applyShadowOn= "hover", 
-        animateShadow = True, 
-        blurRadius = 100, 
-        animateShadowDuration = 500,
-        xOffset = 0,
-        yOffset = 0
-    )
+applyButtonShadow(
+    myButton, 
+    color= "#fff", 
+    applyShadowOn= "hover", 
+    animateShadow = True, 
+    blurRadius = 100, 
+    animateShadowDuration = 500,
+    xOffset = 0,
+    yOffset = 0
+)
 
 ```
 
