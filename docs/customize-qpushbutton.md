@@ -74,6 +74,38 @@ myButton.setObjectCustomTheme("#fff", "#fff")
 
 ```
 
+### Animate QPushButton background and border
+After applying your button theme, you can chose to animate the backround color, border or both.
+
+Animation trigger event:
+
+```python
+myButton.setObjectAnimateOn("hover") #Animate on hover
+# OR
+myButton.setObjectAnimateOn("click") #Animate on click
+
+```
+
+Animation Easing Curve:
+```python
+myButton._animation.setEasingCurve(QtCore.QEasingCurve.InOutElastic)
+# Read more about QT animation easing curve on their website
+```
+
+The default backround color and border will be animated during the animation process. In case you want to apply a different style to your button during the animation process then do add the following statement:
+
+```python
+# Apply red and yellow gradient during the animation
+applyCustomAnimationThemeStyle(myButton, "red", "yellow")
+```
+
+You can also select a different preset theme to be applied to the button during the animation process:
+
+```python
+# Apply theme 2 colors to your button during the animation
+applyAnimationThemeStyle(myButton, 2)
+```
+
 #### QPushButton Icon 
 
 QT-PyQt-PySide-Custom-Widgets uses iconify library to apply and animate button icons. In case you had not installed Iconify library then it should have been installed alongside QT-PyQt-PySide-Custom-Widgets library.
@@ -126,7 +158,7 @@ iconify(
 )
 ```
 
-	Animate on click:
+Animate on click:
 
 ```python
 # Apply button icon
@@ -226,29 +258,3 @@ applyButtonShadow(
 )
 
 ```
-
-
-
-
-
-
-
-
-
-
-# Installation Testing
-Run the following code to see if the installation was successful.
-
-```python
-	# Run this from your terminal or create a python file, 
-	# paste this code, then run
-	from Custom_Widgets.ProgressIndicator import test
-	test.main()
-
-```
-
-You should see the following interface:
-![alt text](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true)
-
-# How to use it.
-Read the full documentation plus video guides [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)
