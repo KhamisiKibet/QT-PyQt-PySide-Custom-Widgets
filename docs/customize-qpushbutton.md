@@ -919,8 +919,8 @@ This is a Json style example. Replace the button names with your own button name
 
 # These Videos will help you understand more:
 
-[CUSTOMIZE QPUSH BUTTON ANIMATIONS | SHADOW | BORDER | BACKGROUND | ICON | MODERN GUI | DESIGN](https://youtu.be/qwShmLzYv4s)
-[Animate QPushButton | Install Font Libraries | Using ICONIFY Library | Pyqt | PySide | Modern GUI](https://youtu.be/y9qQXn836K0)
+[CUSTOMIZE QPUSH BUTTON ANIMATIONS SHADOW  BORDER  BACKGROUND  ICON  MODERN GUI  DESIGN](https://youtu.be/qwShmLzYv4s)
+[Animate QPushButton  Install Font Libraries  Using ICONIFY Library  Pyqt  PySide  Modern GUI](https://youtu.be/y9qQXn836K0)
 
 # Nav
 [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)
