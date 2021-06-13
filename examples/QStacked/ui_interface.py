@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceuuvypD.ui'
+## Form generated from reading UI file 'interfacentpqeq.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -11,6 +11,11 @@
 from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
+
+########################################################################
+# IMPORT CUSTOM BUTTONS FILE
+from Custom_Widgets.widgets import *
+########################################################################
 
 
 class Ui_MainWindow(object):
@@ -22,8 +27,8 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.stackedWidget = QStackedWidget(self.centralwidget)
-        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.myStackedWidget = QStackedWidget(self.centralwidget)
+        self.myStackedWidget.setObjectName(u"myStackedWidget")
         self.page = QWidget()
         self.page.setObjectName(u"page")
         self.page.setStyleSheet(u"background-color: rgb(255, 0, 127);")
@@ -33,7 +38,7 @@ class Ui_MainWindow(object):
         font = QFont()
         font.setPointSize(20)
         self.label.setFont(font)
-        self.stackedWidget.addWidget(self.page)
+        self.myStackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
         self.page_2.setStyleSheet(u"background-color: rgb(85, 255, 255);")
@@ -42,7 +47,7 @@ class Ui_MainWindow(object):
         self.label_2.setGeometry(QRect(180, 100, 241, 191))
         self.label_2.setFont(font)
         self.label_2.setStyleSheet(u"color: #000;")
-        self.stackedWidget.addWidget(self.page_2)
+        self.myStackedWidget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
         self.page_3.setStyleSheet(u"background-color: rgb(25, 25, 25);")
@@ -50,9 +55,9 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName(u"label_3")
         self.label_3.setGeometry(QRect(190, 90, 211, 151))
         self.label_3.setFont(font)
-        self.stackedWidget.addWidget(self.page_3)
+        self.myStackedWidget.addWidget(self.page_3)
 
-        self.verticalLayout.addWidget(self.stackedWidget)
+        self.verticalLayout.addWidget(self.myStackedWidget)
 
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
@@ -60,25 +65,25 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.horizontalLayout = QHBoxLayout(self.frame)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton = QPushButton(self.frame)
-        self.pushButton.setObjectName(u"pushButton")
+        self.nxt = QPushButton(self.frame)
+        self.nxt.setObjectName(u"nxt")
 
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.horizontalLayout.addWidget(self.nxt)
 
-        self.pushButton_2 = QPushButton(self.frame)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.page1 = QPushButton(self.frame)
+        self.page1.setObjectName(u"page1")
 
-        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.horizontalLayout.addWidget(self.page1)
 
-        self.pushButton_3 = QPushButton(self.frame)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.page2 = QPushButton(self.frame)
+        self.page2.setObjectName(u"page2")
 
-        self.horizontalLayout.addWidget(self.pushButton_3)
+        self.horizontalLayout.addWidget(self.page2)
 
-        self.pushButton_4 = QPushButton(self.frame)
-        self.pushButton_4.setObjectName(u"pushButton_4")
+        self.prev = QPushButton(self.frame)
+        self.prev.setObjectName(u"prev")
 
-        self.horizontalLayout.addWidget(self.pushButton_4)
+        self.horizontalLayout.addWidget(self.prev)
 
 
         self.verticalLayout.addWidget(self.frame)
@@ -95,9 +100,9 @@ class Ui_MainWindow(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"PAGE 1", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"PAGE 2", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"PAGE 3", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Next", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Page 1", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Page 2", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Previous", None))
+        self.nxt.setText(QCoreApplication.translate("MainWindow", u"Next", None))
+        self.page1.setText(QCoreApplication.translate("MainWindow", u"Page 1", None))
+        self.page2.setText(QCoreApplication.translate("MainWindow", u"Page 2", None))
+        self.prev.setText(QCoreApplication.translate("MainWindow", u"Previous", None))
     # retranslateUi
 

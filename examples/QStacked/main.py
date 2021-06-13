@@ -25,6 +25,44 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        ########################################################################
+        ## QSTACKWIDGETS NAVIGATION
+        ########################################################################
+        # self.ui.prev.clicked.connect(lambda: self.ui.myStackedWidget.slideToPreviousWidget())
+        # self.ui.nxt.clicked.connect(lambda: self.ui.myStackedWidget.slideToNextWidget())
+
+        # self.ui.page1.clicked.connect(lambda: self.ui.myStackedWidget.setCurrentWidget(self.ui.page))
+        # self.ui.page2.clicked.connect(lambda: self.ui.myStackedWidget.setCurrentWidget(self.ui.page_2))
+        # ########################################################################
+        # ## 
+        # ########################################################################
+
+        # ########################################################################
+        # ## QSTACKWIDGETS ANIMATION
+        # # ########################################################################        
+        # self.ui.myStackedWidget.setTransitionDirection(QtCore.Qt.Vertical)
+        # self.ui.myStackedWidget.setTransitionSpeed(500)
+        # self.ui.myStackedWidget.setTransitionEasingCurve(QtCore.QEasingCurve.Linear)
+        # # ACTIVATE Animation
+        # self.ui.myStackedWidget.setSlideTransition(True)
+
+        # # # Fade animation
+        # self.ui.myStackedWidget.setFadeSpeed(500)
+        # self.ui.myStackedWidget.setFadeCurve(QtCore.QEasingCurve.Linear)
+        # self.ui.myStackedWidget.setFadeTransition(True)
+        ########################################################################
+        ## 
+        ########################################################################
+
+        ########################################################################
+        ## LOAD QSTACKWIDGETS ANIMATION AND NAVIGATIONS FROM JSON FILE
+        ########################################################################
+        loadJsonStyle(self.ui)
+        ########################################################################
+        ## 
+        ########################################################################
+
+
 
         #######################################################################
         # SHOW WINDOW

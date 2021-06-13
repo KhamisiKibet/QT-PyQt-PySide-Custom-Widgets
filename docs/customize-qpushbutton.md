@@ -1623,5 +1623,5 @@ class Ui_MainWindow(object):
 
 
 # Navigation
-[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)
+[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html)
 

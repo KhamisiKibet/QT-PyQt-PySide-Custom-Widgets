@@ -38,7 +38,7 @@ Inside this folder, create a file called "interface.ui", and paste the following
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QStackedWidget" name="stackedWidget">
+     <widget class="QStackedWidget" name="myStackedWidget">
       <widget class="QWidget" name="page">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 0, 127);</string>
@@ -123,28 +123,28 @@ Inside this folder, create a file called "interface.ui", and paste the following
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="nxt">
          <property name="text">
           <string>Next</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="page1">
          <property name="text">
           <string>Page 1</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="page2">
          <property name="text">
           <string>Page 2</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="prev">
          <property name="text">
           <string>Previous</string>
          </property>
@@ -160,6 +160,7 @@ Inside this folder, create a file called "interface.ui", and paste the following
  <connections/>
 </ui>
 
+
 ```
 From the QT Designer app, you can generate the user interface python code, but I have already done that for you. So, just create a file inside your project folder, name it "ui_interface.py". Copy and paste the follownig code inside "ui_interface.py".
 
@@ -167,7 +168,7 @@ From the QT Designer app, you can generate the user interface python code, but I
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceuuvypD.ui'
+## Form generated from reading UI file 'interfacentpqeq.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -188,8 +189,8 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.stackedWidget = QStackedWidget(self.centralwidget)
-        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.myStackedWidget = QStackedWidget(self.centralwidget)
+        self.myStackedWidget.setObjectName(u"myStackedWidget")
         self.page = QWidget()
         self.page.setObjectName(u"page")
         self.page.setStyleSheet(u"background-color: rgb(255, 0, 127);")
@@ -199,7 +200,7 @@ class Ui_MainWindow(object):
         font = QFont()
         font.setPointSize(20)
         self.label.setFont(font)
-        self.stackedWidget.addWidget(self.page)
+        self.myStackedWidget.addWidget(self.page)
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
         self.page_2.setStyleSheet(u"background-color: rgb(85, 255, 255);")
@@ -208,7 +209,7 @@ class Ui_MainWindow(object):
         self.label_2.setGeometry(QRect(180, 100, 241, 191))
         self.label_2.setFont(font)
         self.label_2.setStyleSheet(u"color: #000;")
-        self.stackedWidget.addWidget(self.page_2)
+        self.myStackedWidget.addWidget(self.page_2)
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
         self.page_3.setStyleSheet(u"background-color: rgb(25, 25, 25);")
@@ -216,9 +217,9 @@ class Ui_MainWindow(object):
         self.label_3.setObjectName(u"label_3")
         self.label_3.setGeometry(QRect(190, 90, 211, 151))
         self.label_3.setFont(font)
-        self.stackedWidget.addWidget(self.page_3)
+        self.myStackedWidget.addWidget(self.page_3)
 
-        self.verticalLayout.addWidget(self.stackedWidget)
+        self.verticalLayout.addWidget(self.myStackedWidget)
 
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
@@ -226,25 +227,25 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.horizontalLayout = QHBoxLayout(self.frame)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton = QPushButton(self.frame)
-        self.pushButton.setObjectName(u"pushButton")
+        self.nxt = QPushButton(self.frame)
+        self.nxt.setObjectName(u"nxt")
 
-        self.horizontalLayout.addWidget(self.pushButton)
+        self.horizontalLayout.addWidget(self.nxt)
 
-        self.pushButton_2 = QPushButton(self.frame)
-        self.pushButton_2.setObjectName(u"pushButton_2")
+        self.page1 = QPushButton(self.frame)
+        self.page1.setObjectName(u"page1")
 
-        self.horizontalLayout.addWidget(self.pushButton_2)
+        self.horizontalLayout.addWidget(self.page1)
 
-        self.pushButton_3 = QPushButton(self.frame)
-        self.pushButton_3.setObjectName(u"pushButton_3")
+        self.page2 = QPushButton(self.frame)
+        self.page2.setObjectName(u"page2")
 
-        self.horizontalLayout.addWidget(self.pushButton_3)
+        self.horizontalLayout.addWidget(self.page2)
 
-        self.pushButton_4 = QPushButton(self.frame)
-        self.pushButton_4.setObjectName(u"pushButton_4")
+        self.prev = QPushButton(self.frame)
+        self.prev.setObjectName(u"prev")
 
-        self.horizontalLayout.addWidget(self.pushButton_4)
+        self.horizontalLayout.addWidget(self.prev)
 
 
         self.verticalLayout.addWidget(self.frame)
@@ -261,11 +262,13 @@ class Ui_MainWindow(object):
         self.label.setText(QCoreApplication.translate("MainWindow", u"PAGE 1", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"PAGE 2", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"PAGE 3", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Next", None))
-        self.pushButton_2.setText(QCoreApplication.translate("MainWindow", u"Page 1", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Page 2", None))
-        self.pushButton_4.setText(QCoreApplication.translate("MainWindow", u"Previous", None))
+        self.nxt.setText(QCoreApplication.translate("MainWindow", u"Next", None))
+        self.page1.setText(QCoreApplication.translate("MainWindow", u"Page 1", None))
+        self.page2.setText(QCoreApplication.translate("MainWindow", u"Page 2", None))
+        self.prev.setText(QCoreApplication.translate("MainWindow", u"Previous", None))
     # retranslateUi
+
+
 
 ```
 
@@ -466,4 +469,525 @@ To slide vertically:
 # Set vertical page transition between pages
 myStackedWidget.setTransitionDirection(QtCore.Qt.Vertical)
 ```
+
+Now lets customize QStacked widget from "main.py" file we created earlier,
+Inside this file, copy and paste the following code:
+
+```python
+########################################################################
+## SPINN DESIGN CODE
+# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+# WEBSITE: spinndesign.com
+########################################################################
+
+########################################################################
+## IMPORTS
+########################################################################
+import sys
+from PySide2.QtCore import *
+
+########################################################################
+# IMPORT GUI FILE
+from ui_interface import *
+########################################################################
+
+
+########################################################################
+## MAIN WINDOW CLASS
+########################################################################
+class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        QMainWindow.__init__(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        ########################################################################
+        ## QSTACKWIDGETS NAVIGATION
+        ########################################################################
+        self.ui.prev.clicked.connect(lambda: self.ui.myStackedWidget.slideToPreviousWidget())
+        self.ui.nxt.clicked.connect(lambda: self.ui.myStackedWidget.slideToNextWidget())
+
+        self.ui.page1.clicked.connect(lambda: self.ui.myStackedWidget.setCurrentWidget(self.ui.page))
+        self.ui.page2.clicked.connect(lambda: self.ui.myStackedWidget.setCurrentWidget(self.ui.page_2))
+        ########################################################################
+        ## 
+        ########################################################################
+
+        ########################################################################
+        ## QSTACKWIDGETS ANIMATION
+        # ########################################################################        
+        self.ui.myStackedWidget.setTransitionDirection(QtCore.Qt.Vertical)
+        self.ui.myStackedWidget.setTransitionSpeed(500)
+        self.ui.myStackedWidget.setTransitionEasingCurve(QtCore.QEasingCurve.Linear)
+        # ACTIVATE Animation
+        self.ui.myStackedWidget.setSlideTransition(True)
+
+        # # Fade animation
+        self.ui.myStackedWidget.setFadeSpeed(500)
+        self.ui.myStackedWidget.setFadeCurve(QtCore.QEasingCurve.Linear)
+        self.ui.myStackedWidget.setFadeTransition(True)
+        ########################################################################
+        ## 
+        ########################################################################
+
+        #######################################################################
+        # SHOW WINDOW
+        #######################################################################
+        self.show()
+        ########################################################################
+
+
+########################################################################
+## EXECUTE APP
+########################################################################
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ########################################################################
+    ## 
+    ########################################################################
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
+########################################################################
+## END===>
+########################################################################  
+
+```
+
+RUN "main.py"
+
+### Customize QStacked Widgets from your JSon file. 
+
+The best recommended way to customize your QStacked widgets using QT-PyQt-PySide-Custom-Widgets library is through a JSon file. 
+
+Inside your project folder, create a file and name it "style.json". 
+Inside this file, create a "QStackedWidget" object which will contain all QStackedWidget names and their custom values.
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget"
+		},
+		{
+			"name":"myStackedWidget_2"
+		},
+		{
+			"name":"myStackedWidget_3"
+		}
+	]
+}
+```
+
+#### Adding navigations to QStacked from a JSon file.
+
+Add next("nxt") and previous("prev") button names, which when clicked the QStacked will show the next or previous page from current active page index.
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"navigation":[
+				{
+					"nextPage":"nxt",
+					"previousPage": "prev"
+				}
+			]
+		}
+	]
+}
+```
+You can also add other buttons which will navigate to a particular page as shown:
+In this example when "page1" button is clicked, "page" page will be shown, when "page2" button is clicked, "page_2" page will be displayed in QStacked widget
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"navigation":[
+				{
+					"navigationButtons":[
+						{
+							"page1": "page",
+							"page2": "page_2"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Full navigation exaple will look like this:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"navigation":[
+				{
+					"nextPage":"nxt",
+					"previousPage": "prev",
+					"navigationButtons":[
+						{
+							"page1": "page",
+							"page2": "page_2"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+#### Adding transtion animations to QStacked from a JSon file.
+
+Add fade animation:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"fade":[
+						{
+							"active": true
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Set fade animation duration:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"fade":[
+						{
+							"duration": 1000
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Set fade animation easing curve:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"fade":[
+						{
+							"easingCurve": "Linear"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Full fade animaion customization code will look like this:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"fade":[
+						{
+							"active": true,
+							"duration":1000,
+							"easingCurve": "Linear"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Add Slide animation:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"slide":[
+						{
+							"active": true
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Set Slide animation duration:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"slide":[
+						{
+							"duration": 500
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Set Slide animation easing curve:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"slide":[
+						{
+							"easingCurve": "OutBack"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+##### Set Slide animation easing direction:
+
+Horizontal direction:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"slide":[
+						{
+							"direction": "horizontal"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+OR vertical direction:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"slide":[
+						{
+							"direction": "vertical"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+Full slide animaion customization code will look like this:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"slide":[
+						{
+							"active":true,
+							"duration": 500,
+							"direction": "horizontal",
+							"easingCurve": "OutBack"
+						}
+					]
+				}
+			]
+		}
+	]
+}
+```
+
+#### The full QStacked JSon customization code:
+
+```json
+{
+	"QStackedWidget":[
+		{
+			"name":"myStackedWidget",
+			"transitionAnimation":[
+				{
+					"fade":[
+						{
+							"active": true,
+							"duration":1000,
+							"easingCurve": "OutBack"
+						}
+					],
+					"slide":[
+						{
+							"active":true,
+							"duration": 1000,
+							"direction": "horizontal",
+							"easingCurve": "OutBack"
+						}
+					]
+				}
+			],
+			"navigation":[
+				{
+					"nextPage":"nxt",
+					"previousPage": "prev",
+					"navigationButtons":[
+						{
+							"page1": "page",
+							"page2": "page_2"
+						}
+					]
+				}
+			]
+	
+		}
+	]
+}
+```
+
+## Applying style from JSon file to QStacked widgets
+
+To apply your JSon style from "style.json" to the user inteface, just call loadJsonStyle(ui):
+
+```python
+########################################################################
+## LOAD QSTACKWIDGETS ANIMATION AND NAVIGATIONS FROM JSON FILE
+########################################################################
+# ui  is the window class that contains the user interface wodgets
+loadJsonStyle(ui)
+```
+
+Now lets apply the JSon stylesheet from "main.py" file we created earlier,
+Inside this file, copy and paste the following code:
+
+```python
+########################################################################
+## SPINN DESIGN CODE
+# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+# WEBSITE: spinndesign.com
+########################################################################
+
+########################################################################
+## IMPORTS
+########################################################################
+import sys
+from PySide2.QtCore import *
+
+########################################################################
+# IMPORT GUI FILE
+from ui_interface import *
+########################################################################
+
+
+########################################################################
+## MAIN WINDOW CLASS
+########################################################################
+class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        QMainWindow.__init__(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        ########################################################################
+        ## LOAD QSTACKWIDGETS ANIMATION AND NAVIGATIONS FROM JSON FILE
+        ########################################################################
+        loadJsonStyle(self.ui)
+        ########################################################################
+        ## 
+        ########################################################################
+
+        #######################################################################
+        # SHOW WINDOW
+        #######################################################################
+        self.show()
+        ########################################################################
+
+
+########################################################################
+## EXECUTE APP
+########################################################################
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ########################################################################
+    ## 
+    ########################################################################
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
+########################################################################
+## END===>
+########################################################################  
+
+```
+
+RUN "main.py"
+
+
+
+# Navigation
+[Video Tutorial](https://youtu.be/UHRP5pRZSiU) [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html)
+
 
