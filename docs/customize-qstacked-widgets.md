@@ -401,5 +401,69 @@ prev.clicked.connect(lambda: myStackedWidget.slideToPreviousWidget())
 nxt.clicked.connect(lambda: myStackedWidget.slideToNextWidget())
 ```
 
+To navigate to a particular page:
 
+```python
+# Navigate to page1
+myStackedWidget.setCurrentWidget(page1)
+```
+
+Navigate to a particular page on button click:
+
+```python
+# Navigate to page1 on page1_btn button click
+page1_btn.clicked.connect(lambda: myStackedWidget.setCurrentWidget(page1))
+```
+#### Animating QStacked Widgets
+
+You can add "fade" and "slide" animations to your QStacked widget. You can also fully customize these animations.
+
+##### Fade Animation
+
+Add fade animation to your QStacked widget when transitioning between pages.
+
+```python
+########################################################################
+## QSTACKWIDGETS FADE ANIMATION
+# ######################################################################## 
+# Set setFadeTransition to True if you want the pages to fade 
+# otherwise set it to False
+# The default value is False
+myStackedWidget.setFadeTransition(True)
+# Set the fade animation duration
+myStackedWidget.setFadeSpeed(500)
+# Set the fade easing curve
+myStackedWidget.setFadeCurve(QtCore.QEasingCurve.Linear)
+```
+
+##### Slide Animation
+
+Add slide animation to your QStacked widget when transitioning between pages. Pages can slide horizontally or vertically
+
+```python
+########################################################################
+## QSTACKWIDGETS SLIDE ANIMATION
+# ######################################################################## 
+# Set setSlideTransition to True if you want the pages to slide 
+# otherwise set it to False
+# The default value is False
+myStackedWidget.setSlideTransition(True)
+# Set the slide animation duration
+myStackedWidget.setTransitionSpeed(500)
+# Set the slide easing curve
+myStackedWidget.setTransitionEasingCurve(QtCore.QEasingCurve.Linear)
+```
+To slide horizontally:
+
+```python
+# Set horizontal page transition between pages
+myStackedWidget.setTransitionDirection(QtCore.Qt.Horizontal)
+```
+
+To slide vertically:
+
+```python
+# Set vertical page transition between pages
+myStackedWidget.setTransitionDirection(QtCore.Qt.Vertical)
+```
 
