@@ -401,3 +401,5 @@ prev.clicked.connect(lambda: myStackedWidget.slideToPreviousWidget())
 nxt.clicked.connect(lambda: myStackedWidget.slideToNextWidget())
 ```
 
+
+
