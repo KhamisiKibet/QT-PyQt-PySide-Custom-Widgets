@@ -370,5 +370,34 @@ from Custom_Widgets.widgets import *
 ########################################################################
 ```
 
+#### Adding navigation
 
+QT-PyQt-PySide-Custom-Widgets provides an easy way to navigate through your QStacked widgets.
+
+To navigate to the next widget page:
+
+```python
+# myStackedWidget is the name of your stacked widget
+# slideToNextWidget() shows the next widget page
+myStackedWidget.slideToNextWidget()
+```
+
+To navigate to the previous widget page:
+
+```python
+# myStackedWidget is the name of your stacked widget
+# slideToPreviousWidget() shows the previous widget page
+myStackedWidget.slideToPreviousWidget()
+```
+
+You can also add click events to your buttons. Assuming you have two buttons named "nxt" and "prev":
+
+```python
+# myStackedWidget is the name of your stacked widget
+# slideToNextWidget() shows the next widget page
+# slideToPreviousWidget() shows the previous widget page
+# nxt and prev are navigation buttons
+prev.clicked.connect(lambda: myStackedWidget.slideToPreviousWidget())
+nxt.clicked.connect(lambda: myStackedWidget.slideToNextWidget())
+```
 
