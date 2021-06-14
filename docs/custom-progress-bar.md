@@ -73,16 +73,11 @@ This is the UI code, you can copy it and save it as "interface.ui", then open it
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="FormProgressIndicator" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>110</y>
-      <width>301</width>
-      <height>91</height>
-     </rect>
-    </property>
-   </widget>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="FormProgressIndicator" name="widget" native="true"/>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -108,6 +103,7 @@ This is the UI code, you can copy it and save it as "interface.ui", then open it
  <connections/>
 </ui>
 
+
 ```
 This is how my user interface pyhon code looks like, you can copy it, create a file and name it "ui_interface.py":
 
@@ -115,7 +111,7 @@ This is how my user interface pyhon code looks like, you can copy it, create a f
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceLKyDfz.ui'
+## Form generated from reading UI file 'interfaceBmpbGI.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -136,9 +132,13 @@ class Ui_MainWindow(object):
         MainWindow.resize(469, 448)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.verticalLayout = QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.widget = FormProgressIndicator(self.centralwidget)
         self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(80, 110, 301, 91))
+
+        self.verticalLayout.addWidget(self.widget)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
@@ -220,4 +220,7 @@ if __name__ == "__main__":
 If you run "main.py", you will get something like this:
 
 ![Qt Custom Progress Bar Default Look](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/12.png?raw=true)
+
+
+
 
