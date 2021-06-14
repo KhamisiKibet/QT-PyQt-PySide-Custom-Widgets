@@ -20,6 +20,8 @@ test.main()
 
 ## Adding Custom Progress Bar / Form Progress Indicator To The User Interface
 
+Using QT Designer:
+
 ### Step 1:
 Open QT Designer app, create the "Main Window".
 
@@ -220,6 +222,91 @@ if __name__ == "__main__":
 If you run "main.py", you will get something like this:
 
 ![Qt Custom Progress Bar Default Look](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/12.png?raw=true)
+
+
+You can also add the custom progress bar to the user interace without using QT Designer app:
+
+### Step 1:
+
+Import the custom progress bar the file where you want to create the progress bar:
+
+```python
+# IMPORT CUSTOM PROGRESS BAR / PROGRESS INDICATOR
+from Custom_Widgets.widgets import FormProgressIndicator
+```
+
+### Step 2:
+
+Create the progress bar:
+
+```python
+myProgressBar = FormProgressIndicator(parentContainer)
+myProgressBar.setObjectName(u"widget")
+# If you have a layout
+myLayout.addWidget(myProgressBar)
+```
+
+## Customizing and Animating the Custom Progress bar / Progress Indicator
+
+Use the "updateFormProgressIndicator()" function to customize the progress bar.
+
+### Changing font color:
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set font color
+    color = "#000"
+)
+```
+
+### Changing fill color:
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set fill color
+    fillColor = "white"
+)
+```
+
+### Changing fill color "warning":
+
+The custom progress indicator has different steps, each step status can be set individually. For example, if you have a task that is downloading 5 files, the prigress indicator will have five steps. If file one fails to download, then you can set "step 1" to show an error or warning. 
+You can also refer to YouTube video upload Form, each step where the correct video information is passed is marked with a check mark, while any step that has an error is marked with a warning sign.
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set fill color for warnings
+    warningFillColor = "purple"
+)
+```
+
+### Changing fill color "errors":
+
+To mark steps where an error occured,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set fill color for errors
+    errorFillColor = "red"
+)
+```
+
+### Changing fill color "errors":
+
+To mark steps that completed successfully,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set fill color for success
+    successFillColor = "pink"
+)
+```
+
 
 
 
