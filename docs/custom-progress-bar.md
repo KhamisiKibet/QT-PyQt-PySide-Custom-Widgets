@@ -540,7 +540,7 @@ myProgressBar.setStepStatus(
 # Add and customize your progress bar using a JSon File.
 
 Am currently working on developing a way you can add and modify your custom progress bar using a JSon file.
-Subscribe to this [channel](https://www.youtube.com/user/spinntv) to get notified when the update is available.
+Subscribe to this [channel](https://www.youtube.com/channel/UCJVsWdUC3M8p-q67RXPujkg) to get notified when the update is available.
 
 # Examples
 
