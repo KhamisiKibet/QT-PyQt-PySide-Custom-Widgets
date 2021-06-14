@@ -295,7 +295,7 @@ myProgressBar.updateFormProgressIndicator(
 )
 ```
 
-### Changing fill color "errors":
+### Changing fill color "success":
 
 To mark steps that completed successfully,
 
@@ -306,6 +306,109 @@ myProgressBar.updateFormProgressIndicator(
     successFillColor = "pink"
 )
 ```
+
+### Changing number of steps:
+
+The default value is 5,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set number of progress steps(default is 5)
+    formProgressCount = 7
+)
+```
+
+### Changing progress animation duration:
+
+The default value is 500,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set progress animation duration
+    formProgressAnimationDuration = 200
+)
+```
+
+### Changing progress animation easing curve:
+
+The default value is Linear,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set progress animation easing curve
+    formProgressAnimationEasingCurve = "InOutQuint"
+)
+```
+
+### Changing progress bar height:
+
+The default value is 60,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set progress container height
+    height = 80
+)
+```
+
+### Changing progress bar width:
+
+The default value is 500,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set progress container width
+    width = 550
+)
+```
+
+### Changing progress starting percentage:
+
+The default value is 0,
+
+```python
+# CUSTOMIZE FORM PROGRESS INDICATOR
+myProgressBar.updateFormProgressIndicator(
+    # Set default progress percentage
+    startPercentage = 50 #half
+)
+```
+
+The full progress bar customization code will look like this:
+
+```python
+myProgressBar.updateFormProgressIndicator(
+    # Set font color
+    color = "#000", 
+    # Set fill color
+    fillColor = "white", 
+    # Set fill color for warnings
+    warningFillColor = "purple",
+    # Set fill color for errors
+    errorFillColor = "red",
+    # Set fill color for success
+    successFillColor = "pink",
+    # Set number of progress steps(default is 5)
+    formProgressCount = 10,
+    # Set progress animation duration
+    formProgressAnimationDuration = 2000, #2seconds
+    # Set progress animation easing curve
+    formProgressAnimationEasingCurve = "InOutQuint",
+    # Set progress container height
+    height = 80,
+    # Set progress container width
+    width = 1000,
+    # Set default progress percentage
+    startPercentage = 50 #half
+)
+```
+
+
 
 
 
