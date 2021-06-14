@@ -408,8 +408,372 @@ myProgressBar.updateFormProgressIndicator(
 )
 ```
 
+### Applying pre-set progress bar themes:
+
+QT-PyQt-PySide-Custom-Widgets has five progress bar themes wich you can apply to your progress bar instead of passing your own colors.
+To apply the progress bar theme:
+
+```python
+# Slect progress bar theme (range 1-5)
+myProgressBar.selectFormProgressIndicatorTheme(4)
+```
+
+### Animating progress bar:
+
+In order to animate the progress bar, you have to change the progress value in terms of percentage.
+
+```python
+# Animate progress to 60 percent
+myProgressBar.animateFormProgress(60) #60 percent 
+```
+
+## Updating Progress Step Status
+
+The progress indicator has four status. The default status in "None". You can update each progress step indidually to indicate the status of that step.
+
+### Setting progress step status to "warning":
+
+```python
+# UPDATE THE PROGRESS STEP STATUS
+myProgressBar.setStepStatus(
+	# Step 2
+    step_2_warning = True
+)
+```
+
+### Setting progress step status to "error":
+
+```python
+# UPDATE THE PROGRESS STEP STATUS
+myProgressBar.setStepStatus(
+	# Step 5
+    step_5_error = True
+)
+```
+
+### Setting progress step status to "success":
+
+```python
+# UPDATE THE PROGRESS STEP STATUS
+myProgressBar.setStepStatus(
+	# Step 3
+    step_3_success = True
+)
+```
+
+Now to upadate multiple step status, you can write something like this:
+
+```python
+# UPDATE THE PROGRESS STEP STATUS
+self.ui.widget.setStepStatus(
+    # Step 5
+    step_5_error = True,
+    # Step 2
+    step_2_warning = True,
+    # Step 3
+    step_3_success = True
+)
+```
+
+Another alternative way to update the progress step stays is to use "setStepStatus()" function.
+
+```python
+# UPDATE THE PROGRESS STEP STATUS USING setStepStatus()
+myProgressBar.setStepStatus(
+	# progress step number
+	step = 3,
+	# Status ["warning", "error", "success"]
+	status = "error",
+	# Satus value [True, False]
+	value = True
+)
+```
+
+To reset the progress status, use "setStepStatus()" and set the value to "False".
+
+### Reset progress step status:
+
+Reset progress status for step 3:
+
+Warning:
+
+```python
+# UPDATE THE PROGRESS STEP STATUS USING setStepStatus()
+myProgressBar.setStepStatus(
+	# progress step number
+	step = 3,
+	# Status ["warning", "error", "success"]
+	status = "warning",
+	# Satus value [True, False]
+	value = False
+)
+```
+
+Error:
+
+```python
+# UPDATE THE PROGRESS STEP STATUS USING setStepStatus()
+myProgressBar.setStepStatus(
+	# progress step number
+	step = 3,
+	# Status ["warning", "error", "success"]
+	status = "error",
+	# Satus value [True, False]
+	value = False
+)
+```
+
+Success:
+
+```python
+# UPDATE THE PROGRESS STEP STATUS USING setStepStatus()
+myProgressBar.setStepStatus(
+	# progress step number
+	step = 3,
+	# Status ["warning", "error", "success"]
+	status = "success",
+	# Satus value [True, False]
+	value = False
+)
+```
+
+# Examples
+
+Copy and paste the follong code examples to "main.py" file we created earlier:
+
+Example 1:
+
+![Qt Progress bar example](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/13.png?raw=true)
+
+```python
+########################################################################
+## SPINN DESIGN CODE
+# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+# WEBSITE: spinndesign.com
+########################################################################
+
+########################################################################
+## IMPORTS
+########################################################################
+import sys
+from PySide2.QtCore import *
+
+########################################################################
+# IMPORT GUI FILE
+from ui_interface import *
+########################################################################
 
 
+########################################################################
+## MAIN WINDOW CLASS
+########################################################################
+class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        QMainWindow.__init__(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        #######################################################################
+        # SHOW WINDOW
+        #######################################################################
+        self.show()
+        ########################################################################
+
+
+        #######################################################################
+        # CUSTOMIZE PROGRESS BAR
+        #######################################################################
+        self.ui.widget.updateFormProgressIndicator(
+            # Set font color
+            color = "#000", 
+            # Set fill color
+            fillColor = "white", 
+            # Set fill color for warnings
+            warningFillColor = "purple",
+            # Set fill color for errors
+            errorFillColor = "red",
+            # Set fill color for success
+            successFillColor = "pink",
+            # Set number of progress steps(default is 5)
+            formProgressCount = 10,
+            # Set progress animation duration
+            formProgressAnimationDuration = 2000, #2seconds
+            # Set progress animation easing curve
+            formProgressAnimationEasingCurve = "InOutQuint",
+            # Set progress container height
+            height = 80,
+            # Set progress container width
+            width = 1000,
+            # Set default progress percentage
+            startPercentage = 50 #half
+        )
+
+
+########################################################################
+## EXECUTE APP
+########################################################################
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ########################################################################
+    ## 
+    ########################################################################
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
+########################################################################
+## END===>
+########################################################################  
+
+```
+
+Example 2
+
+![Qt Progress bar example](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/14.png?raw=true)
+
+```python
+########################################################################
+## SPINN DESIGN CODE
+# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+# WEBSITE: spinndesign.com
+########################################################################
+
+########################################################################
+## IMPORTS
+########################################################################
+import sys
+from PySide2.QtCore import *
+
+########################################################################
+# IMPORT GUI FILE
+from ui_interface import *
+########################################################################
+
+
+########################################################################
+## MAIN WINDOW CLASS
+########################################################################
+class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        QMainWindow.__init__(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        #######################################################################
+        # SHOW WINDOW
+        #######################################################################
+        self.show()
+        ########################################################################
+
+
+        #######################################################################
+        # CUSTOMIZE PROGRESS BAR
+        #######################################################################
+
+        # Slect progress bar theme (range 1-5)
+        self.ui.widget.selectFormProgressIndicatorTheme(5)
+
+        # Animate progress to 60 percent
+        self.ui.widget.animateFormProgress(60) #60 percent 
+
+
+########################################################################
+## EXECUTE APP
+########################################################################
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ########################################################################
+    ## 
+    ########################################################################
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
+########################################################################
+## END===>
+########################################################################  
+
+
+```
+
+Example 3:
+
+![Qt Progress bar example](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/15.png?raw=true)
+
+```python
+########################################################################
+## SPINN DESIGN CODE
+# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+# WEBSITE: spinndesign.com
+########################################################################
+
+########################################################################
+## IMPORTS
+########################################################################
+import sys
+from PySide2.QtCore import *
+
+########################################################################
+# IMPORT GUI FILE
+from ui_interface import *
+########################################################################
+
+
+########################################################################
+## MAIN WINDOW CLASS
+########################################################################
+class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        QMainWindow.__init__(self)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+
+        #######################################################################
+        # SHOW WINDOW
+        #######################################################################
+        self.show()
+        ########################################################################
+
+
+        #######################################################################
+        # CUSTOMIZE PROGRESS BAR
+        #######################################################################
+
+        # Slect progress bar theme (range 1-5)
+        self.ui.widget.selectFormProgressIndicatorTheme(3)
+
+        # Animate progress to 60 percent
+        self.ui.widget.animateFormProgress(100) #60 percent 
+
+        # UPDATE THE PROGRESS STEP STATUS
+        self.ui.widget.setStepStatus(
+            # Step 5
+            step_5_error = True,
+            # Step 2
+            step_2_warning = True,
+            # Step 3
+            step_3_success = True
+        )
+
+
+########################################################################
+## EXECUTE APP
+########################################################################
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    ########################################################################
+    ## 
+    ########################################################################
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
+########################################################################
+## END===>
+########################################################################  
+
+```
+
+
+# Navigation
+[Video Tutorial 1](https://youtu.be/0jw4ZT6mH_w) [Video Tutorial 2](https://youtu.be/CEsUlUD1_sE) [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)  [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html)  [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html)
 
 
 
