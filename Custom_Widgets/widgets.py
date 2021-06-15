@@ -16,6 +16,8 @@ from PySide2.QtWidgets import *
 # JSON FOR READING THE JSON STYLESHEET
 import json
 
+
+
 class QPushButton(QtWidgets.QPushButton):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -29,7 +31,7 @@ class QPushButton(QtWidgets.QPushButton):
         # self._animation.setEasingCurve(QtCore.QEasingCurve.OutQuad)
 
         # DEAFAULT ANIMATION DURATION
-        self._animation.setDuration(500) 
+        self._animation.setDuration(500)
 
         self._shadowAnimation = QtCore.QVariantAnimation()
         self._shadowAnimation.setStartValue(0)
@@ -38,7 +40,7 @@ class QPushButton(QtWidgets.QPushButton):
         # self._shadowAnimation.setEasingCurve(QtCore.QEasingCurve.OutQuad)
 
         # DEAFAULT ANIMATION DURATION
-        self._shadowAnimation.setDuration(500) 
+        self._shadowAnimation.setDuration(500)
 
         # DEFAULT COLOR
         self.color1 = None
@@ -137,7 +139,7 @@ class QPushButton(QtWidgets.QPushButton):
     def setObjectAnimateOn(self, trigger):
         self.setObjectAnimatedOn = trigger
         if str(trigger) == "click":
-            self._animation.setDuration(200) 
+            self._animation.setDuration(200)
         else:
             self._animation.setDuration(500)
 
@@ -148,7 +150,7 @@ class QPushButton(QtWidgets.QPushButton):
         self.fallBackStyle = str(style)
 
     ########################################################################
-    ## SET BUTTON DEFAULT STYLESHEET THAT WILL BE ADDED ALONGSIDE ANIMATION 
+    ## SET BUTTON DEFAULT STYLESHEET THAT WILL BE ADDED ALONGSIDE ANIMATION
     ## STYLE
     ########################################################################
     def setObjectDefaultStyle(self, style):
@@ -158,11 +160,11 @@ class QPushButton(QtWidgets.QPushButton):
     ## SET BUTTON BUTTON HOVER IN EVENT
     ########################################################################
     def enterEvent(self, event):
-        self.mousePosition = "over" 
-        if self.setObjectAnimatedOn  == "hover" or self.setObjectAnimatedOn is None:             
+        self.mousePosition = "over"
+        if self.setObjectAnimatedOn  == "hover" or self.setObjectAnimatedOn is None:
             self._animation.setDirection(QtCore.QAbstractAnimation.Forward)
             self._animation.start()
-        # 
+        #
         if self.setIconAnimatedOn == "hover":
             if hasattr(self, 'anim'):
                 self.anim.start()
@@ -170,9 +172,9 @@ class QPushButton(QtWidgets.QPushButton):
             if self.animateShadow:
                 self._shadowAnimation.setDirection(QtCore.QAbstractAnimation.Forward)
                 self._shadowAnimation.start()
-                
+
             else:
-                self.setGraphicsEffect(self.shadow)   
+                self.setGraphicsEffect(self.shadow)
 
         super().enterEvent(event)
 
@@ -181,7 +183,7 @@ class QPushButton(QtWidgets.QPushButton):
     ########################################################################
     def leaveEvent(self, event):
         self.mousePosition = "out"
-        if self.setObjectAnimatedOn  == "hover" or self.setObjectAnimatedOn is None: 
+        if self.setObjectAnimatedOn  == "hover" or self.setObjectAnimatedOn is None:
             self._animation.setDirection(QtCore.QAbstractAnimation.Backward)
             self._animation.start()
             self._animation.finished.connect(lambda: self.applyDefaultStyle())
@@ -194,17 +196,17 @@ class QPushButton(QtWidgets.QPushButton):
                 # disconnect(self._shadowAnimation.finished, self.removeButtonShadow())
 
         super().leaveEvent(event)
-        
+
 
     ########################################################################
     ## SET BUTTON MOUSE PRESS 'DOWN' EVENT
     ########################################################################
     def mousePressEvent(self, event):
         self.clickPosition = "down"
-        if self.setObjectAnimatedOn  == "click": 
+        if self.setObjectAnimatedOn  == "click":
             self._animation.setDirection(QtCore.QAbstractAnimation.Forward)
             self._animation.start()
-        # 
+        #
         if self.setIconAnimatedOn == "click":
             if hasattr(self, 'anim'):
                 self.anim.start()
@@ -213,7 +215,7 @@ class QPushButton(QtWidgets.QPushButton):
                 self._shadowAnimation.setDirection(QtCore.QAbstractAnimation.Forward)
                 self._shadowAnimation.start()
             else:
-                self.setGraphicsEffect(self.shadow) 
+                self.setGraphicsEffect(self.shadow)
 
         super().mousePressEvent(event)
 
@@ -222,7 +224,7 @@ class QPushButton(QtWidgets.QPushButton):
     ########################################################################
     def mouseReleaseEvent(self, event):
         self.clickPosition = "up"
-        if self.setObjectAnimatedOn  == "click": 
+        if self.setObjectAnimatedOn  == "click":
             self._animation.setDirection(QtCore.QAbstractAnimation.Backward)
             self._animation.start()
             self._animation.finished.connect(lambda: self.applyDefaultStyle())
@@ -232,7 +234,7 @@ class QPushButton(QtWidgets.QPushButton):
                 self._shadowAnimation.start()
                 self._shadowAnimation.finished.connect(lambda: self.removeButtonShadow())
             else:
-                self.setGraphicsEffect(self.shadow) 
+                self.setGraphicsEffect(self.shadow)
         super().mouseReleaseEvent(event)
 
     def doNothing(self):
@@ -241,14 +243,14 @@ class QPushButton(QtWidgets.QPushButton):
 
     ########################################################################
     ## REMOVE BUTTON SHADOW
-    ## 
+    ##
     ########################################################################
     def removeButtonShadow(self):
         # self.shadow.setBlurRadius(0)
         #######################################################################
         ## # Appy shadow to button
-        ########################################################################  
-        self.setGraphicsEffect(self.shadow) 
+        ########################################################################
+        self.setGraphicsEffect(self.shadow)
 
     ########################################################################
     ## APPLY BUTTON STYLESHEET AFTER ANIMATION IS OVER
@@ -266,7 +268,7 @@ class QPushButton(QtWidgets.QPushButton):
                     self.setStyleSheet(str(self.fallBackStyle))
 
             if hasattr(self, 'anim'):
-                if (self.setIconAnimatedOn == "click" and self.clickPosition == "up") or (self.setIconAnimatedOn == "hover" and self.mousePosition == "out"):                    
+                if (self.setIconAnimatedOn == "click" and self.clickPosition == "up") or (self.setIconAnimatedOn == "hover" and self.mousePosition == "out"):
                     try:
                         # print("stopping icon animation")
                         self.anim.stop()
@@ -284,16 +286,16 @@ class QPushButton(QtWidgets.QPushButton):
             qss = str(self.defaultStyle)
         else:
             qss = """
-                
+
             """
 
         if self.color1 is not None or self.color2 is not None:
             grad = "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 {color1}, stop:{value} {color2}, stop: 1.0 {color1});".format(
                 color1=self.color1.name(), color2=self.color2.name(), value=value
             )
-    
 
-            style = """        
+
+            style = """
                 border-top-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.466, stop: """+str(value)+"""  """+str(self.color1.name())+""", stop: """+str(color_stop)+"""  """+str(self.color2.name())+""");
                 border-bottom-color: qlineargradient(spread:pad, x1:1, y1:0.5, x2:0, y2:0.5, stop: """+str(value)+""" """+str(self.color1.name())+""", stop: """+str(color_stop)+"""  """+str(self.color2.name())+""");
                 border-right-color: qlineargradient(spread:pad, x1:0.5, y1:0, x2:0.5, y2:1, stop:"""+str(value)+"""  """+str(self.color1.name())+""", stop: """+str(color_stop)+"""  """+str(self.color2.name())+""");
@@ -307,8 +309,8 @@ class QPushButton(QtWidgets.QPushButton):
                 qss += grad
             else:
                 qss += grad
-                qss += style            
-            
+                qss += style
+
             self.setStyleSheet(qss)
 
             # print(self.color2.name())
@@ -321,11 +323,11 @@ class QPushButton(QtWidgets.QPushButton):
         self.shadow.setBlurRadius(value)
         #######################################################################
         ## # Appy shadow to button
-        ########################################################################  
-        self.setGraphicsEffect(self.shadow)  
+        ########################################################################
+        self.setGraphicsEffect(self.shadow)
 ########################################################################
-## 
-########################################################################    
+##
+########################################################################
 
 
 def iconify(buttonObject, **iconCustomization):
@@ -369,7 +371,7 @@ def iconify(buttonObject, **iconCustomization):
 
 #######################################################################
 ## # APPLY BUTTON SHADOW
-########################################################################  
+########################################################################
 def applyButtonShadow(buttonObject, **shadowCustomization):
     buttonObject.shadow = QGraphicsDropShadowEffect(buttonObject)
 
@@ -403,7 +405,7 @@ def applyButtonShadow(buttonObject, **shadowCustomization):
         if "animateShadow" in shadowCustomization and shadowCustomization['animateShadow'] == True:
             buttonObject.animateShadow = True
             if "animateShadowDuration" in shadowCustomization and int(shadowCustomization['animateShadowDuration']) > 0:
-                buttonObject._shadowAnimation.setDuration(int(shadowCustomization['animateShadowDuration'])) 
+                buttonObject._shadowAnimation.setDuration(int(shadowCustomization['animateShadowDuration']))
         else:
             buttonObject.animateShadow = False
 
@@ -411,8 +413,8 @@ def applyButtonShadow(buttonObject, **shadowCustomization):
 
         #######################################################################
         ## # Appy shadow to central widget
-        ########################################################################  
-        buttonObject.setGraphicsEffect(buttonObject.shadow)   
+        ########################################################################
+        buttonObject.setGraphicsEffect(buttonObject.shadow)
 
 
 ########################################################################
@@ -440,14 +442,14 @@ def applyCustomAnimationThemeStyle(buttonObject, color1, color2):
         raise Exception("Please enter valid colors for your custom theme. Supported signature applyCustomAnimationThemeStyle(buttonObject, color1, color2)")
 
 def applyStylesFromColor(buttonObject, color1, color2):
-        if buttonObject.defaultStyle is not None: 
+        if buttonObject.defaultStyle is not None:
             qss = buttonObject.defaultStyle
         else:
             qss = ""
 
         grad = "background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 {color1}, stop: 0 {color2}, stop: 1.0 {color1});".format(color1=color1.name(), color2=color2.name())
 
-        style = """        
+        style = """
             border-top-color: qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.466, stop: 0  """+str(color1.name())+""", stop: 1  """+str(color2.name())+""");
             border-bottom-color: qlineargradient(spread:pad, x1:1, y1:0.5, x2:0, y2:0.5, stop: 0 """+str(color1.name())+""", stop: 1  """+str(color2.name())+""");
             border-right-color: qlineargradient(spread:pad, x1:0.5, y1:0, x2:0.5, y2:1, stop: 0  """+str(color1.name())+""", stop: 1  """+str(color2.name())+""");
@@ -463,16 +465,16 @@ def applyStylesFromColor(buttonObject, color1, color2):
 
 ########################################################################
 ## ==> END
-########################################################################      
+########################################################################
 
 
 """
-This is an extension of QStackedWidget which adds transition animation 
+This is an extension of QStackedWidget which adds transition animation
 And Navigation Functions to
 your QStackedWidget widgets
 You can customize the animations using a JSon file or Python statements
 """
-                              
+
 
 ########################################################################
 ## QStackedWidget Class
@@ -506,7 +508,7 @@ class QStackedWidget(QtWidgets.QStackedWidget):
         self._currentWidgetPosition = QtCore.QPoint(0, 0)
         # Default boolean for active widget
         self.widgetActive = False
-                            
+
 
     ########################################################################
     ## Function to update transition direction
@@ -644,8 +646,8 @@ class QStackedWidget(QtWidgets.QStackedWidget):
         )
 
         for index, start, end in zip(
-            (_currentWidgetIndex, _nextWidgetIndex), 
-            (currentWidgetPosition, nextWidgetPosition - offset), 
+            (_currentWidgetIndex, _nextWidgetIndex),
+            (currentWidgetPosition, nextWidgetPosition - offset),
             (currentWidgetPosition + offset, nextWidgetPosition)
         ):
             animation = QtCore.QPropertyAnimation(
@@ -705,64 +707,50 @@ class QStackedWidget(QtWidgets.QStackedWidget):
 ########################################################################
 class FadeWidgetTransition(QWidget):
     def __init__(self, animationSettings, oldWidget, newWidget):
-    
+
         QWidget.__init__(self, newWidget)
-        
+
         self.oldPixmap = QPixmap(newWidget.size())
         oldWidget.render(self.oldPixmap)
         self.pixmapOpacity = 1.0
-        
+
         self.timeline = QTimeLine()
         self.timeline.valueChanged.connect(self.animate)
         self.timeline.finished.connect(self.close)
         self.timeline.setDuration(animationSettings.fadeTime)
         self.timeline.setEasingCurve(animationSettings.fadeEasingCurve)
         self.timeline.start()
-        
+
         self.resize(newWidget.size())
         self.show()
-    
+
     def paintEvent(self, event):
-    
+
         painter = QPainter()
         painter.begin(self)
         painter.setOpacity(self.pixmapOpacity)
         painter.drawPixmap(0, 0, self.oldPixmap)
         painter.end()
-    
-    def animate(self, value):    
+
+    def animate(self, value):
         self.pixmapOpacity = 1.0 - value
         self.repaint()
 
+class QMainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
-#######################################################################
-# Add mouse events to the window
-#######################################################################
-def mousePressEvent(self, event):
-    # ###############################################
-    # Get the current position of the mouse
-    self.clickPosition = event.globalPos()
-    # We will use this value to move the window
-#######################################################################
-#######################################################################
+    #######################################################################
+    # Add mouse events to the window
+    #######################################################################
+    def mousePressEvent(self, event):
+        # ###############################################
+        # Get the current position of the mouse
+        self.clickPosition = event.globalPos()
+        # We will use this value to move the window
+    #######################################################################
+    #######################################################################
 
-
-
-#######################################################################
-# Update restore button icon on msximizing or minimizing window
-#######################################################################
-def restore_or_maximize_window(self):
-    # If window is maxmized
-    if self.isMaximized():
-        self.showNormal()
-        # Change Icon
-        if str(self.normalIcon) > 0:
-            self.ui.restore_window_button.setIcon(QtGui.QIcon(str(self.normalIcon)))
-    else:
-        self.showMaximized()
-        # Change Iconload
-        if str(self.maximizedIcon) > 0:
-            self.ui.restore_window_button.setIcon(QtGui.QIcon(str(self.maximizedIcon)))
 
 
 
@@ -777,7 +765,23 @@ def loadJsonStyle(self, ui):
 
     ########################################################################
     ## WINDOWS FLAG
-    ######################################################################## 
+    ########################################################################
+
+    #######################################################################
+    # Update restore button icon on msximizing or minimizing window
+    #######################################################################
+    def restore_or_maximize_window(self):
+        # If window is maxmized
+        if self.isMaximized():
+            self.showNormal()
+            # Change Icon
+            if len(str(self.normalIcon)) > 0:
+                self.restoreBtn.setIcon(QtGui.QIcon(str(self.normalIcon)))
+        else:
+            self.showMaximized()
+            # Change Iconload
+            if len(str(self.maximizedIcon)) > 0:
+                self.restoreBtn.setIcon(QtGui.QIcon(str(self.maximizedIcon)))
 
     if "QMainWindow" in data:
         for QMainWindow in data['QMainWindow']:
@@ -794,47 +798,49 @@ def loadJsonStyle(self, ui):
             if "frameless" in QMainWindow and QMainWindow["frameless"]:
                 #######################################################################
                 ## # Remove window tittle bar
-                ########################################################################    
-                self.setWindowFlags(QtCore.Qt.FramelessWindowHint) 
+                ########################################################################
+                self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
 
             if "transluscentBg" in QMainWindow and QMainWindow["transluscentBg"]:
                 #######################################################################
                 ## # Set main background to transparent
-                ########################################################################  
+                ########################################################################
                 self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-            
+
             if "sizeGrip" in QMainWindow and len(str(QMainWindow["sizeGrip"])) > 0:
                 #################################################################################
                 # Window Size grip to resize window
                 #################################################################################
-                if hasattr(self.ui, str(QMainWindow["sizeGrip"])):                    
+                if hasattr(self.ui, str(QMainWindow["sizeGrip"])):
                     QSizeGrip(getattr(self.ui, str(QMainWindow["sizeGrip"])))
 
             if "shadow" in QMainWindow:
                 #######################################################################
                 ## # Shadow effect style
-                ########################################################################  
-                self.shadow = QGraphicsDropShadowEffect(self)
+                ########################################################################
+                
                 for shadow in QMainWindow["shadow"]:
-                    if "color" in shadow and len(str(shadow['color'])) > 0:
-                        self.shadow.setColor(QColor(str(shadow['color'])))
-                    if "blurRadius" in shadow and int(shadow['blurRadius']) > 0:
-                        self.shadow.setBlurRadius(int(shadow['blurRadius']))
-                    if "xOffset" in shadow and int(shadow['xOffset']) > 0:
-                        self.shadow.setXOffset(int(shadow['xOffset']))
-                    else:
-                        self.shadow.setXOffset(0)
-
-                    if "yOffset" in shadow and int(shadow['yOffset']) > 0:                
-                        self.shadow.setYOffset(int(shadow['yOffset']))
-                    else:
-                        self.shadow.setYOffset(0)
-
                     if "centralWidget" in shadow and len(str(shadow['centralWidget'])) > 0:
-                        if hasattr(self.ui, str(shadow["centralWidget"])): 
+                        if hasattr(self.ui, str(shadow["centralWidget"])):
+                            self.shadow = QGraphicsDropShadowEffect(self)
+                            if "color" in shadow and len(str(shadow['color'])) > 0:
+                                self.shadow.setColor(QColor(str(shadow['color'])))
+                            if "blurRadius" in shadow and int(shadow['blurRadius']) > 0:
+                                self.shadow.setBlurRadius(int(shadow['blurRadius']))
+                            if "xOffset" in shadow and int(shadow['xOffset']) > 0:
+                                self.shadow.setXOffset(int(shadow['xOffset']))
+                            else:
+                                self.shadow.setXOffset(0)
+
+                            if "yOffset" in shadow and int(shadow['yOffset']) > 0:
+                                self.shadow.setYOffset(int(shadow['yOffset']))
+                            else:
+                                self.shadow.setYOffset(0)
+
+                    
                             #######################################################################
                             ## # Appy shadow to central widget
-                            ########################################################################  
+                            ########################################################################
                             getattr(self.ui, str(shadow["centralWidget"])).setGraphicsEffect(self.shadow)
 
 
@@ -843,13 +849,13 @@ def loadJsonStyle(self, ui):
             # ###############################################
             def moveWindow(e):
                 # Detect if the window is  normal size
-                # ###############################################  
+                # ###############################################
                 if self.isMaximized() == False: #Not maximized
-                    # Move window only when window is normal size  
+                    # Move window only when window is normal size
                     # ###############################################
                     #if left mouse button is clicked (Only accept left mouse button clicks)
-                    if e.buttons() == Qt.LeftButton:  
-                        #Move window 
+                    if e.buttons() == Qt.LeftButton:
+                        #Move window
                         self.move(self.pos() + e.globalPos() - self.clickPosition)
                         self.clickPosition = e.globalPos()
                         e.accept()
@@ -859,54 +865,54 @@ def loadJsonStyle(self, ui):
 
             if "navigation" in QMainWindow:
                 for navigation in QMainWindow["navigation"]:
-                    if "minimize" in navigation and len(str(navigation["minimize"])) > 0:         
+                    if "minimize" in navigation and len(str(navigation["minimize"])) > 0:
                         #######################################################################
                         #Minimize window
-                        if hasattr(self.ui, str(navigation["minimize"])): 
+                        if hasattr(self.ui, str(navigation["minimize"])):
                             getattr(self.ui, str(navigation["minimize"])).clicked.connect(lambda: self.showMinimized())
 
-                    if "close" in navigation and len(str(navigation["close"])) > 0:         
+                    if "close" in navigation and len(str(navigation["close"])) > 0:
                         #######################################################################
                         #Close window
-                        if hasattr(self.ui, str(navigation["close"])): 
+                        if hasattr(self.ui, str(navigation["close"])):
                             getattr(self.ui, str(navigation["close"])).clicked.connect(lambda: self.close())
 
-                    if "restore" in navigation:         
+                    if "restore" in navigation:
                         #######################################################################
                         #Restore/Maximize window
                         for restore in navigation["restore"]:
-                            if "buttonName" in restore and len(str(restore["buttonName"])) > 0:  
-                                if hasattr(self.ui, str(restore["buttonName"])): 
-                                    getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: self.restore_or_maximize_window())
-
-                            if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0: 
+                            if "buttonName" in restore and len(str(restore["buttonName"])) > 0:
+                                if hasattr(self.ui, str(restore["buttonName"])):
+                                    getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: restore_or_maximize_window(self))
+                                    self.restoreBtn = getattr(self.ui, str(restore["buttonName"]))
+                            if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0:
                                 self.normalIcon = str(restore["normalIcon"])
                             else:
                                 self.normalIcon = ""
 
-                            if "maximizedIcon" in restore and len(str(restore["maximizedIcon"])) > 0: 
+                            if "maximizedIcon" in restore and len(str(restore["maximizedIcon"])) > 0:
                                 self.maximizedIcon = str(restore["maximizedIcon"])
                             else:
                                 self.maximizedIcon = ""
 
-                        if "moveWindow" in navigation and len(str(navigation["moveWindow"])) > 0: 
+                        if "moveWindow" in navigation and len(str(navigation["moveWindow"])) > 0:
                             #######################################################################
                             # Add click event/Mouse move event/drag event to the top header to move the window
                             #######################################################################
-                            if hasattr(self.ui, str(navigation["moveWindow"])): 
+                            if hasattr(self.ui, str(navigation["moveWindow"])):
                                 getattr(self.ui, str(navigation["moveWindow"])).mouseMoveEvent = moveWindow
                             #######################################################################
 
 
     ########################################################################
     ## END
-    ######################################################################## 
+    ########################################################################
 
     if "QPushButton" in data:
-        for button in data['QPushButton']:            
+        for button in data['QPushButton']:
             if "name" in button and len(button["name"]) > 0:
                 # GET BUTTON OBJECT
-                if hasattr(self.ui, str(button["name"])): 
+                if hasattr(self.ui, str(button["name"])):
                     buttonObject = getattr(self.ui, str(button["name"]))
                     # VERIFY IF THE OBJECT IS A BUTTON
                     if not str(buttonObject.metaObject().className()) == "QPushButton":
@@ -936,7 +942,7 @@ def loadJsonStyle(self, ui):
                             buttonObject._animation.setDuration(int(button["animationDuration"]))
 
                         if "animationEasingCurve" in button and len(button['animationEasingCurve']) > 0:
-                            easingCurve = returnAnimationEasingCurve(button['animationEasingCurve'])          
+                            easingCurve = returnAnimationEasingCurve(button['animationEasingCurve'])
                             buttonObject._animation.setEasingCurve(easingCurve)
 
 
@@ -965,20 +971,20 @@ def loadJsonStyle(self, ui):
                         if len(fallBackStyle) > 0:
                             buttonObject.setStyleSheet(defaultStyle + fallBackStyle)
                         elif "theme" in button and len(button["theme"]) > 0:
-                            # 
+                            #
                             applyAnimationThemeStyle(buttonObject, button["theme"])
                         elif "customTheme" in button and len(button["customTheme"]) > 0:
                             for x in button["customTheme"]:
                                 if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
                                     applyCustomAnimationThemeStyle(buttonObject, x["color1"], x["color2"])
-                        else: 
+                        else:
                             buttonObject.wasThemed = False
 
 
                         ########################################################################
                         ## ICONIFY STYLESHEET
                         ########################################################################
-                        if "iconify" in button:                    
+                        if "iconify" in button:
                             for icon in button['iconify']:
                                 if "icon" in icon and len(icon['icon']) > 0:
                                     btnIcon = icon['icon']
@@ -989,7 +995,7 @@ def loadJsonStyle(self, ui):
 
                                     if "size" in icon and int(icon['size']) > 0:
                                         size = icon['size']
-                                    else: 
+                                    else:
                                         size = ""
 
                                     if "animateOn" in icon and len(icon['animateOn']) > 0:
@@ -1008,7 +1014,7 @@ def loadJsonStyle(self, ui):
                         ########################################################################
                         ## BUTTON SHADOW STYLESHEET
                         ########################################################################
-                        if "shadow" in button:  
+                        if "shadow" in button:
                             for shadow in button["shadow"]:
                                 if "color" in shadow and len(str(shadow['color'])) > 0:
                                     shadowColor = shadow['color']
@@ -1046,11 +1052,11 @@ def loadJsonStyle(self, ui):
                                     yOffset = 0
 
                                 applyButtonShadow(
-                                    buttonObject, 
-                                    color= shadowColor, 
-                                    applyShadowOn= applyShadowOn, 
-                                    animateShadow = animateShadow, 
-                                    blurRadius = blurRadius, 
+                                    buttonObject,
+                                    color= shadowColor,
+                                    applyShadowOn= applyShadowOn,
+                                    animateShadow = animateShadow,
+                                    blurRadius = blurRadius,
                                     animateShadowDuration = animateShadowDuration,
                                     xOffset = xOffset,
                                     yOffset = yOffset
@@ -1064,7 +1070,7 @@ def loadJsonStyle(self, ui):
         for stackedWidget in data['QStackedWidget']:
             if "name" in stackedWidget and len(str(stackedWidget["name"])) > 0:
                 if hasattr(self.ui, str(stackedWidget["name"])):
-                    widget = getattr(self.ui, str(stackedWidget["name"]))                    
+                    widget = getattr(self.ui, str(stackedWidget["name"]))
                     if widget.objectName() == stackedWidget["name"]:
                         if "transitionAnimation" in stackedWidget:
                             for transitionAnimation in stackedWidget["transitionAnimation"]:
@@ -1118,111 +1124,111 @@ def loadJsonStyle(self, ui):
                                             navigationButtons(widget, pushBtn, widgetPg)
 
 ########################################################################
-## 
+##
 ########################################################################
 
 ########################################################################
-## 
+##
 ########################################################################
-def navigationButtons(stackedWidget, pushButton, widgetPage):    
+def navigationButtons(stackedWidget, pushButton, widgetPage):
     pushButton.clicked.connect(lambda: stackedWidget.setCurrentWidget(widgetPage))
 ########################################################################
 ##
 ########################################################################
 
 ########################################################################
-## 
+##
 ########################################################################
 def returnAnimationEasingCurve(easingCurveName):
     if len(str(easingCurveName)) > 0:
-        if str(easingCurveName) == "OutQuad":               
+        if str(easingCurveName) == "OutQuad":
             return QtCore.QEasingCurve.OutQuad
-        elif str(easingCurveName) == "Linear":              
+        elif str(easingCurveName) == "Linear":
             return QtCore.QEasingCurve.Linear
-        elif str(easingCurveName) == "InQuad":              
+        elif str(easingCurveName) == "InQuad":
             return QtCore.QEasingCurve.InQuad
-        elif str(easingCurveName) == "InOutQuad":           
+        elif str(easingCurveName) == "InOutQuad":
             return QtCore.QEasingCurve.InOutQuad
-        elif str(easingCurveName) == "OutInQuad":           
+        elif str(easingCurveName) == "OutInQuad":
             return QtCore.QEasingCurve.OutInQuad
-        elif str(easingCurveName) == "InCubic":           
+        elif str(easingCurveName) == "InCubic":
             return QtCore.QEasingCurve.InCubic
-        elif str(easingCurveName) == "OutCubic":           
+        elif str(easingCurveName) == "OutCubic":
             return QtCore.QEasingCurve.OutCubic
-        elif str(easingCurveName) == "InOutCubic":          
+        elif str(easingCurveName) == "InOutCubic":
             return QtCore.QEasingCurve.InOutCubic
-        elif str(easingCurveName) == "OutInCubic":          
+        elif str(easingCurveName) == "OutInCubic":
             return QtCore.QEasingCurve.OutInCubic
-        elif str(easingCurveName) == "InQuart":          
+        elif str(easingCurveName) == "InQuart":
             return QtCore.QEasingCurve.InQuart
-        elif str(easingCurveName) == "OutQuart":          
+        elif str(easingCurveName) == "OutQuart":
             return QtCore.QEasingCurve.OutQuart
-        elif str(easingCurveName) == "InOutQuart":          
+        elif str(easingCurveName) == "InOutQuart":
             return QtCore.QEasingCurve.InOutQuart
-        elif str(easingCurveName) == "OutInQuart":          
+        elif str(easingCurveName) == "OutInQuart":
             return QtCore.QEasingCurve.OutInQuart
-        elif str(easingCurveName) == "InQuint":          
+        elif str(easingCurveName) == "InQuint":
             return QtCore.QEasingCurve.InQuint
-        elif str(easingCurveName) == "OutQuint":          
+        elif str(easingCurveName) == "OutQuint":
             return QtCore.QEasingCurve.OutQuint
-        elif str(easingCurveName) == "InOutQuint":          
+        elif str(easingCurveName) == "InOutQuint":
             return QtCore.QEasingCurve.InOutQuint
-        elif str(easingCurveName) == "InSine":          
+        elif str(easingCurveName) == "InSine":
             return QtCore.QEasingCurve.InSine
-        elif str(easingCurveName) == "OutSine":          
+        elif str(easingCurveName) == "OutSine":
             return QtCore.QEasingCurve.OutSine
-        elif str(easingCurveName) == "InOutSine":          
+        elif str(easingCurveName) == "InOutSine":
             return QtCore.QEasingCurve.InOutSine
-        elif str(easingCurveName) == "OutInSine":          
+        elif str(easingCurveName) == "OutInSine":
             return QtCore.QEasingCurve.OutInSine
-        elif str(easingCurveName) == "InExpo":          
+        elif str(easingCurveName) == "InExpo":
             return QtCore.QEasingCurve.InExpo
-        elif str(easingCurveName) == "OutExpo":          
+        elif str(easingCurveName) == "OutExpo":
             return QtCore.QEasingCurve.OutExpo
-        elif str(easingCurveName) == "InOutExpo":          
+        elif str(easingCurveName) == "InOutExpo":
             return QtCore.QEasingCurve.InOutExpo
-        elif str(easingCurveName) == "OutInExpo":          
+        elif str(easingCurveName) == "OutInExpo":
             return QtCore.QEasingCurve.OutInExpo
-        elif str(easingCurveName) == "InCirc":          
+        elif str(easingCurveName) == "InCirc":
             return QtCore.QEasingCurve.InCirc
-        elif str(easingCurveName) == "OutCirc":          
+        elif str(easingCurveName) == "OutCirc":
             return QtCore.QEasingCurve.OutCirc
-        elif str(easingCurveName) == "InOutCirc":          
+        elif str(easingCurveName) == "InOutCirc":
             return QtCore.QEasingCurve.InOutCirc
-        elif str(easingCurveName) == "OutInCirc":          
+        elif str(easingCurveName) == "OutInCirc":
             return QtCore.QEasingCurve.OutInCirc
-        elif str(easingCurveName) == "InElastic":          
+        elif str(easingCurveName) == "InElastic":
             return QtCore.QEasingCurve.InElastic
-        elif str(easingCurveName) == "OutElastic":          
+        elif str(easingCurveName) == "OutElastic":
             return QtCore.QEasingCurve.OutElastic
-        elif str(easingCurveName) == "InOutElastic":        
+        elif str(easingCurveName) == "InOutElastic":
             return QtCore.QEasingCurve.InOutElastic
-        elif str(easingCurveName) == "OutInElastic":        
+        elif str(easingCurveName) == "OutInElastic":
             return QtCore.QEasingCurve.OutInElastic
-        elif str(easingCurveName) == "InBack":        
+        elif str(easingCurveName) == "InBack":
             return QtCore.QEasingCurve.InBack
-        elif str(easingCurveName) == "OutBack":        
+        elif str(easingCurveName) == "OutBack":
             return QtCore.QEasingCurve.OutBack
-        elif str(easingCurveName) == "InOutBack":        
+        elif str(easingCurveName) == "InOutBack":
             return QtCore.QEasingCurve.InOutBack
-        elif str(easingCurveName) == "OutInBack":        
+        elif str(easingCurveName) == "OutInBack":
             return QtCore.QEasingCurve.OutInBack
-        elif str(easingCurveName) == "InBounce":        
+        elif str(easingCurveName) == "InBounce":
             return QtCore.QEasingCurve.InBounce
-        elif str(easingCurveName) == "OutBounce":        
+        elif str(easingCurveName) == "OutBounce":
             return QtCore.QEasingCurve.OutBounce
-        elif str(easingCurveName) == "InOutBounce":        
+        elif str(easingCurveName) == "InOutBounce":
             return QtCore.QEasingCurve.InOutBounce
-        elif str(easingCurveName) == "OutInBounce":        
+        elif str(easingCurveName) == "OutInBounce":
             return QtCore.QEasingCurve.OutInBounce
         else:
             raise Exception("Unknown value'" +easingCurveName+ "' for setEasingCurve() on ", animation)
 ########################################################################
-## 
+##
 ########################################################################
 
 ########################################################################
-## 
+##
 ########################################################################
 def returnQtDirection(direction):
     if len(str(direction)) > 0:
@@ -1234,15 +1240,15 @@ def returnQtDirection(direction):
             raise Exception("Unknown direction name given ("+direction+"), please use Vertical or Horizontal direction")
 
     else:
-        raise Exception("Empty direction name given, please use Vertical or Horizontal direction")                                    
+        raise Exception("Empty direction name given, please use Vertical or Horizontal direction")
 
 ########################################################################
 ## END
-########################################################################     
+########################################################################
 
 ########################################################################
 ## FORM PROGRESS INDICATOR
-########################################################################    
+########################################################################
 class FormProgressIndicator(QWidget):
     def __init__(self, parent=None):
         super(FormProgressIndicator, self).__init__(parent)
@@ -1265,7 +1271,7 @@ class FormProgressIndicator(QWidget):
         self.formProgressDefaultWidth = self.formProgressWidth
         # Progress height
         self.formProgressHeight = 30
-        # Animation 
+        # Animation
         self.formProgressAnimation = QtCore.QVariantAnimation()
         self.formProgressAnimation.valueChanged.connect(self.updateFormProgress)
         self.formProgressAnimation.setEasingCurve(QtCore.QEasingCurve.OutQuad)
@@ -1307,14 +1313,14 @@ class FormProgressIndicator(QWidget):
             errorFillColor = "qlineargradient(spread:pad, x1:0, y1:0.5, x2:1, y2:0.5, stop:0 rgba(255, 255, 255, 255), stop:1 rgba(255, 42, 42, 255))"
             successFillColor = fillColor
 
-            
+
 
 
         self.fillColor = fillColor
         self.warningFillColor = warningFillColor
         self.errorFillColor = errorFillColor
         self.successFillColor = successFillColor
-            
+
 
     def setStepStatus(self, **stepStatus):
         for x in stepStatus:
@@ -1324,14 +1330,14 @@ class FormProgressIndicator(QWidget):
                 else:
                     raise Exception("setStepStatus() only accepts boolean variables, "+stepStatus[x]+" given instead")
         if "step" in stepStatus and "status" in stepStatus and "value" in stepStatus:
-            
+
             if hasattr(self, "step_"+str(stepStatus["step"])+"_"+str(stepStatus["status"])):
                 if isinstance(stepStatus["value"], bool):
                     setattr(self, "step_"+str(stepStatus["step"])+"_"+str(stepStatus["status"]), stepStatus["value"])
                 else:
                     raise Exception("setStepStatus() only accepts boolean variables, "+stepStatus["value"]+" given instead")
-                
-        
+
+
 
     def updateFormProgressIndicator(self, **values):
         if "color" in values and len(str(values['color'])) > 0:
@@ -1417,20 +1423,20 @@ class FormProgressIndicator(QWidget):
         self.formProgressAnimation.start()
 
     def updateFormProgress(self, value):
-        
+
         self.formProgressWidth = value
         self.progressIndicatorBg.setMinimumSize(QSize(value, (self.formProgressHeight / 3)))
         self.progressIndicatorBg.setMaximumSize(QSize(value, (self.formProgressHeight / 3)))
         self.progressIndicatorBg.setStyleSheet(u"#progressIndicatorBg{background-color: "+self.fillColor+"; border-radius: "+str(int(self.formProgressHeight / 6))+";}")
 
 
-        # 
+        #
         if self.formProgressDefaultWidth < 1:
-           self.formProgressDefaultWidth = self.width() 
+           self.formProgressDefaultWidth = self.width()
 
         percentageValue = (value/self.formProgressDefaultWidth ) * 100
-        stepsPercentage = 100/self.formProgressCount 
-        fillEl = int(percentageValue / stepsPercentage)  
+        stepsPercentage = 100/self.formProgressCount
+        fillEl = int(percentageValue / stepsPercentage)
 
         for x in range(1, fillEl + 1):
             if hasattr(self, 'step_'+str(x)+"_error") and getattr(self, 'step_'+str(x)+"_error"):
@@ -1443,7 +1449,7 @@ class FormProgressIndicator(QWidget):
                     """)
                     getattr(self, '_'+str(x)).setText(u"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\"> ✘ </span><span style=\" font-weight:600; vertical-align:super;\"> "+str(x)+" </span></p></body></html>")
                     getattr(self, '_'+str(x)).setToolTip(u"Error!")
-                
+
             elif hasattr(self, 'step_'+str(x)+"_warning") and getattr(self, 'step_'+str(x)+"_warning"):
                 if hasattr(self, '_'+str(x)):
                     # print(x, getattr(self, '_'+str(x)))
@@ -1468,7 +1474,7 @@ class FormProgressIndicator(QWidget):
                     getattr(self, '_'+str(x)).setText(u"<html><head/><body><p align=\"center\"><span style=\" font-weight:600;\"> ✔ </span><span style=\" font-weight:600; vertical-align:super;\"> "+str(x)+" </span></p></body></html>")
                     getattr(self, '_'+str(x)).setToolTip(u"Success!")
 
-                                      
+
             else:
                 if hasattr(self, '_'+str(x)):
                     getattr(self, '_'+str(x)).setStyleSheet("""
@@ -1511,7 +1517,7 @@ class FormProgressIndicator(QWidget):
         self.progressIndicatorBg.setFrameShadow(QFrame.Raised)
         self.progressIndicatorFront = QFrame(self.progressIndicator)
         self.progressIndicatorFront.setObjectName(u"progressIndicatorFront")
-        
+
         self.progressIndicatorFront.setFrameShape(QFrame.StyledPanel)
         self.progressIndicatorFront.setFrameShadow(QFrame.Raised)
         self.progressIndicatorFrontGridLayout = QGridLayout(self.progressIndicatorFront)
@@ -1541,7 +1547,7 @@ class FormProgressIndicator(QWidget):
 
             self.progressIndicatorFrontGridLayout.addWidget(newLabel, 0, (x-1), 1, 1)
 
-        
+
         self.progressIndicatorVerticalLayout = QVBoxLayout(self)
         self.progressIndicatorVerticalLayout.setObjectName(u"progressIndicatorVerticalLayout")
         self.progressIndicatorVerticalLayout.setSpacing(0)
@@ -1555,8 +1561,8 @@ class FormProgressIndicator(QWidget):
         self.progressIndicatorBg.setMinimumSize(QSize(self.formProgressWidth, int(self.formProgressHeight / 3)))
         self.progressIndicatorBg.setMaximumSize(QSize(self.formProgressWidth, int(self.formProgressHeight / 3)))
         if self.formProgressDefaultWidth < 1:
-            self.formProgressDefaultWidth = self.width() 
-        
+            self.formProgressDefaultWidth = self.width()
+
         self.progressIndicatorFront.setMinimumSize(QSize(self.formProgressDefaultWidth, self.formProgressHeight))
 
 
@@ -1575,13 +1581,13 @@ class FormProgressIndicator(QWidget):
         self.progressIndicatorBg.setStyleSheet(u"background-color: "+self.fillColor+"; border-radius: "+str(int(self.formProgressHeight / 6)))
 ########################################################################
 ## END
-######################################################################## 
+########################################################################
 
 
 if __name__=="__main__":
     print("Import to your main py file")
-        
+
 
 ########################################################################
 ## END
-########################################################################                             
+########################################################################

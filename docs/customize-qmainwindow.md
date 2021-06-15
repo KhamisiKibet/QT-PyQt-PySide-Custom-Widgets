@@ -21,7 +21,8 @@ Open QT Designer, design your app main widow. Add a custom tittle bar with custo
 You can also add a QFrame to the bottom right corner of your app window which will be used as a "Size Grip" to resize the window.
 
 I designed the simple window below:
-![Custom Title Bar QT DESIGNER](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/i6.png?raw=true)
+
+![Custom Title Bar QT DESIGNER](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/16.png?raw=true)
 
 The source code to the above UI can be downloaded [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/QMainWindow).
 
