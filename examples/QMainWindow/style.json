@@ -1,0 +1,77 @@
+{
+	"QMainWindow":[
+		{
+			"tittle":"My Window",
+			"icon":":/icons/icons/github.svg",
+			"frameless": true,
+			"transluscentBg": true,
+			"sizeGrip": "size_grip",
+			"shadow":[
+				{
+					"color": "#fff",
+					"blurRadius": 20,
+					"xOffset": 20,
+					"yOffset": 20,
+					"centralWidget": "centralwidget"
+				}
+			],
+			"navigation":[
+				{
+					"minimize":"minimize_window_button",
+					"close": "close_window_button",
+					"restore":[
+						{	
+							"buttonName": "restore_window_button",
+							"normalIcon": ":/icons/icons/maximize-2.svg",
+							"maximizedIcon": ":/icons/icons/minimize-2.svg"
+						}
+					],
+					"moveWindow": "header_frame"
+				}
+			]
+		}
+	],
+	"QPushButton": [
+		{
+			"name": "open_close_side_bar_btn",
+			"customTheme": [
+				{
+				"color1": "#2596be",
+				"color2": "rgb(37, 150, 190)"
+				}
+			],
+			"iconify": [
+				{
+					"icon": "dash:admin-generic",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "hover"
+				}
+			]
+		},
+		{
+			"name": "pushButton_2",
+			"theme": "2",
+			"animateOn": "click",
+			"shadow":[
+				{
+					"color": "white",
+					"applyShadowOn": "click",
+					"animateShadow": true,
+					"animateShadowDuration": 500,
+					"blurRadius": 100
+				}
+			],
+			"iconify": [
+				{
+					"icon": "feather:loader",
+					"color": "white",
+					"size": 32,
+					"animation": "spin",
+					"animateOn": "hover"
+				}
+			]
+		}
+	]
+}

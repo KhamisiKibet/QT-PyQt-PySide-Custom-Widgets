@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceSWMeWG.ui'
+## Form generated from reading UI file 'interfaceogJAiu.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -12,6 +12,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+from Custom_Widgets.widgets import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -20,15 +21,23 @@ class Ui_MainWindow(object):
         MainWindow.resize(546, 296)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
+        self.horizontalLayout = QHBoxLayout(self.centralwidget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setGeometry(QRect(40, 120, 88, 34))
+
+        self.horizontalLayout.addWidget(self.pushButton)
+
         self.pushButton_2 = QPushButton(self.centralwidget)
         self.pushButton_2.setObjectName(u"pushButton_2")
-        self.pushButton_2.setGeometry(QRect(190, 120, 88, 34))
+
+        self.horizontalLayout.addWidget(self.pushButton_2)
+
         self.pushButton_3 = QPushButton(self.centralwidget)
         self.pushButton_3.setObjectName(u"pushButton_3")
-        self.pushButton_3.setGeometry(QRect(360, 120, 88, 34))
+
+        self.horizontalLayout.addWidget(self.pushButton_3)
+
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)

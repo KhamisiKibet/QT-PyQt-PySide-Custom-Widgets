@@ -735,171 +735,336 @@ class FadeWidgetTransition(QWidget):
         self.repaint()
 
 
-    
+#######################################################################
+# Add mouse events to the window
+#######################################################################
+def mousePressEvent(self, event):
+    # ###############################################
+    # Get the current position of the mouse
+    self.clickPosition = event.globalPos()
+    # We will use this value to move the window
+#######################################################################
+#######################################################################
+
+
+
+#######################################################################
+# Update restore button icon on msximizing or minimizing window
+#######################################################################
+def restore_or_maximize_window(self):
+    # If window is maxmized
+    if self.isMaximized():
+        self.showNormal()
+        # Change Icon
+        if str(self.normalIcon) > 0:
+            self.ui.restore_window_button.setIcon(QtGui.QIcon(str(self.normalIcon)))
+    else:
+        self.showMaximized()
+        # Change Iconload
+        if str(self.maximizedIcon) > 0:
+            self.ui.restore_window_button.setIcon(QtGui.QIcon(str(self.maximizedIcon)))
+
+
+
 ########################################################################
 ## Read JSon stylesheet
 ########################################################################
-def loadJsonStyle(self):
+def loadJsonStyle(self, ui):
     file = open('style.json',)
     data = json.load(file)
 
-    self.wasFound = False
-    self.wasThemed = False
+    self.ui = ui
 
-    if "buttons" in data:
-        for button in data['buttons']:
-            # print(json.dumps(button["fallBackStyle"]))
+    ########################################################################
+    ## WINDOWS FLAG
+    ######################################################################## 
 
+    if "QMainWindow" in data:
+        for QMainWindow in data['QMainWindow']:
+            if "tittle" in QMainWindow and len(str(QMainWindow["tittle"])) > 0:
+                # Set window tittle
+                self.setWindowTitle(str(QMainWindow["tittle"]))
+
+            if "icon" in QMainWindow and len(str(QMainWindow["icon"])) > 0:
+                #######################################################################
+                # Set window Icon
+                #######################################################################
+                self.setWindowIcon(QtGui.QIcon(str(QMainWindow["icon"])))
+
+            if "frameless" in QMainWindow and QMainWindow["frameless"]:
+                #######################################################################
+                ## # Remove window tittle bar
+                ########################################################################    
+                self.setWindowFlags(QtCore.Qt.FramelessWindowHint) 
+
+            if "transluscentBg" in QMainWindow and QMainWindow["transluscentBg"]:
+                #######################################################################
+                ## # Set main background to transparent
+                ########################################################################  
+                self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+            
+            if "sizeGrip" in QMainWindow and len(str(QMainWindow["sizeGrip"])) > 0:
+                #################################################################################
+                # Window Size grip to resize window
+                #################################################################################
+                if hasattr(self.ui, str(QMainWindow["sizeGrip"])):                    
+                    QSizeGrip(getattr(self.ui, str(QMainWindow["sizeGrip"])))
+
+            if "shadow" in QMainWindow:
+                #######################################################################
+                ## # Shadow effect style
+                ########################################################################  
+                self.shadow = QGraphicsDropShadowEffect(self)
+                for shadow in QMainWindow["shadow"]:
+                    if "color" in shadow and len(str(shadow['color'])) > 0:
+                        self.shadow.setColor(QColor(str(shadow['color'])))
+                    if "blurRadius" in shadow and int(shadow['blurRadius']) > 0:
+                        self.shadow.setBlurRadius(int(shadow['blurRadius']))
+                    if "xOffset" in shadow and int(shadow['xOffset']) > 0:
+                        self.shadow.setXOffset(int(shadow['xOffset']))
+                    else:
+                        self.shadow.setXOffset(0)
+
+                    if "yOffset" in shadow and int(shadow['yOffset']) > 0:                
+                        self.shadow.setYOffset(int(shadow['yOffset']))
+                    else:
+                        self.shadow.setYOffset(0)
+
+                    if "centralWidget" in shadow and len(str(shadow['centralWidget'])) > 0:
+                        if hasattr(self.ui, str(shadow["centralWidget"])): 
+                            #######################################################################
+                            ## # Appy shadow to central widget
+                            ########################################################################  
+                            getattr(self.ui, str(shadow["centralWidget"])).setGraphicsEffect(self.shadow)
+
+
+            # ###############################################
+            # Function to Move window on mouse drag event on the tittle bar
+            # ###############################################
+            def moveWindow(e):
+                # Detect if the window is  normal size
+                # ###############################################  
+                if self.isMaximized() == False: #Not maximized
+                    # Move window only when window is normal size  
+                    # ###############################################
+                    #if left mouse button is clicked (Only accept left mouse button clicks)
+                    if e.buttons() == Qt.LeftButton:  
+                        #Move window 
+                        self.move(self.pos() + e.globalPos() - self.clickPosition)
+                        self.clickPosition = e.globalPos()
+                        e.accept()
+            #######################################################################
+
+
+
+            if "navigation" in QMainWindow:
+                for navigation in QMainWindow["navigation"]:
+                    if "minimize" in navigation and len(str(navigation["minimize"])) > 0:         
+                        #######################################################################
+                        #Minimize window
+                        if hasattr(self.ui, str(navigation["minimize"])): 
+                            getattr(self.ui, str(navigation["minimize"])).clicked.connect(lambda: self.showMinimized())
+
+                    if "close" in navigation and len(str(navigation["close"])) > 0:         
+                        #######################################################################
+                        #Close window
+                        if hasattr(self.ui, str(navigation["close"])): 
+                            getattr(self.ui, str(navigation["close"])).clicked.connect(lambda: self.close())
+
+                    if "restore" in navigation:         
+                        #######################################################################
+                        #Restore/Maximize window
+                        for restore in navigation["restore"]:
+                            if "buttonName" in restore and len(str(restore["buttonName"])) > 0:  
+                                if hasattr(self.ui, str(restore["buttonName"])): 
+                                    getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: self.restore_or_maximize_window())
+
+                            if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0: 
+                                self.normalIcon = str(restore["normalIcon"])
+                            else:
+                                self.normalIcon = ""
+
+                            if "maximizedIcon" in restore and len(str(restore["maximizedIcon"])) > 0: 
+                                self.maximizedIcon = str(restore["maximizedIcon"])
+                            else:
+                                self.maximizedIcon = ""
+
+                        if "moveWindow" in navigation and len(str(navigation["moveWindow"])) > 0: 
+                            #######################################################################
+                            # Add click event/Mouse move event/drag event to the top header to move the window
+                            #######################################################################
+                            if hasattr(self.ui, str(navigation["moveWindow"])): 
+                                getattr(self.ui, str(navigation["moveWindow"])).mouseMoveEvent = moveWindow
+                            #######################################################################
+
+
+    ########################################################################
+    ## END
+    ######################################################################## 
+
+    if "QPushButton" in data:
+        for button in data['QPushButton']:            
             if "name" in button and len(button["name"]) > 0:
-                if self.objectName() == button["name"]:
-                    if "theme" in button and len(button["theme"]) > 0:
-                        self.setObjectTheme(button["theme"])
+                # GET BUTTON OBJECT
+                if hasattr(self.ui, str(button["name"])): 
+                    buttonObject = getattr(self.ui, str(button["name"]))
+                    # VERIFY IF THE OBJECT IS A BUTTON
+                    if not str(buttonObject.metaObject().className()) == "QPushButton":
+                        raise Exception(buttonObject.metaObject().className(), buttonObject, " is not of type QPushButton")
+                        return
 
-                    if "customTheme" in button and len(button["customTheme"]) > 0:
-                        for x in button["customTheme"]:
-                            # print(x)
-                            if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
-                                self.setObjectCustomTheme(x["color1"], x["color2"])
+                    buttonObject.wasFound = False
+                    buttonObject.wasThemed = False
 
-                    if "animateOn" in button and len(button["animateOn"]) > 0:
-                        self.setObjectAnimateOn(button["animateOn"])
+                    if buttonObject.objectName() == button["name"]:
+                        if "theme" in button and len(button["theme"]) > 0:
+                            buttonObject.setObjectTheme(button["theme"])
 
-                    if "animation" in button and len(button["animation"]) > 0:
-                        self.setObjectAnimation(button["animation"])
+                        if "customTheme" in button and len(button["customTheme"]) > 0:
+                            for x in button["customTheme"]:
+                                # print(x)
+                                if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
+                                    buttonObject.setObjectCustomTheme(x["color1"], x["color2"])
 
-                    if "animationDuration" in button and int(button['animationDuration']) > 0:
-                        self._animation.setDuration(int(button["animationDuration"]))
+                        if "animateOn" in button and len(button["animateOn"]) > 0:
+                            buttonObject.setObjectAnimateOn(button["animateOn"])
 
-                    if "animationEasingCurve" in button and len(button['animationEasingCurve']) > 0:
-                        easingCurve = returnAnimationEasingCurve(button['animationEasingCurve'])          
-                        self._animation.setEasingCurve(easingCurve)
+                        if "animation" in button and len(button["animation"]) > 0:
+                            buttonObject.setObjectAnimation(button["animation"])
 
+                        if "animationDuration" in button and int(button['animationDuration']) > 0:
+                            buttonObject._animation.setDuration(int(button["animationDuration"]))
 
-                    fallBackStyle = ""
-                    if "fallBackStyle" in button:
-                        for x in button["fallBackStyle"]:
-                            fallBackStyle += x
-
-                    # print(fallBackStyle)
-
-                    defaultStyle = ""
-                    if "defaultStyle" in button:
-                        for x in button["defaultStyle"]:
-                            defaultStyle += x
-
-                    # print(fallBackStyle)
-
-                    self.wasThemed = True
-
-                    if len(fallBackStyle) > 0:
-                        self.setObjectFallBackStyle(fallBackStyle)
-
-                    if len(defaultStyle) > 0:
-                        self.setObjectDefaultStyle(defaultStyle)
-
-                    if len(fallBackStyle) > 0:
-                        self.setStyleSheet(defaultStyle + fallBackStyle)
-                    elif "theme" in button and len(button["theme"]) > 0:
-                        # 
-                        applyAnimationThemeStyle(self, button["theme"])
-                    elif "customTheme" in button and len(button["customTheme"]) > 0:
-                        for x in button["customTheme"]:
-                            if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
-                                applyCustomAnimationThemeStyle(self, x["color1"], x["color2"])
-                    else: 
-                        self.wasThemed = False
+                        if "animationEasingCurve" in button and len(button['animationEasingCurve']) > 0:
+                            easingCurve = returnAnimationEasingCurve(button['animationEasingCurve'])          
+                            buttonObject._animation.setEasingCurve(easingCurve)
 
 
-                    ########################################################################
-                    ## ICONIFY STYLESHEET
-                    ########################################################################
-                    if "iconify" in button:                    
-                        for icon in button['iconify']:
-                            if "icon" in icon and len(icon['icon']) > 0:
-                                btnIcon = icon['icon']
-                                if "color" in icon and len(icon['color']) > 0:
-                                    color = icon['color']
+                        fallBackStyle = ""
+                        if "fallBackStyle" in button:
+                            for x in button["fallBackStyle"]:
+                                fallBackStyle += x
+
+                        # print(fallBackStyle)
+
+                        defaultStyle = ""
+                        if "defaultStyle" in button:
+                            for x in button["defaultStyle"]:
+                                defaultStyle += x
+
+                        # print(fallBackStyle)
+
+                        buttonObject.wasThemed = True
+
+                        if len(fallBackStyle) > 0:
+                            buttonObject.setObjectFallBackStyle(fallBackStyle)
+
+                        if len(defaultStyle) > 0:
+                            buttonObject.setObjectDefaultStyle(defaultStyle)
+
+                        if len(fallBackStyle) > 0:
+                            buttonObject.setStyleSheet(defaultStyle + fallBackStyle)
+                        elif "theme" in button and len(button["theme"]) > 0:
+                            # 
+                            applyAnimationThemeStyle(buttonObject, button["theme"])
+                        elif "customTheme" in button and len(button["customTheme"]) > 0:
+                            for x in button["customTheme"]:
+                                if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
+                                    applyCustomAnimationThemeStyle(buttonObject, x["color1"], x["color2"])
+                        else: 
+                            buttonObject.wasThemed = False
+
+
+                        ########################################################################
+                        ## ICONIFY STYLESHEET
+                        ########################################################################
+                        if "iconify" in button:                    
+                            for icon in button['iconify']:
+                                if "icon" in icon and len(icon['icon']) > 0:
+                                    btnIcon = icon['icon']
+                                    if "color" in icon and len(icon['color']) > 0:
+                                        color = icon['color']
+                                    else:
+                                        color = ""
+
+                                    if "size" in icon and int(icon['size']) > 0:
+                                        size = icon['size']
+                                    else: 
+                                        size = ""
+
+                                    if "animateOn" in icon and len(icon['animateOn']) > 0:
+                                        animateOn = icon['animateOn']
+                                    else:
+                                        animateOn = ""
+
+                                    if "animation" in icon and len(icon['animation']) > 0:
+                                        animation = icon['animation']
+                                    else:
+                                        animation = ""
+
+                                    iconify(buttonObject, icon = btnIcon, color = color, size = size, animation = animation, animateOn = animateOn)
+
+
+                        ########################################################################
+                        ## BUTTON SHADOW STYLESHEET
+                        ########################################################################
+                        if "shadow" in button:  
+                            for shadow in button["shadow"]:
+                                if "color" in shadow and len(str(shadow['color'])) > 0:
+                                    shadowColor = shadow['color']
                                 else:
-                                    color = ""
+                                    shadowColor = ""
 
-                                if "size" in icon and int(icon['size']) > 0:
-                                    size = icon['size']
-                                else: 
-                                    size = ""
-
-                                if "animateOn" in icon and len(icon['animateOn']) > 0:
-                                    animateOn = icon['animateOn']
+                                if "applyShadowOn" in shadow and len(str(shadow['applyShadowOn'])) > 0:
+                                    applyShadowOn = shadow['applyShadowOn']
                                 else:
-                                    animateOn = ""
+                                    applyShadowOn = ""
 
-                                if "animation" in icon and len(icon['animation']) > 0:
-                                    animation = icon['animation']
+                                if "animateShadow" in shadow:
+                                    animateShadow = shadow['animateShadow']
                                 else:
-                                    animation = ""
+                                    animateShadow = False
 
-                                iconify(self, icon = btnIcon, color = color, size = size, animation = animation, animateOn = animateOn)
+                                if "animateShadowDuration" in shadow and int(shadow['animateShadowDuration']) > 0:
+                                    animateShadowDuration = shadow['animateShadowDuration']
+                                else:
+                                    animateShadowDuration = 0
 
+                                if "blurRadius" in shadow and int(shadow['blurRadius']) > 0:
+                                    blurRadius = shadow['blurRadius']
+                                else:
+                                    blurRadius = 0
 
-                    ########################################################################
-                    ## BUTTON SHADOW STYLESHEET
-                    ########################################################################
-                    if "shadow" in button:  
-                        for shadow in button["shadow"]:
-                            if "color" in shadow and len(str(shadow['color'])) > 0:
-                                shadowColor = shadow['color']
-                            else:
-                                shadowColor = ""
+                                if "xOffset" in shadow and int(shadow['xOffset']) > 0:
+                                    xOffset = shadow['xOffset']
+                                else:
+                                    xOffset = 0
 
-                            if "applyShadowOn" in shadow and len(str(shadow['applyShadowOn'])) > 0:
-                                applyShadowOn = shadow['applyShadowOn']
-                            else:
-                                applyShadowOn = ""
+                                if "yOffset" in shadow and int(shadow['yOffset']) > 0:
+                                    yOffset = shadow['yOffset']
+                                else:
+                                    yOffset = 0
 
-                            if "animateShadow" in shadow:
-                                animateShadow = shadow['animateShadow']
-                            else:
-                                animateShadow = False
-
-                            if "animateShadowDuration" in shadow and int(shadow['animateShadowDuration']) > 0:
-                                animateShadowDuration = shadow['animateShadowDuration']
-                            else:
-                                animateShadowDuration = 0
-
-                            if "blurRadius" in shadow and int(shadow['blurRadius']) > 0:
-                                blurRadius = shadow['blurRadius']
-                            else:
-                                blurRadius = 0
-
-                            if "xOffset" in shadow and int(shadow['xOffset']) > 0:
-                                xOffset = shadow['xOffset']
-                            else:
-                                xOffset = 0
-
-                            if "yOffset" in shadow and int(shadow['yOffset']) > 0:
-                                yOffset = shadow['yOffset']
-                            else:
-                                yOffset = 0
-
-                            applyButtonShadow(
-                                self, 
-                                color= shadowColor, 
-                                applyShadowOn= applyShadowOn, 
-                                animateShadow = animateShadow, 
-                                blurRadius = blurRadius, 
-                                animateShadowDuration = animateShadowDuration,
-                                xOffset = xOffset,
-                                yOffset = yOffset
-                            )
+                                applyButtonShadow(
+                                    buttonObject, 
+                                    color= shadowColor, 
+                                    applyShadowOn= applyShadowOn, 
+                                    animateShadow = animateShadow, 
+                                    blurRadius = blurRadius, 
+                                    animateShadowDuration = animateShadowDuration,
+                                    xOffset = xOffset,
+                                    yOffset = yOffset
+                                )
 
 
 
-                    self.wasFound = True
+                        buttonObject.wasFound = True
 
     if "QStackedWidget" in data:
         for stackedWidget in data['QStackedWidget']:
             if "name" in stackedWidget and len(str(stackedWidget["name"])) > 0:
-                if hasattr(self, str(stackedWidget["name"])):
-                    widget = getattr(self, str(stackedWidget["name"]))                    
+                if hasattr(self.ui, str(stackedWidget["name"])):
+                    widget = getattr(self.ui, str(stackedWidget["name"]))                    
                     if widget.objectName() == stackedWidget["name"]:
                         if "transitionAnimation" in stackedWidget:
                             for transitionAnimation in stackedWidget["transitionAnimation"]:
@@ -926,15 +1091,15 @@ def loadJsonStyle(self):
                         if "navigation" in stackedWidget:
                             for navigation in stackedWidget["navigation"]:
                                 if "nextPage" in navigation:
-                                    if hasattr(self, str(navigation["nextPage"])):
-                                        button = getattr(self, str(navigation["nextPage"]))
+                                    if hasattr(self.ui, str(navigation["nextPage"])):
+                                        button = getattr(self.ui, str(navigation["nextPage"]))
                                         button.clicked.connect(lambda: widget.slideToNextWidget())
                                     else:
                                         print("No button found")
 
                                 if "previousPage" in navigation:
-                                    if hasattr(self, str(navigation["previousPage"])):
-                                        button = getattr(self, str(navigation["previousPage"]))
+                                    if hasattr(self.ui, str(navigation["previousPage"])):
+                                        button = getattr(self.ui, str(navigation["previousPage"]))
                                         button.clicked.connect(lambda: widget.slideToPreviousWidget())
                                     else:
                                         print("No button found")
@@ -943,13 +1108,13 @@ def loadJsonStyle(self):
                                     for navigationButton in navigation["navigationButtons"]:
                                         for button in navigationButton:
                                             widgetPage = navigationButton[button]
-                                            if not hasattr(self, str(widgetPage)):
+                                            if not hasattr(self.ui, str(widgetPage)):
                                                 raise Exception("Unknown widget '" +str(widgetPage)+ "'. Please check your JSon file")
-                                            if not hasattr(self, str(button)):
+                                            if not hasattr(self.ui, str(button)):
                                                 raise Exception("Unknown button '" +str(button)+ "'. Please check your JSon file")
 
-                                            pushBtn = getattr(self, str(button))
-                                            widgetPg = getattr(self, str(widgetPage))
+                                            pushBtn = getattr(self.ui, str(button))
+                                            widgetPg = getattr(self.ui, str(widgetPage))
                                             navigationButtons(widget, pushBtn, widgetPg)
 
 ########################################################################
@@ -1411,6 +1576,7 @@ class FormProgressIndicator(QWidget):
 ########################################################################
 ## END
 ######################################################################## 
+
 
 if __name__=="__main__":
     print("Import to your main py file")

@@ -276,11 +276,11 @@ The easiest way to style your QPushButtons using QT-PyQt-PySide-Custom-Widgets i
 Create a Json file inside your project folder, name it "style.json".
 Follow the following steps to style your buttons:
 
-Create a button object that will contain a list of all the buttons you want to style.
+Create a QPushButton object that will contain a list of all the buttons you want to style.
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "button1"
 		},
@@ -300,7 +300,7 @@ We are going to apply the pre-set theme number "2" to "myButton".
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"theme": "2"
@@ -312,7 +312,7 @@ You can also apply the custom theme of your choice by passing two colors.
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"customTheme": [
@@ -330,7 +330,7 @@ Set the default style that will be applied to the button during and after the an
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"defaultStyle": [
@@ -349,7 +349,7 @@ Set the style that will be applied the button after the animation is done playin
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"fallBackStyle": [
@@ -367,7 +367,7 @@ Animate border alone:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"animation": "border"
@@ -380,7 +380,7 @@ Animate background alone:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"animation": "background"
@@ -394,7 +394,7 @@ Animate on click event:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"animateOn": "click"
@@ -407,7 +407,7 @@ Animate on hover event:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"animateOn": "hover"
@@ -420,7 +420,7 @@ Set the background and border style animation duration.
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"animationDuration": 1000
@@ -435,7 +435,7 @@ Select icon:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"iconify": [
@@ -452,7 +452,7 @@ Set icon color:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"iconify": [
@@ -469,7 +469,7 @@ Set icon size:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"iconify": [
@@ -486,7 +486,7 @@ Set icon animation(spin or breathe):
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"iconify": [
@@ -503,7 +503,7 @@ Set icon animation trigger event (click or hover):
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"iconify": [
@@ -520,7 +520,7 @@ Full Iconify Json object:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"iconify": [
@@ -543,7 +543,7 @@ Set shadow color:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -559,7 +559,7 @@ Set shadow blur radius:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -575,7 +575,7 @@ Set shadow x and y offset:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -595,7 +595,7 @@ The default value is False
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -615,7 +615,7 @@ Apply shadow on click:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -632,7 +632,7 @@ Apply shadow on hover:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -649,7 +649,7 @@ Set the shadow animation duration:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -666,7 +666,7 @@ Full json shadow stylesheet:
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "myButton",
 			"shadow":[
@@ -689,56 +689,33 @@ Full json shadow stylesheet:
 
 To apply the Json stylesheet to your button, use:
 ```python
-loadJsonStyle(myButton) #Apply button style from json
+loadJsonStyle(MainWindow_Class, UserInterface_Class) #Apply button style from json
 ```
-The above statement only applies the syle to ne button. If you want to apply the style to multiple buttons, you can use the for-loop.
-For example, assuming that you have a group of QPushButton inside a QFrame called "myFrame",
-you can apply the style to all buttona as follows:
 
 ```python
 ######################################################################
 ## APPLY BUTTON STYLE FROM JSON FILE
 ########################################################################
 # Load the stylesheet for all buttons inside myFrame
-for w in myFrame.findChildren(QPushButton):
-    # load the stylesheet for button w from the json file
-    loadJsonStyle(w) 
-    # check if the button stylesheet was found inside the Json file
-    if not w.wasThemed:
-        # If no style was found, you can apply another style
-        applyAnimationThemeStyle(w, 2) #Apply theme 2 to the button
-        # OR
-        # Appply your own custom theme
-        applyCustomAnimationThemeStyle(w, "red", "yellow") #Apply custom theme to the button
+# self = QMainWindow Class Object
+# self.ui = Ui_MainWindow Class Object from user interface file that contains all buttons
+loadJsonStyle(self, self.ui) 
+# Check if the button was themed/styled    
+if not w.wasThemed:
+    # If no style was found, you can apply another style
+    applyAnimationThemeStyle(w, 2) #Apply theme 2 to the button
+    # OR
+    # Appply your own custom theme
+    applyCustomAnimationThemeStyle(w, "red", "yellow") #Apply custom theme to the button
 ```
 
-Another way you can apply the JSon style to multiple buttons is by creating a python list object containing the names of all buttons.
-
-```python
-######################################################################
-## APPLY BUTTON STYLE FROM JSON FILE
-########################################################################
-# Create a list containint all the buttons you want to style
-myButtons = [myButton1, myButton2, myButton3, ...]
-# Load the stylesheet for all buttons in the list
-for w in myButtons:
-    # load the stylesheet for button w from the json file
-    loadJsonStyle(w) 
-    # check if the button stylesheet was found inside the Json file
-    if not w.wasThemed:
-        # If no style was found, you can apply another style
-        applyAnimationThemeStyle(w, 2) #Apply theme 2 to the button
-        # OR
-        # Appply your own custom theme
-        applyCustomAnimationThemeStyle(w, "red", "yellow") #Apply custom theme to the button
-```
 
 ## Json Stylesheet Sample
 This is a Json style example. Replace the button names with your own button names.
 
 ```json
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "pushButton",
 			"customTheme": [
@@ -936,57 +913,7 @@ This is a Json style example. Replace the button names with your own button name
 # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
 # WEBSITE: spinndesign.com
 ########################################################################
-"""
-READ ME:
-I made an extension of the QPushButton class to help make button
-customization a animation easier
-The QPushButton custom class is in Custom_Widgets.widgets.py, you can go
-through it but only change it if youre sure of what youre doing
 
-You can fully customize the buttons in the UI through the style.json file.
-
-
-name (the name of the button)
-theme (theme number from 1 to 13)
-customTheme (pass in your custom theme colors -color1 and color2- if the like the look of the available themes)
-animateOn (the event that will trigger the button animation- hover or click- event)
-animation (the part of the butttom you want to animate - border, background or both)
-animationDuration (the time your animation should take playing)
-animationEasingCurve (the easing curve for the anomation, google QT animation easing curve)
-fallBackStyle (the style that should be applied to the button once the animation is done playing)
-defaultStyle (the style that will be applied alongside the animation style)
-iconify (pass in the iconify icon style:  
-    name = name of the icon
-    color = color of the icon
-    size = size of the icon
-    animateOn = event that should trigger icon animation (hover, click or all)
-)
-
-If no JSon value was passed for a particular button, the default stylesheet will be applied the button.
-
-CHECK THE FOR-LOOP BELOW ON MAINWINDOW CLASS ON HOW TO APPLY STYLE FROM JSON FILE
-
-
-
-You can also customize the buttons from inside your mainwindow class using the folowing statements:
-
-Set theme
-button.setObjectTheme(themeNumber)
-Set custom theme
-button.setObjectCustomTheme(color, color)
-Set animation trigger event
-button.setObjectAnimateOn("click" or "hover")
-Pass the style that should be applied to the button once the animation is over
-button.setObjectFallBackStyle(Stylesheet)
-Set the style sheet that will be applied alongside the animation style and fallBack style
-button.setObjectDefaultStyle(Stylesheet)
-Set the animation easing curve
-button._animation.setEasingCurve(QtCore easing curve)
-
-IMPORTANT
-If you need to apply the theme to the UI file generated by QT Designer, you should also import the Custom_Widgets.widgets to the UI, check ui_interface.py
-
-"""
 ########################################################################
 ## IMPORTS
 ########################################################################
@@ -1016,6 +943,12 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        ######################################################################
+        ## APPLY STYLE FROM JSON FILE
+        ########################################################################
+        loadJsonStyle(self, self.ui)
+
         #######################################################################
         # SHOW WINDOW
         #######################################################################
@@ -1025,17 +958,7 @@ class MainWindow(QMainWindow):
         ## UNCOMMENT/COMMENT THE COMMENTED STATEMENTS TO SEE THEIR EFFECTS
         ########################################################################
 
-        ######################################################################
-        ## APPLY STYLE FROM JSON FILE
-        ########################################################################
-        # loadJsonStyle(self.ui.pushButton_2)
-        for w in self.ui.widget.findChildren(QPushButton):
-            # print(w.objectName())
-
-            ########################################################################
-            # load the stylesheet for button w from the json file
-            ########################################################################
-            loadJsonStyle(w)
+        # for w in self.ui.widget.findChildren(QPushButton):            
 
             ########################################################################
             # check if the stylesheet was found 
@@ -1099,7 +1022,7 @@ class MainWindow(QMainWindow):
         # """)  
 
         ########################################################################
-        # STYLE APPLIED ALONSIDE ANIMATION THEME STYLE AND FALLBACK STYLE
+        # STYLE APPLIED ALONGSIDE ANIMATION THEME STYLE AND FALLBACK STYLE
         ########################################################################
         # self.ui.pushButton.setObjectDefaultStyle(
         #     """
@@ -1291,7 +1214,7 @@ class Ui_MainWindow(object):
 
 ```python
 {
-	"buttons": [
+	"QPushButton": [
 		{
 			"name": "pushButton",
 			"customTheme": [
@@ -1623,5 +1546,5 @@ class Ui_MainWindow(object):
 
 
 # Navigation
-[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html) [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html)
+[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html) [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html)  [Customize QMainWindow](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qmainwindow.html)
 
