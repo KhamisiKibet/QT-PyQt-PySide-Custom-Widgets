@@ -40,7 +40,7 @@ Set the width and height of your widget, alternatively you can set the layout of
 Right click on the "widget" the click "promote to". The promote window will appear.
 In "Base Class Name" select "QWidget"
 In "Promoted class name" field enter "FormProgressIndicator"
-In "Header file" enter "Custom_Widgets.widgets.h"
+In "Header file" enter "Custom_Widgets.Widgets.h"
 Then Click on "Add" buton
 
 ![Qt Designer Create Main Window](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/9.png?raw=true)
@@ -97,7 +97,7 @@ This is the UI code, you can copy it and save it as "interface.ui", then open it
   <customwidget>
    <class>FormProgressIndicator</class>
    <extends>QWidget</extends>
-   <header location="global">Custom_Widgets.widgets.h</header>
+   <header location="global">Custom_Widgets.Widgets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
@@ -124,7 +124,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from Custom_Widgets.widgets import FormProgressIndicator
+from Custom_Widgets.Widgets import FormProgressIndicator
 
 
 class Ui_MainWindow(object):
@@ -232,7 +232,7 @@ Import the custom progress bar the file where you want to create the progress ba
 
 ```python
 # IMPORT CUSTOM PROGRESS BAR / PROGRESS INDICATOR
-from Custom_Widgets.widgets import FormProgressIndicator
+from Custom_Widgets.Widgets import FormProgressIndicator
 ```
 
 ### Step 2:

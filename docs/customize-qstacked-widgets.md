@@ -272,7 +272,7 @@ class Ui_MainWindow(object):
 
 ```
 
-Import "Custom_Widgets.widgets" to the user interface file, "ui_interface.py", you just created as shown below.
+Import "Custom_Widgets.Widgets" to the user interface file, "ui_interface.py", you just created as shown below.
 
 ```python
 # -*- coding: utf-8 -*-
@@ -291,7 +291,7 @@ from PySide2.QtWidgets import *
 
 ########################################################################
 # IMPORT CUSTOM BUTTONS FILE
-from Custom_Widgets.widgets import *
+from Custom_Widgets.Widgets import *
 ########################################################################
 
 
@@ -369,7 +369,7 @@ The first step is to import QT-PyQt-PySide-Custom-Widgets library to the python 
 ```python
 ########################################################################
 # IMPORT CUSTOM BUTTONS FILE
-from Custom_Widgets.widgets import *
+from Custom_Widgets.Widgets import *
 ########################################################################
 ```
 

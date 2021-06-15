@@ -14,7 +14,7 @@ setup(
         'Custom_Widgets', 
         'Custom_Widgets.ProgressIndicator', 
     ],   
-    version = '0.1.4',      # Start with a small number and increase it with every change you make
+    version = '0.1.6',      # Start with a small number and increase it with every change you make
     license="GNU General Public License v3.0",        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description = 'Custom widgets and widget animations made for QT applications',   # Give a short description about your library
     long_description=README,

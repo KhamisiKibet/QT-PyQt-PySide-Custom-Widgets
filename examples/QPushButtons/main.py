@@ -22,7 +22,7 @@ from ui_interface import *
 # Because ill be frequently updating this package,
 # run "pip install --upgrade QT-PyQt-PySide-Custom-Widgets"
 # to install any updates
-from Custom_Widgets.widgets import *
+from Custom_Widgets.Widgets import *
 ########################################################################
 
 ########################################################################

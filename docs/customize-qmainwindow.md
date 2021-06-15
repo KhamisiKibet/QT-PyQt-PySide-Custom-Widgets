@@ -46,7 +46,7 @@ from ui_interface import *
 
 ########################################################################
 # IMPORT Custom widgets
-from Custom_Widgets.widgets import *
+from Custom_Widgets.Widgets import *
 ########################################################################
 .....########################################################################
 ## SPINN DESIGN CODE
@@ -69,7 +69,7 @@ from ui_interface import *
 
 ########################################################################
 # IMPORT Custom widgets
-from Custom_Widgets.widgets import *
+from Custom_Widgets.Widgets import *
 ########################################################################
 
 
@@ -344,7 +344,7 @@ from ui_interface import *
 
 ########################################################################
 # IMPORT Custom widgets
-from Custom_Widgets.widgets import *
+from Custom_Widgets.Widgets import *
 ########################################################################
 
 
