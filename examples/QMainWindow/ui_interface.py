@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceuEIRoy.ui'
+## Form generated from reading UI file 'interfaceHVxFBl.ui'
 ##
 ## Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -99,7 +99,9 @@ class Ui_MainWindow(object):
         self.main_body_contents.setFrameShape(QFrame.StyledPanel)
         self.main_body_contents.setFrameShadow(QFrame.Raised)
         self.verticalLayout_11 = QVBoxLayout(self.main_body_contents)
+        self.verticalLayout_11.setSpacing(0)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
+        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
         self.label_5 = QLabel(self.main_body_contents)
         self.label_5.setObjectName(u"label_5")
         self.label_5.setMinimumSize(QSize(60, 60))
@@ -132,8 +134,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.size_grip = QFrame(self.frame_2)
         self.size_grip.setObjectName(u"size_grip")
-        self.size_grip.setMinimumSize(QSize(5, 5))
-        self.size_grip.setMaximumSize(QSize(5, 5))
+        self.size_grip.setMinimumSize(QSize(10, 10))
+        self.size_grip.setMaximumSize(QSize(10, 10))
         self.size_grip.setFrameShape(QFrame.StyledPanel)
         self.size_grip.setFrameShadow(QFrame.Raised)
 

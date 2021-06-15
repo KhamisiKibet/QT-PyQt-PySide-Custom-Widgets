@@ -10,8 +10,6 @@
 import sys
 import os
 from PySide2 import *
-
-
 ########################################################################
 # IMPORT GUI FILE
 from ui_interface import *
