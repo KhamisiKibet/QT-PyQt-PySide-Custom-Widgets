@@ -385,8 +385,8 @@ This is the final results:
 
 ![Custom Title Bar QT DESIGNER](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/18.png?raw=true)
 
-Watch this vide for the full tutorial:
-[Video]
+Watch this video for the full tutorial:
+[Video](https://youtu.be/li7esLMuFhE)
 
 # Navigation
 [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html) [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html) [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html)

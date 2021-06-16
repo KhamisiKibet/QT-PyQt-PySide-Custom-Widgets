@@ -11,15 +11,16 @@ pip install QT-PyQt-PySide-Custom-Widgets
 Run the following code to see if the installation was successful.
 
 ```python
-	# Run this from your terminal or create a python file, 
-	# paste this code, then run
-	from Custom_Widgets.ProgressIndicator import test
-	test.main()
-
+# Run this from your terminal or create a python file, 
+# paste this code, then run
+from Custom_Widgets.ProgressIndicator import test
+test.main()
 ```
 
 You should see the following interface:
 ![alt text](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true)
 
 # How to use it.
-Read the full documentation plus video guides [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/)
+Read the full documentation plus video guides [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
+
+[Watch the tutorial videos here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
