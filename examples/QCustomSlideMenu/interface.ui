@@ -13,8 +13,8 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget">
-   <widget class="QCustomSlideMenu" name="widget" native="true">
+  <widget class="QWidget" name="my_toggle_button">
+   <widget class="QCustomSlideMenu" name="my_widget_name" native="true">
     <property name="geometry">
      <rect>
       <x>220</x>
@@ -39,6 +39,19 @@
       <string>My Widget</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>131</width>
+      <height>34</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Toggle Button </string>
+    </property>
    </widget>
   </widget>
  </widget>

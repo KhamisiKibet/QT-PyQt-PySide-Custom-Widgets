@@ -244,6 +244,20 @@ If you want to apply defferent styles to your button when the widget is minimize
 }
 ```
 
+## Apply the JSon stylesheet:
+
+To apply the JSon stylesheet just call the following function from your "main" python file:
+
+```python
+########################################################################
+# APPLY JSON STYLESHEET
+########################################################################
+# self = QMainWindow class
+# self.ui = Ui_MainWindow / user interface class
+loadJsonStyle(self, self.ui)
+########################################################################
+```
+
 ## An Example of the full JSon Style object:
 
 ```json

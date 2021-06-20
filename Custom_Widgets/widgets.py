@@ -7,15 +7,24 @@
 ########################################################################
 ## IMPORTS
 ########################################################################
+import os
+import sys
 import iconify as ico #pip install iconify
 from iconify.qt import QtGui, QtWidgets, QtCore
-from PySide2 import QtWidgets, QtGui, QtCore
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+
+if 'PySide2' in sys.modules:
+    from PySide2 import QtWidgets, QtGui, QtCore
+    from PySide2.QtCore import *
+    from PySide2.QtGui import *
+    from PySide2.QtWidgets import *
+
+elif 'PySide6' in sys.modules:
+    from PySide6 import QtWidgets, QtGui, QtCore
+    from PySide6.QtCore import *
+    from PySide6.QtGui import *
+    from PySide6.QtWidgets import *
 # JSON FOR READING THE JSON STYLESHEET
 import json
-
 
 
 class QPushButton(QtWidgets.QPushButton):
@@ -751,6 +760,362 @@ class QMainWindow(QMainWindow):
     #######################################################################
     #######################################################################
 
+    #######################################################################
+    # Update restore button icon on maximizing or minimizing window
+    #######################################################################
+    def updateRestoreButtonIcon(self):
+        # If window is maxmized
+        if self.isMaximized():
+            # Change Iconload
+            if len(str(self.maximizedIcon)) > 0:
+                self.restoreBtn.setIcon(QtGui.QIcon(str(self.maximizedIcon)))
+        else:
+            # Change Icon
+            if len(str(self.normalIcon)) > 0:
+                self.restoreBtn.setIcon(QtGui.QIcon(str(self.normalIcon)))
+            
+
+    def restore_or_maximize_window(self):
+        # If window is maxmized
+        if self.isMaximized():
+            self.showNormal()
+            
+        else:
+            self.showMaximized()
+            
+        self.updateRestoreButtonIcon()
+
+     # ###############################################
+    # Function to Move window on mouse drag event on the tittle bar
+    # ###############################################
+    def moveWindow(self, e):
+        # Detect if the window is  normal size
+        # ###############################################
+        if self.isMaximized() == False: #Not maximized
+            # Move window only when window is normal size
+            # ###############################################
+            #if left mouse button is clicked (Only accept left mouse button clicks)
+            if e.buttons() == Qt.LeftButton:
+                #Move window
+                self.move(self.pos() + e.globalPos() - self.clickPosition)
+                self.clickPosition = e.globalPos()
+                e.accept()
+        else:
+            self.showNormal()
+    #######################################################################
+
+
+class QCustomSlideMenu(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        # SET DEFAULT SIZE
+        self.defaultWidth = self.width()
+        self.defaultHeight = self.height()
+
+        self.collapsedWidth = 0
+        self.collapsedHeight = 0
+
+        self.expandedWidth = self.defaultWidth
+        self.expandedHeight = self.defaultHeight
+
+        self.animationDuration = 500
+        self.animationEasingCurve = QtCore.QEasingCurve.Linear
+
+        self.collapsingAnimationDuration = self.animationDuration
+        self.collapsingAnimationEasingCurve = self.animationEasingCurve
+
+        self.expandingAnimationDuration = self.animationDuration
+        self.expandingAnimationEasingCurve = self.animationEasingCurve
+
+        self.collapsedStyle = "background-color: rgb(9, 5, 13);"
+        self.expandedStyle = "background-color: rgb(9, 5, 13);"
+
+        self.collapsed = False
+        self.expanded = True
+
+        # self.setMaximumSize(QSize(0, 0))
+
+
+    ########################################################################
+    # Customize mennu
+    ########################################################################
+    def customizeQCustomSlideMenu(self, **customValues):
+        if "defaultWidth" in customValues:
+            if isinstance(customValues["defaultWidth"], int):
+                self.defaultWidth = customValues["defaultWidth"]
+                self.setMaximumWidth(customValues["defaultWidth"])
+                self.setMinimumWidth(customValues["defaultWidth"])
+            elif customValues["defaultWidth"] == "auto":
+                self.setMinimumWidth(0)
+                self.setMaximumWidth(16777215)
+
+        if "defaultHeight" in customValues:
+            if isinstance(customValues["defaultHeight"], int):
+                self.defaultHeight = customValues["defaultHeight"]
+                self.setMaximumHeight(customValues["defaultHeight"])
+                self.setMinimumHeight(customValues["defaultHeight"])
+            elif customValues["defaultHeight"] == "auto":
+                self.setMinimumHeight(0)
+                self.setMaximumHeight(16777215)
+
+        if (self.defaultWidth == "auto" and self.defaultHeight == "auto" ) or self.defaultWidth == 0 or self.defaultHeight == 0:
+            self.setMaximumWidth(0)
+            self.setMaximumHeight(0)
+
+        if "collapsedWidth" in customValues:
+            if isinstance(customValues["collapsedWidth"], int):
+                self.collapsedWidth = customValues["collapsedWidth"]
+            else:
+                self.collapsedWidth = 0
+
+        if "collapsedHeight" in customValues:
+            if isinstance(customValues["collapsedHeight"], int):
+                self.collapsedHeight = customValues["collapsedHeight"]
+            else:
+                self.collapsedWidth = 0
+
+        if "expandedWidth" in customValues:
+            if isinstance(customValues["defaultWidth"], int):
+                self.expandedWidth = customValues["expandedWidth"]
+            else:
+                self.expandedWidth = 16777215
+
+        if "expandedHeight" in customValues:
+            if isinstance(customValues["defaultWidth"], int):
+                self.expandedHeight = customValues["expandedHeight"]
+            else:
+                self.expandedHeight = 16777215
+
+        if "animationDuration" in customValues and int(customValues["animationDuration"]) > 0:
+            self.animationDuration = customValues["animationDuration"]
+
+        if "animationEasingCurve" in customValues and len(str(customValues["animationEasingCurve"])) > 0:
+            self.animationEasingCurve = customValues["animationEasingCurve"]
+
+        if "collapsingAnimationDuration" in customValues and int(customValues["collapsingAnimationDuration"]) > 0:
+            self.collapsingAnimationDuration = customValues["collapsingAnimationDuration"]
+
+        if "collapsingAnimationEasingCurve" in customValues and len(str(customValues["collapsingAnimationEasingCurve"])) > 0:
+            self.collapsingAnimationEasingCurve = customValues["collapsingAnimationEasingCurve"]
+
+        if "expandingAnimationDuration" in customValues and int(customValues["expandingAnimationDuration"]) > 0:       
+            self.expandingAnimationDuration = customValues["expandingAnimationDuration"]
+
+        if "expandingAnimationEasingCurve" in customValues and len(str(customValues["expandingAnimationEasingCurve"])) > 0:
+            self.expandingAnimationEasingCurve = customValues["expandingAnimationEasingCurve"]
+
+        if "collapsedStyle" in customValues and len(str(customValues["collapsedStyle"])) > 0:
+            self.collapsedStyle = str(customValues["collapsedStyle"])
+            if self.collapsed:
+                self.setStyleSheet(str(customValues["collapsedStyle"]))
+
+        if "expandedStyle" in customValues and len(str(customValues["expandedStyle"])) > 0:
+            self.expandedStyle = str(customValues["expandedStyle"])
+            if self.expanded:
+                self.setStyleSheet(str(customValues["expandedStyle"]))
+
+
+    ########################################################################
+    # Menu Toggle Button
+    ########################################################################
+    def toggleMenu(self, buttonObject):
+
+        self.slideMenu()
+
+        self.applyButtonStyle()
+
+
+    def activateMenuButton(self, buttonObject):
+        buttonObject.clicked.connect(lambda: self.toggleMenu(buttonObject))
+
+    def toggleButton(self, **values):
+        if not hasattr(self, "targetBtn") and not "buttonName" in values:
+            raise Exception("No button specified for this widget, please specify the QPushButton object")
+            return
+
+        if "buttonName" in values:
+            toggleButton = values["buttonName"]
+            if not hasattr(self, "targetBtn") or self.targetBtn != self:
+                toggleButton.menuCollapsedIcon = ""
+                toggleButton.menuExpandedIcon = "" 
+                toggleButton.menuCollapsedStyle = "" 
+                toggleButton.menuExpandedStyle = "" 
+
+            toggleButton.targetMenu = self
+
+            self.targetBtn = toggleButton
+
+            self.activateMenuButton(self.targetBtn)
+
+
+        if "iconWhenMenuIsCollapsed" in values and len(str(values["iconWhenMenuIsCollapsed"])) > 0:                                               
+            toggleButton.menuCollapsedIcon = str(values["iconWhenMenuIsCollapsed"])
+                    
+
+        if "iconWhenMenuIsExpanded" in values and len(str(values["iconWhenMenuIsExpanded"])) > 0:
+            toggleButton.menuExpandedIcon = str(values["iconWhenMenuIsExpanded"])               
+
+        if "styleWhenMenuIsCollapsed" in values and len(str(values["iconWhenMenuIsExpanded"])) > 0:                            
+            toggleButton.menuCollapsedStyle = str(values["styleWhenMenuIsCollapsed"])
+
+        if "styleWhenMenuIsExpanded" in values and len(str(values["styleWhenMenuIsExpanded"])) > 0:                            
+            toggleButton.menuExpandedStyle = str(values["styleWhenMenuIsExpanded"])
+
+
+
+    ########################################################################
+    # Slide menu function
+    ########################################################################
+    def slideMenu(self):
+        if self.collapsed:
+            self.expandMenu()
+        else:
+            self.collapseMenu()
+
+    def expandMenu(self):
+        self.collapsed = True
+        self.expanded = False
+
+        self.animateMenu()
+
+        self.collapsed = False
+        self.expanded = True
+
+        self.applyButtonStyle()
+
+    def collapseMenu(self):
+        self.collapsed = False
+        self.expanded = True
+
+        self.animateMenu()
+
+        self.collapsed = True
+        self.expanded = False 
+
+        self.applyButtonStyle()
+
+    def applyWidgetStyle(self):
+        if self.expanded and len(str(self.expandedStyle)) > 0:
+
+            self.setStyleSheet(str(self.expandedStyle))
+
+        if self.collapsed and len(str(self.collapsedStyle)) > 0:
+                self.setStyleSheet(str(self.collapsedStyle))    
+
+    def applyButtonStyle(self):
+        if self.collapsed:
+            if len(self.targetBtn.menuCollapsedIcon) > 0:
+                    self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
+
+            if len(str(self.targetBtn.menuCollapsedStyle)) > 0:
+                self.targetBtn.setStyleSheet(str(self.targetBtn.menuCollapsedStyle))
+        else:
+            if len(str(self.targetBtn.menuExpandedIcon)) > 0:
+                    self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuExpandedIcon))
+
+            if len(str(self.targetBtn.menuExpandedStyle)) > 0:
+                self.targetBtn.setStyleSheet(str(self.targetBtn.menuExpandedStyle))
+
+    def animateMenu(self):
+        self.setMinimumSize(QSize(0, 0))
+        
+        if self.collapsed:
+            if self.expandedWidth != "auto" and self.expandedWidth != 16777215:
+                startWidth = self.width()
+                endWidth = self.expandedWidth
+            else:
+                startWidth = self.width()
+                endWidth = self.parent().width()
+
+            self._widthAnimation = QPropertyAnimation(self, b"maximumWidth")
+            self._widthAnimation.setDuration(self.expandingAnimationDuration)
+            self._widthAnimation.setEasingCurve(self.expandingAnimationEasingCurve)
+                
+
+            if self.expandedHeight != "auto" and self.expandedHeight != 16777215:
+                startHeight = self.height()
+                endHeight = self.expandedHeight
+            else:
+                startHeight = self.height()
+                endHeight = self.parent().height()
+
+            self._heightAnimation = QPropertyAnimation(self, b"maximumHeight")
+            self._heightAnimation.setDuration(self.expandingAnimationDuration)
+            self._heightAnimation.setEasingCurve(self.expandingAnimationEasingCurve)
+            
+            
+
+        if self.expanded:
+            if self.collapsedWidth != "auto":
+                startWidth = self.width()
+                endWidth = self.collapsedWidth
+            else:
+                startWidth = self.width()
+                endWidth = 0
+
+            self._widthAnimation = QPropertyAnimation(self, b"maximumWidth")
+            self._widthAnimation.setDuration(self.collapsingAnimationDuration)
+            self._widthAnimation.setEasingCurve(self.collapsingAnimationEasingCurve)
+                
+
+            if self.collapsedHeight != "auto":
+                startHeight = self.height()
+                endHeight = self.collapsedHeight
+            else:
+                startHeight = self.height()
+                endHeight = 0
+
+            self._heightAnimation = QPropertyAnimation(self, b"maximumHeight")
+            self._heightAnimation.setDuration(self.collapsingAnimationDuration)
+            self._heightAnimation.setEasingCurve(self.collapsingAnimationEasingCurve)
+
+        self.applyWidgetStyle()
+
+        self.animateWidth(startWidth, endWidth)
+        self.animateHeight(startHeight, endHeight)
+
+
+    def animateWidth(self, startWidth, endWidth):
+        if self.expandedWidth == "auto" or self.expandedWidth == 16777215:
+            if self.collapsed:
+                self._widthAnimation.finished.connect(lambda: self.setMaximumWidth(16777215))
+            if self.expanded:
+                self._widthAnimation.finished.connect(lambda: self.setMaximumWidth(0))
+
+        self._widthAnimation.setStartValue(startWidth)
+        self._widthAnimation.setEndValue(endWidth)
+        self._widthAnimation.start()
+
+
+    def animateHeight(self, startHeight, endHeight):
+        if self.expandedHeight == "auto" or self.expandedHeight == 16777215:
+            if self.collapsed:
+                self._heightAnimation.finished.connect(lambda: self.setMaximumHeight(16777215))
+            if self.expanded:
+                self._heightAnimation.finished.connect(lambda: self.setMaximumHeight(0))
+
+        self._heightAnimation.setStartValue(startHeight)
+        self._heightAnimation.setEndValue(endHeight)
+        self._heightAnimation.start()
+
+
+
+    def refresh(self):
+        if self.defaultWidth > self.collapsedWidth and self.defaultHeight > self.collapsedHeight:
+
+            self.collapsed = False
+            self.expanded = True
+
+        else:
+
+            self.collapsed = True
+            self.expanded = False
+
+        self.applyWidgetStyle()
+        self.applyButtonStyle()
+
+    #######################################################################
 
 
 
@@ -764,25 +1129,196 @@ def loadJsonStyle(self, ui):
     self.ui = ui
 
     ########################################################################
-    ## WINDOWS FLAG
+    ## MENUS
+    ########################################################################
+    if "QCustomSlideMenu" in data:
+        for QCustomSlideMenu in data['QCustomSlideMenu']:
+            if "name" in QCustomSlideMenu and len(str(QCustomSlideMenu["name"])) > 0:
+                if hasattr(self.ui, str(QCustomSlideMenu["name"])):
+                    containerWidget = getattr(self.ui, str(QCustomSlideMenu["name"]))
+
+                    if not containerWidget.metaObject().className() == "QCustomSlideMenu":
+                        raise Exception("Error: "+str(QCustomSlideMenu["name"])+" is not a QCustomSlideMenu object")
+                        return
+
+                    # 
+                    defaultWidth = 0 
+                    defaultHeight = 0
+                    collapsedWidth = 0
+                    collapsedHeight = 0
+                    expandedWidth = 0
+                    expandedHeight = 0 
+                    animationDuration = 0
+                    collapsingAnimationDuration = 0
+                    expandingAnimationDuration = 0
+                    animationEasingCurve = None
+                    collapsingAnimationEasingCurve = None
+                    expandingAnimationEasingCurve = None
+                    collapsedStyle = "" 
+                    expandedStyle = ""
+                    buttonObject = "" 
+                    menuCollapsedIcon = "" 
+                    menuExpandedIcon = ""
+                    menuCollapsedStyle = "" 
+                    menuExpandedStyle = ""
+
+                    if "defaultSize" in QCustomSlideMenu:
+                        for defaultSize in QCustomSlideMenu["defaultSize"]:
+
+                            if "width" in defaultSize:                                
+                                defaultWidth = defaultSize["width"]
+
+                            if "height" in defaultSize:
+                                defaultHeight = defaultSize["height"]
+
+
+                    if "collapsedSize" in QCustomSlideMenu:
+                        for collapsedSize in QCustomSlideMenu["collapsedSize"]:
+
+                            if "width" in collapsedSize:
+                                collapsedWidth = collapsedSize["width"]
+
+                            if "height" in collapsedSize:
+                                collapsedHeight = collapsedSize["height"]
+
+                    if "expandedSize" in QCustomSlideMenu:
+                        for expandedSize in QCustomSlideMenu["expandedSize"]:
+
+                            if "width" in expandedSize:
+                                expandedWidth = expandedSize["width"]
+
+                            if "height" in expandedSize:
+                                expandedHeight = expandedSize["height"]
+
+                    if "menuTransitionAnimation" in QCustomSlideMenu:
+
+                        for menuTransitionAnimation in QCustomSlideMenu["menuTransitionAnimation"]:
+
+                            if "animationDuration" in menuTransitionAnimation:
+                                animationDuration = menuTransitionAnimation["animationDuration"]
+                                collapsingAnimationDuration = menuTransitionAnimation["animationDuration"]
+                                expandingAnimationDuration = menuTransitionAnimation["animationDuration"]                                 
+
+                            if "animationEasingCurve" in menuTransitionAnimation:                          
+                                animationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
+                                collapsingAnimationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
+                                expandingAnimationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
+
+                            if "whenCollapsing" in QCustomSlideMenu:
+                                for whenCollapsing in QCustomSlideMenu["whenCollapsing"]:
+                                    if "animationDuration" in whenCollapsing:
+                                        collapsingAnimationDuration = whenCollapsing["animationDuration"]
+
+                                    if "animationEasingCurve" in whenCollapsing:                          
+                                        collapsingAnimationEasingCurve = returnAnimationEasingCurve(whenCollapsing["animationEasingCurve"])
+
+
+                            if "whenExpanding" in menuTransitionAnimation:
+                                for whenExpanding in menuTransitionAnimation["whenExpanding"]:
+                                    if "animationDuration" in whenExpanding:
+                                        expandingAnimationDuration = whenExpanding["animationDuration"]
+
+                                    if "animationEasingCurve" in whenExpanding:                          
+                                        expandingAnimationEasingCurve = returnAnimationEasingCurve(whenExpanding["animationEasingCurve"])
+
+
+                    if "menuContainerStyle" in QCustomSlideMenu:
+                        for menuContainerStyle in QCustomSlideMenu["menuContainerStyle"]:
+                            if "whenMenuIsCollapsed" in menuContainerStyle:
+                                colSty = ""
+                                for collapsedStyle in menuContainerStyle["whenMenuIsCollapsed"]:
+                                    colSty +=str(collapsedStyle) 
+
+                                if len(colSty) > 0: 
+                                    collapsedStyle = colSty
+
+                            if "whenMenuIsExpanded" in menuContainerStyle and len(str(menuContainerStyle["whenMenuIsExpanded"])) > 0: 
+                                expSty = ""
+                                for expandedStyle in menuContainerStyle["whenMenuIsExpanded"]:
+                                    expSty += str(expandedStyle) 
+
+                                if len(expSty) > 0: 
+                                    expandedStyle = expSty
+
+                    containerWidget.customizeQCustomSlideMenu(
+                        defaultWidth = defaultWidth,
+                        defaultHeight = defaultHeight,
+                        collapsedWidth = collapsedWidth,
+                        collapsedHeight = collapsedHeight,
+                        expandedWidth = expandedWidth,
+                        expandedHeight = expandedHeight,
+                        animationDuration = animationDuration,
+                        animationEasingCurve = collapsingAnimationDuration,
+                        collapsingAnimationDuration = expandingAnimationDuration,
+                        collapsingAnimationEasingCurve = animationEasingCurve,
+                        expandingAnimationDuration = collapsingAnimationEasingCurve,
+                        expandingAnimationEasingCurve = expandingAnimationEasingCurve,
+                        collapsedStyle = collapsedStyle,
+                        expandedStyle = expandedStyle
+                    )
+
+                    if "toggleButton" in QCustomSlideMenu:
+                        for toggleButton in QCustomSlideMenu["toggleButton"]:
+                            if "buttonName" in toggleButton and len(str(toggleButton["buttonName"])) > 0: 
+                                if hasattr(self.ui, str(toggleButton["buttonName"])):
+
+                                    buttonObject = getattr(self.ui, str(toggleButton["buttonName"]))
+
+                                    if "icons" in toggleButton:
+                                        for icons in toggleButton["icons"]:
+                                            if "whenMenuIsCollapsed" in icons and len(str(icons["whenMenuIsCollapsed"])) > 0:                                                
+                                                menuCollapsedIcon = str(icons["whenMenuIsCollapsed"])
+                                                    
+
+                                            if "whenMenuIsExpanded" in icons and len(str(icons["whenMenuIsExpanded"])) > 0:                                                
+                                                menuExpandedIcon = str(icons["whenMenuIsExpanded"])
+                    
+
+
+                                    if "style" in toggleButton:
+                                        for style in toggleButton["style"]:
+                                            if "whenMenuIsCollapsed" in style:
+                                                colSty = ""
+                                                for collapsedStyle in style["whenMenuIsCollapsed"]:
+                                                    colSty += str(collapsedStyle) 
+
+                                                if len(colSty) > 0:                                                                                               
+                                                    menuCollapsedStyle = colSty
+                                         
+
+                                            if "whenMenuIsExpanded" in style:
+                                                expSty = ""
+                                                for collapsedStyle in style["whenMenuIsExpanded"]:
+                                                    expSty += str(collapsedStyle) 
+
+                                                if len(expSty) > 0:                                                                                               
+                                                    menuExpandedStyle = expSty
+                                 
+
+                                    containerWidget.toggleButton(
+                                        buttonName = buttonObject,
+                                        iconWhenMenuIsCollapsed = menuCollapsedIcon,
+                                        iconWhenMenuIsExpanded = menuExpandedIcon,
+                                        styleWhenMenuIsCollapsed = menuCollapsedStyle,
+                                        styleWhenMenuIsExpanded = menuExpandedStyle
+                                    )
+                                    
+                                else:
+                                    raise Exception(str(toggleButton["buttonName"])+" toggle button could not be found")   
+
+                    containerWidget.refresh()
+                    
+
+                else:
+                    raise Exception(str(QCustomSlideMenu["name"])+" is not a QCustomSlideMenu, no widget found")
+    ########################################################################
+    ## END
     ########################################################################
 
-    #######################################################################
-    # Update restore button icon on msximizing or minimizing window
-    #######################################################################
-    def restore_or_maximize_window(self):
-        # If window is maxmized
-        if self.isMaximized():
-            self.showNormal()
-            # Change Icon
-            if len(str(self.normalIcon)) > 0:
-                self.restoreBtn.setIcon(QtGui.QIcon(str(self.normalIcon)))
-        else:
-            self.showMaximized()
-            # Change Iconload
-            if len(str(self.maximizedIcon)) > 0:
-                self.restoreBtn.setIcon(QtGui.QIcon(str(self.maximizedIcon)))
 
+    ########################################################################
+    ## WINDOWS FLAG
+    ########################################################################
     if "QMainWindow" in data:
         for QMainWindow in data['QMainWindow']:
             if "tittle" in QMainWindow and len(str(QMainWindow["tittle"])) > 0:
@@ -844,24 +1380,6 @@ def loadJsonStyle(self, ui):
                             getattr(self.ui, str(shadow["centralWidget"])).setGraphicsEffect(self.shadow)
 
 
-            # ###############################################
-            # Function to Move window on mouse drag event on the tittle bar
-            # ###############################################
-            def moveWindow(e):
-                # Detect if the window is  normal size
-                # ###############################################
-                if self.isMaximized() == False: #Not maximized
-                    # Move window only when window is normal size
-                    # ###############################################
-                    #if left mouse button is clicked (Only accept left mouse button clicks)
-                    if e.buttons() == Qt.LeftButton:
-                        #Move window
-                        self.move(self.pos() + e.globalPos() - self.clickPosition)
-                        self.clickPosition = e.globalPos()
-                        e.accept()
-            #######################################################################
-
-
 
             if "navigation" in QMainWindow:
                 for navigation in QMainWindow["navigation"]:
@@ -883,7 +1401,7 @@ def loadJsonStyle(self, ui):
                         for restore in navigation["restore"]:
                             if "buttonName" in restore and len(str(restore["buttonName"])) > 0:
                                 if hasattr(self.ui, str(restore["buttonName"])):
-                                    getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: restore_or_maximize_window(self))
+                                    getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: self.restore_or_maximize_window())
                                     self.restoreBtn = getattr(self.ui, str(restore["buttonName"]))
                             if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0:
                                 self.normalIcon = str(restore["normalIcon"])
@@ -895,13 +1413,23 @@ def loadJsonStyle(self, ui):
                             else:
                                 self.maximizedIcon = ""
 
-                        if "moveWindow" in navigation and len(str(navigation["moveWindow"])) > 0:
-                            #######################################################################
-                            # Add click event/Mouse move event/drag event to the top header to move the window
-                            #######################################################################
-                            if hasattr(self.ui, str(navigation["moveWindow"])):
-                                getattr(self.ui, str(navigation["moveWindow"])).mouseMoveEvent = moveWindow
-                            #######################################################################
+                    if "moveWindow" in navigation and len(str(navigation["moveWindow"])) > 0:
+                        #######################################################################
+                        # Add click event/Mouse move event/drag event to the top header to move the window
+                        #######################################################################
+                        if hasattr(self.ui, str(navigation["moveWindow"])):
+                            getattr(self.ui, str(navigation["moveWindow"])).mouseMoveEvent = self.moveWindow
+                        #######################################################################
+
+                    if "tittleBar" in navigation and len(str(navigation["tittleBar"])) > 0:
+                        #######################################################################
+                        # Add click event/Mouse move event/drag event to the top header to move the window
+                        #######################################################################
+                        if hasattr(self.ui, str(navigation["tittleBar"])):
+                            getattr(self.ui, str(navigation["tittleBar"])).mouseDoubleClickEvent = self.moveWindow
+                        #######################################################################
+
+
 
 
     ########################################################################
