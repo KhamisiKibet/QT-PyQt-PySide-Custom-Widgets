@@ -6,60 +6,37 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
-    <height>356</height>
+    <width>634</width>
+    <height>430</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="my_toggle_button">
-   <widget class="QCustomSlideMenu" name="my_widget_name" native="true">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>60</y>
-      <width>261</width>
-      <height>211</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(255, 0, 0);</string>
-    </property>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>90</y>
-       <width>101</width>
-       <height>18</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>My Widget</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>20</y>
-      <width>131</width>
-      <height>34</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Toggle Button </string>
-    </property>
-   </widget>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>PushButton</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCustomSlideMenu" name="widget" native="true">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 85, 0);</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
    <class>QCustomSlideMenu</class>
    <extends>QWidget</extends>
-   <header location="global">Custom_Widgets.h</header>
+   <header location="global">Custom_Widgets.Widgets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
