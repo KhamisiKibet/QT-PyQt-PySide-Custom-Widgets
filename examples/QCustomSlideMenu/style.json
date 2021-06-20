@@ -12,7 +12,41 @@
 		"expandedSize": [{
 			"width": "auto",
 			"height": "auto"
+		}],
+		"toggleButton": [{
+			"buttonName": "my_toggle_button",
+			"icons": [{
+				"whenMenuIsCollapsed": ":/icons/icons/arrow-down.svg",
+				"whenMenuIsExpanded": ":/icons/icons/arrow-up.svg"
+			}],
+			"style": [{
+				"whenMenuIsCollapsed": [
+					"border: 2px solid transparent"
+				],
+				"whenMenuIsExpanded": [
+					"border: 2px solid rgb(9, 5, 13)"
+				]
+			}]
+		}],
+		"menuTransitionAnimation": [{
+			"animationDuration": 2000,
+			"animationEasingCurve": "Linear",
+			"whenCollapsing": [{
+				"animationDuration": 500,
+				"animationEasingCurve": "Linear"
+			}],
+			"whenExpanding": [{
+				"animationDuration": 500,
+				"animationEasingCurve": "OutInBack"
+			}]
+		}],
+		"menuContainerStyle": [{
+			"whenMenuIsCollapsed": [
+				"background-color: rgb(255, 255, 255);"
+			],
+			"whenMenuIsExpanded": [
+				"background-color: rgb(255, 255, 255);"
+			]
 		}]
-		
-	}
-]
+	}]
+}

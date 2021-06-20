@@ -31,7 +31,7 @@ Right click on your widget, then click on promote to.
 Inside the promote classes widget,
 ========> under base class name select "QWidget" 
 ========> under promote class name enter "QCustomSlideMenu" 
-========> under header file name enter "Custom_Widgets.h" 
+========> under header file name enter "Custom_Widgets.Widgets.h" 
 ========> check the "Global Include" check box
 ========> click on "add"
 
