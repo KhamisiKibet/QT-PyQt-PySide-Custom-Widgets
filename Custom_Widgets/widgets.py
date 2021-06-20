@@ -1070,8 +1070,6 @@ class QCustomSlideMenu(QWidget):
             self._heightAnimation.setDuration(self.collapsingAnimationDuration)
             self._heightAnimation.setEasingCurve(self.collapsingAnimationEasingCurve)
 
-        self.applyWidgetStyle()
-
         self.animateWidth(startWidth, endWidth)
         self.animateHeight(startHeight, endHeight)
 
@@ -1086,6 +1084,8 @@ class QCustomSlideMenu(QWidget):
         self._widthAnimation.setStartValue(startWidth)
         self._widthAnimation.setEndValue(endWidth)
         self._widthAnimation.start()
+        
+        self._widthAnimation.finished.connect(lambda: self.self.applyWidgetStyle())
 
 
     def animateHeight(self, startHeight, endHeight):

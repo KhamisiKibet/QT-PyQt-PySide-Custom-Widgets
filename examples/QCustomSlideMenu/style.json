@@ -2,7 +2,7 @@
 	"QCustomSlideMenu": [{
 		"name": "widget",
 		"defaultSize": [{
-			"width": "auto",
+			"width": 250,
 			"height": "auto"
 		}],
 		"collapsedSize": [{
@@ -10,7 +10,7 @@
 			"height": 0
 		}],
 		"expandedSize": [{
-			"width": "auto",
+			"width": 250,
 			"height": "auto"
 		}],
 		"toggleButton": [{
@@ -42,10 +42,10 @@
 		}],
 		"menuContainerStyle": [{
 			"whenMenuIsCollapsed": [
-				"background-color: rgb(255, 255, 255);"
+				"border: 2px solid transparent"
 			],
 			"whenMenuIsExpanded": [
-				"background-color: rgb(255, 255, 255);"
+				"border: 2px solid rgb(9, 5, 13); background-color: white;"
 			]
 		}]
 	}]
