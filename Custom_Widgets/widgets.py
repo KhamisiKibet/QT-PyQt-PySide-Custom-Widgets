@@ -1085,7 +1085,7 @@ class QCustomSlideMenu(QWidget):
         self._widthAnimation.setEndValue(endWidth)
         self._widthAnimation.start()
         
-        self._widthAnimation.finished.connect(lambda: self.self.applyWidgetStyle())
+        self._widthAnimation.finished.connect(lambda: self.applyWidgetStyle())
 
 
     def animateHeight(self, startHeight, endHeight):
