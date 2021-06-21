@@ -277,6 +277,24 @@ A widget that will be used to drag the app window
 }
 ```
 
+The title bar
+
+This is the widget or frame which when double clicked will maximize the window if the window is in normal size or show the normal window size if the window is maximized
+
+```json
+{
+	"QMainWindow":[
+		{
+			"navigation":[
+				{
+					"tittleBar": "header_frame"
+				}
+			]
+		}
+	]
+}
+```
+
 So, the full json style sheet for QMainWindow will look like this:
 
 ```json
@@ -308,7 +326,8 @@ So, the full json style sheet for QMainWindow will look like this:
 							"maximizedIcon": ":/icons/icons/minimize-2.svg"
 						}
 					],
-					"moveWindow": "header_frame"
+					"moveWindow": "header_frame",
+					"tittleBar": "header_frame"
 				}
 			]
 		}

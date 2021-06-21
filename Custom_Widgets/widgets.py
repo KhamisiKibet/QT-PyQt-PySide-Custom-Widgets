@@ -791,7 +791,7 @@ class QMainWindow(QMainWindow):
     def moveWindow(self, e):
         # Detect if the window is  normal size
         # ###############################################
-        if self.isMaximized() == False: #Not maximized
+        if not self.isMaximized(): #Not maximized
             # Move window only when window is normal size
             # ###############################################
             #if left mouse button is clicked (Only accept left mouse button clicks)
@@ -802,6 +802,13 @@ class QMainWindow(QMainWindow):
                 e.accept()
         else:
             self.showNormal()
+
+    def toggleWindowSize(self, e):
+        if self.isMaximized():
+            self.showNormal()
+        else:
+            self.showMaximized()
+
     #######################################################################
 
 
@@ -1522,7 +1529,7 @@ def loadJsonStyle(self, ui):
                         # Add click event/Mouse move event/drag event to the top header to move the window
                         #######################################################################
                         if hasattr(self.ui, str(navigation["tittleBar"])):
-                            getattr(self.ui, str(navigation["tittleBar"])).mouseDoubleClickEvent = self.moveWindow
+                            getattr(self.ui, str(navigation["tittleBar"])).mouseDoubleClickEvent = self.toggleWindowSize
                         #######################################################################
 
 
