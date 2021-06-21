@@ -838,54 +838,51 @@ class QCustomSlideMenu(QWidget):
 
 
     ########################################################################
-    # Customize mennu
+    # Customize menu
     ########################################################################
     def customizeQCustomSlideMenu(self, **customValues):
         if "defaultWidth" in customValues:
+            self.defaultWidth = customValues["defaultWidth"]
             if isinstance(customValues["defaultWidth"], int):
-                self.defaultWidth = customValues["defaultWidth"]
                 self.setMaximumWidth(customValues["defaultWidth"])
                 self.setMinimumWidth(customValues["defaultWidth"])
             elif customValues["defaultWidth"] == "auto":
                 self.setMinimumWidth(0)
                 self.setMaximumWidth(16777215)
+            elif customValues["defaultWidth"] == "parent":
+                self.setMinimumWidth(self.parent().width())
+                self.setMaximumWidth(self.parent().width())
+
 
         if "defaultHeight" in customValues:
+            self.defaultHeight = customValues["defaultHeight"]
             if isinstance(customValues["defaultHeight"], int):
-                self.defaultHeight = customValues["defaultHeight"]
                 self.setMaximumHeight(customValues["defaultHeight"])
                 self.setMinimumHeight(customValues["defaultHeight"])
             elif customValues["defaultHeight"] == "auto":
                 self.setMinimumHeight(0)
                 self.setMaximumHeight(16777215)
+            elif customValues["defaultHeight"] == "parent":
+                self.setMinimumHeight(self.parent().height())
+                self.setMaximumHeight(self.parent().height())
 
         if (self.defaultWidth == "auto" and self.defaultHeight == "auto" ) or self.defaultWidth == 0 or self.defaultHeight == 0:
             self.setMaximumWidth(0)
             self.setMaximumHeight(0)
 
         if "collapsedWidth" in customValues:
-            if isinstance(customValues["collapsedWidth"], int):
-                self.collapsedWidth = customValues["collapsedWidth"]
-            else:
-                self.collapsedWidth = 0
+            self.collapsedWidth = customValues["collapsedWidth"]
 
         if "collapsedHeight" in customValues:
-            if isinstance(customValues["collapsedHeight"], int):
-                self.collapsedHeight = customValues["collapsedHeight"]
-            else:
-                self.collapsedWidth = 0
+            self.collapsedHeight = customValues["collapsedHeight"]
+           
 
         if "expandedWidth" in customValues:
-            if isinstance(customValues["defaultWidth"], int):
-                self.expandedWidth = customValues["expandedWidth"]
-            else:
-                self.expandedWidth = 16777215
+            self.expandedWidth = customValues["expandedWidth"]
 
         if "expandedHeight" in customValues:
-            if isinstance(customValues["defaultWidth"], int):
-                self.expandedHeight = customValues["expandedHeight"]
-            else:
-                self.expandedHeight = 16777215
+            self.expandedHeight = customValues["expandedHeight"]
+           
 
         if "animationDuration" in customValues and int(customValues["animationDuration"]) > 0:
             self.animationDuration = customValues["animationDuration"]
@@ -914,6 +911,9 @@ class QCustomSlideMenu(QWidget):
             self.expandedStyle = str(customValues["expandedStyle"])
             if self.expanded:
                 self.setStyleSheet(str(customValues["expandedStyle"]))
+
+
+        self.refresh()
 
 
     ########################################################################
@@ -1019,9 +1019,8 @@ class QCustomSlideMenu(QWidget):
 
     def animateMenu(self):
         self.setMinimumSize(QSize(0, 0))
-        
         if self.collapsed:
-            if self.expandedWidth != "auto" and self.expandedWidth != 16777215:
+            if self.expandedWidth != "auto" and self.expandedWidth != 16777215 and self.expandedWidth != "parent":
                 startWidth = self.width()
                 endWidth = self.expandedWidth
             else:
@@ -1033,7 +1032,7 @@ class QCustomSlideMenu(QWidget):
             self._widthAnimation.setEasingCurve(self.expandingAnimationEasingCurve)
                 
 
-            if self.expandedHeight != "auto" and self.expandedHeight != 16777215:
+            if self.expandedHeight != "auto" and self.expandedHeight != 16777215 and self.expandedHeight != "parent":
                 startHeight = self.height()
                 endHeight = self.expandedHeight
             else:
@@ -1047,9 +1046,12 @@ class QCustomSlideMenu(QWidget):
             
 
         if self.expanded:
-            if self.collapsedWidth != "auto":
+            if self.collapsedWidth != "auto" and self.collapsedWidth != "parent":
                 startWidth = self.width()
                 endWidth = self.collapsedWidth
+            elif self.collapsedWidth == "parent":
+                startWidth = self.width()
+                endWidth = self.parent().width()
             else:
                 startWidth = self.width()
                 endWidth = 0
@@ -1059,9 +1061,12 @@ class QCustomSlideMenu(QWidget):
             self._widthAnimation.setEasingCurve(self.collapsingAnimationEasingCurve)
                 
 
-            if self.collapsedHeight != "auto":
+            if self.collapsedHeight != "auto" and self.collapsedHeight != "parent":
                 startHeight = self.height()
                 endHeight = self.collapsedHeight
+            elif self.collapsedHeight == "parent":
+                startHeight = self.height()
+                endHeight = self.parent().height()
             else:
                 startHeight = self.height()
                 endHeight = 0
@@ -1102,7 +1107,7 @@ class QCustomSlideMenu(QWidget):
 
 
     def refresh(self):
-        if self.defaultWidth > self.collapsedWidth and self.defaultHeight > self.collapsedHeight:
+        if self.isExpanded():
 
             self.collapsed = False
             self.expanded = True
@@ -1113,7 +1118,98 @@ class QCustomSlideMenu(QWidget):
             self.expanded = False
 
         self.applyWidgetStyle()
-        self.applyButtonStyle()
+        if hasattr(self, "targetBtn"):
+            self.applyButtonStyle()
+
+    def isExpanded(self):
+        if self.width() > self.getCollapsedWidth() or self.width() > self.getCollapsedHeight():
+            return True
+
+    def isCollapsed(self):
+        if self.width() < self.getCollapsedWidth() or self.width() < self.getCollapsedHeight():
+            return True
+
+    def getDefaultWidth(self):
+        if isinstance(self.defaultWidth, int):
+            return self.defaultWidth
+        if self.defaultWidth == "auto":
+            return 0
+        if self.defaultWidth == "parent":
+            return self.parent().width()
+
+    def getDefaultHeight(self):
+        if isinstance(self.defaultHeight, int):
+            return self.defaultHeight
+        if self.defaultHeight == "auto":
+            return 0
+        if self.defaultHeight == "parent":
+            return self.parent().width()
+
+    def getCollapsedWidth(self):
+        if isinstance(self.collapsedWidth, int):
+            return self.collapsedWidth
+        if self.collapsedWidth == "auto":
+            return 0
+        if self.collapsedWidth == "parent":
+            return self.parent().width()
+
+    def getCollapsedHeight(self):
+        if isinstance(self.collapsedHeight, int):
+            return self.collapsedHeight
+        if self.collapsedHeight == "auto":
+            return 0
+        if self.collapsedHeight == "parent":
+            return self.parent().width()
+
+    def getExpandedWidth(self):
+        if isinstance(self.expandedWidth, int):
+            return self.expandedWidth
+        if self.expandedWidth == "auto":
+            return 16777215
+        if self.expandedWidth == "parent":
+            return self.parent().width()
+
+    def getExpandedHeight(self):
+        if isinstance(self.expandedHeight, int):
+            return self.expandedHeight
+        if self.expandedHeight == "auto":
+            return 16777215
+        if self.expandedHeight == "parent":
+            return self.parent().width()
+
+    def paintEvent(self, event: QPaintEvent):
+        if hasattr(self, "_widthAnimation"):
+            if self._widthAnimation.finished:
+                if self.collapsed:
+                    if self.collapsedWidth == "parent":
+                        self.setMinimumWidth(self.parent().width())
+                        self.setMaximumWidth(self.parent().width())
+                if self.expanded:
+                    if self.expandedWidth == "parent":
+                        self.setMinimumWidth(self.parent().width())
+                        self.setMaximumWidth(self.parent().width())
+                    
+
+        if hasattr(self, "_heightAnimation"):
+            if self._heightAnimation.finished:
+                if self.collapsed:
+                    if self.collapsedHeight == "parent":
+                        self.setMinimumHeight(self.parent().height())
+                        self.setMaximumHeight(self.parent().height())
+                if self.expanded:
+                    if self.expandedHeight == "parent":
+                        self.setMinimumHeight(self.parent().height())
+                        self.setMaximumHeight(self.parent().height())
+
+        if not hasattr(self, "_widthAnimation") and not hasattr(self, "_heightAnimation"):
+            if self.defaultWidth == "parent":
+                self.setMinimumWidth(self.parent().width())
+                self.setMaximumWidth(self.parent().width())
+            if self.defaultHeight == "parent":
+                self.setMinimumHeight(self.parent().height())
+                self.setMaximumHeight(self.parent().height())
+
+
 
     #######################################################################
 

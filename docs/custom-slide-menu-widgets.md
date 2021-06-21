@@ -126,6 +126,32 @@ The "auto" value applies the full available width or height to the widget
 }
 ```
 
+### Match widget size with parent:
+
+You can also use "parent" instead of auto to give your widget a fixed size that matches the parent size. 
+
+```json
+{
+	"QCustomSlideMenu": [{
+		"name": "my_widget_name",
+		"defaultSize": [{
+			"width": "parent",
+			"height": "auto"
+		}],
+		"collapsedSize": [{
+			"width": "parent",
+			"height": "auto"
+		}],
+		"expandedSize": [{
+			"width": "parent",
+			"height": "auto"
+		}]
+	}]
+}
+```
+
+The above widget will have a fixed width that matches the parent witdth even when minimized or maximized.
+
 ### Enter widget style when maximized/expanded or minimized/collapsed:
 
 You can pass the style that will be applied to the widget when it is collapsed or expanded
