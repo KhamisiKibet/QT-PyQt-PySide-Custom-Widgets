@@ -835,8 +835,8 @@ class QCustomSlideMenu(QWidget):
         self.expandingAnimationDuration = self.animationDuration
         self.expandingAnimationEasingCurve = self.animationEasingCurve
 
-        self.collapsedStyle = "background-color: rgb(9, 5, 13);"
-        self.expandedStyle = "background-color: rgb(9, 5, 13);"
+        self.collapsedStyle = ""
+        self.expandedStyle = ""
 
         self.collapsed = False
         self.expanded = True
@@ -1011,18 +1011,19 @@ class QCustomSlideMenu(QWidget):
                 self.setStyleSheet(str(self.collapsedStyle))    
 
     def applyButtonStyle(self):
-        if self.collapsed:
-            if len(self.targetBtn.menuCollapsedIcon) > 0:
-                    self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
+        if hasattr(self, "targetBtn"):
+            if self.collapsed:
+                if len(self.targetBtn.menuCollapsedIcon) > 0:
+                        self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
 
-            if len(str(self.targetBtn.menuCollapsedStyle)) > 0:
-                self.targetBtn.setStyleSheet(str(self.targetBtn.menuCollapsedStyle))
-        else:
-            if len(str(self.targetBtn.menuExpandedIcon)) > 0:
-                    self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuExpandedIcon))
+                if len(str(self.targetBtn.menuCollapsedStyle)) > 0:
+                    self.targetBtn.setStyleSheet(str(self.targetBtn.menuCollapsedStyle))
+            else:
+                if len(str(self.targetBtn.menuExpandedIcon)) > 0:
+                        self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuExpandedIcon))
 
-            if len(str(self.targetBtn.menuExpandedStyle)) > 0:
-                self.targetBtn.setStyleSheet(str(self.targetBtn.menuExpandedStyle))
+                if len(str(self.targetBtn.menuExpandedStyle)) > 0:
+                    self.targetBtn.setStyleSheet(str(self.targetBtn.menuExpandedStyle))
 
     def animateMenu(self):
         self.setMinimumSize(QSize(0, 0))
@@ -1254,9 +1255,9 @@ def loadJsonStyle(self, ui):
                     animationDuration = 0
                     collapsingAnimationDuration = 0
                     expandingAnimationDuration = 0
-                    animationEasingCurve = None
-                    collapsingAnimationEasingCurve = None
-                    expandingAnimationEasingCurve = None
+                    animationEasingCurve = returnAnimationEasingCurve("Linear")
+                    collapsingAnimationEasingCurve = returnAnimationEasingCurve("Linear")
+                    expandingAnimationEasingCurve = returnAnimationEasingCurve("Linear")
                     collapsedStyle = "" 
                     expandedStyle = ""
                     buttonObject = "" 
@@ -1300,19 +1301,19 @@ def loadJsonStyle(self, ui):
                             if "animationDuration" in menuTransitionAnimation:
                                 animationDuration = menuTransitionAnimation["animationDuration"]
                                 collapsingAnimationDuration = menuTransitionAnimation["animationDuration"]
-                                expandingAnimationDuration = menuTransitionAnimation["animationDuration"]                                 
+                                expandingAnimationDuration = menuTransitionAnimation["animationDuration"]      
 
                             if "animationEasingCurve" in menuTransitionAnimation:                          
                                 animationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
                                 collapsingAnimationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
                                 expandingAnimationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
 
-                            if "whenCollapsing" in QCustomSlideMenu:
-                                for whenCollapsing in QCustomSlideMenu["whenCollapsing"]:
+                            if "whenCollapsing" in menuTransitionAnimation:
+                                for whenCollapsing in menuTransitionAnimation["whenCollapsing"]:
                                     if "animationDuration" in whenCollapsing:
                                         collapsingAnimationDuration = whenCollapsing["animationDuration"]
 
-                                    if "animationEasingCurve" in whenCollapsing:                          
+                                    if "animationEasingCurve" in whenCollapsing:     
                                         collapsingAnimationEasingCurve = returnAnimationEasingCurve(whenCollapsing["animationEasingCurve"])
 
 
@@ -1352,9 +1353,9 @@ def loadJsonStyle(self, ui):
                         expandedHeight = expandedHeight,
                         animationDuration = animationDuration,
                         animationEasingCurve = collapsingAnimationDuration,
-                        collapsingAnimationDuration = expandingAnimationDuration,
+                        collapsingAnimationDuration = collapsingAnimationDuration,
                         collapsingAnimationEasingCurve = animationEasingCurve,
-                        expandingAnimationDuration = collapsingAnimationEasingCurve,
+                        expandingAnimationDuration = expandingAnimationDuration,
                         expandingAnimationEasingCurve = expandingAnimationEasingCurve,
                         collapsedStyle = collapsedStyle,
                         expandedStyle = expandedStyle

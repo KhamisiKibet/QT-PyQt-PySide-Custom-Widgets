@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>576</width>
-    <height>402</height>
+    <width>479</width>
+    <height>368</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <string notr="true">color: rgb(0, 0, 0);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <widget class="QPushButton" name="my_toggle_button">
       <property name="styleSheet">
@@ -34,16 +34,10 @@
     </item>
     <item>
      <widget class="QCustomSlideMenu" name="widget" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>564</width>
-        <height>350</height>
-       </size>
-      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QFrame" name="frame">
          <property name="frameShape">
@@ -52,18 +46,18 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
            <widget class="QLabel" name="label">
             <property name="font">
              <font>
-              <pointsize>20</pointsize>
+              <pointsize>15</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
             <property name="text">
-             <string>MY WIDGET</string>
+             <string>My Responsive Widget</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
