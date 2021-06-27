@@ -36,7 +36,7 @@
   <customwidget>
    <class>FormProgressIndicator</class>
    <extends>QWidget</extends>
-   <header location="global">Custom_Widgets.widgets.h</header>
+   <header location="global">Custom_Widgets.Widgets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

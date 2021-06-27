@@ -14,7 +14,7 @@ from PySide2.QtWidgets import *
 
 ########################################################################
 # IMPORT CUSTOM BUTTONS FILE
-from Custom_Widgets.widgets import *
+from Custom_Widgets.Widgets import *
 ########################################################################
 
 

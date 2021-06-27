@@ -488,9 +488,9 @@ You can customize the animations using a JSon file or Python statements
 ########################################################################
 ## QStackedWidget Class
 ########################################################################
-class QStackedWidget(QtWidgets.QStackedWidget):
+class QCustomStackedWidget(QtWidgets.QStackedWidget):
     def __init__(self, parent=None):
-        super(QStackedWidget, self).__init__(parent)
+        super(QCustomStackedWidget, self).__init__(parent)
 
         ########################################################################
         ## Initialize Default Values
@@ -873,7 +873,7 @@ class QCustomSlideMenu(QWidget):
                 self.setMinimumHeight(self.parent().height())
                 self.setMaximumHeight(self.parent().height())
 
-        if (self.defaultWidth == "auto" and self.defaultHeight == "auto" ) or self.defaultWidth == 0 or self.defaultHeight == 0:
+        if self.defaultWidth == 0 or self.defaultHeight == 0:
             self.setMaximumWidth(0)
             self.setMaximumHeight(0)
 
