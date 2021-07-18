@@ -22,11 +22,12 @@ PySide6/2 guide coming soon, Please check back later
 Create a widget with a custom promote class inside QT Designer as shown below:
 
 Add the widget to the UI
-![Ading QT Designer Widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/24.png?raw=true)
+
+![Ading QT Designer Widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/25.png?raw=true)
 
 Right click on the widget, select promote. Inside the Promoted Widgets container, enter "AnalogGaugeWidget" as the class name and "analoggaugewidget.h" as the header file name the click on "add".
 Check the "Global include" check mark then click on promote.
-![Adding QT Designer Promote Widget class](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/25.png?raw=true)
+![Adding QT Designer Promote Widget class](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/26.png?raw=true)
 
 After designing your user interface file (UI), convet it to a PyQt python file
 
