@@ -4,12 +4,21 @@
 # Author: Stefan Holstein
 # inspired by: https://github.com/Werkov/PyQt4/blob/master/examples/widgets/analogclock.py
 # Thanks to https://stackoverflow.com/
-#Updated by
-#####
-## SPINN DESIGN CODE
-# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
-# WEBSITE: spinndesign.com
-########################################################################
+#
+# Sorry for mixing english & german notes
+#
+# ToDo: Fix Bug: Rundungsfehler Max Value / Grid
+# ToDo: mehrere Zeiger ermöglichen. z.b. über ein ZeigerArray mit allen valiablen
+#       Signal erzeugung (self.valueChange.emit()) pruefen wie es dann möglich ist.
+#       Evtl MausTracking(Teil)-deaktivieren
+#       Farben separat handeln
+# todo: aktuell ist nur eine Zeigerrichtung klein nach gross im Uhrzeigersinn moeglich
+# -> erweiterung Anzeige von gross nach klein um Uhrzeigersin
+# todo: auf timer event verzichten um effizienz zu steigern
+#       self.update() an allen stellen einfügen, an denen es notwendig ist.
+#       It is possible to En-/disable timerevents. Use: self.use_timer_event = True/False
+# todo: Bug Fix: Offset Berechnung bezogen auf den Winkel ist falsch
+# Todo: print() in logging() ausgabe aendern
 ###
 
 import os
@@ -49,7 +58,7 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # DEFAULT NEEDLE COLOR
         ################################################################################################
-        self.set_NeedleColor(0, 0, 0, 255)
+        self.setNeedleColor(0, 0, 0, 255)
 
         ################################################################################################
         # DEFAULT NEEDLE WHEN RELEASED
@@ -507,7 +516,7 @@ class AnalogGaugeWidget(QWidget):
     ################################################################################################
     # SET NEEDLE COLOR
     ################################################################################################
-    def set_NeedleColor(self, R=50, G=50, B=50, Transparency=255):
+    def setNeedleColor(self, R=50, G=50, B=50, Transparency=255):
         # Red: R = 0 - 255
         # Green: G = 0 - 255
         # Blue: B = 0 - 255
