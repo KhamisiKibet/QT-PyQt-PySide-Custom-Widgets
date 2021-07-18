@@ -9,6 +9,10 @@ Continue reading...
 
 ## Download
 
+Download the source code plus examples below
+[Download](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/AnalogGaugeMeterWidget)  
+
+
 ## PyQT
 For pyqt5 users click here to download the "analoggaugewidget.py" file and put it in 
 the main root directory of your project folder.
