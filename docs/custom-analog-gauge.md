@@ -5,6 +5,9 @@ This module will be soon available for Pip installations, please check back late
 
 # PyQt/PySide Analog Gauge Meter
 
+## Usage
+
+Please check back later for full documentation and downloads
 
 
 
