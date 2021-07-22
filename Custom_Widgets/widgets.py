@@ -773,16 +773,16 @@ class QMainWindow(QMainWindow):
             # Change Icon
             if len(str(self.normalIcon)) > 0:
                 self.restoreBtn.setIcon(QtGui.QIcon(str(self.normalIcon)))
-            
+
 
     def restore_or_maximize_window(self):
         # If window is maxmized
         if self.isMaximized():
             self.showNormal()
-            
+
         else:
             self.showMaximized()
-            
+
         self.updateRestoreButtonIcon()
 
      # ###############################################
@@ -882,14 +882,14 @@ class QCustomSlideMenu(QWidget):
 
         if "collapsedHeight" in customValues:
             self.collapsedHeight = customValues["collapsedHeight"]
-           
+
 
         if "expandedWidth" in customValues:
             self.expandedWidth = customValues["expandedWidth"]
 
         if "expandedHeight" in customValues:
             self.expandedHeight = customValues["expandedHeight"]
-           
+
 
         if "animationDuration" in customValues and int(customValues["animationDuration"]) > 0:
             self.animationDuration = customValues["animationDuration"]
@@ -903,7 +903,7 @@ class QCustomSlideMenu(QWidget):
         if "collapsingAnimationEasingCurve" in customValues and len(str(customValues["collapsingAnimationEasingCurve"])) > 0:
             self.collapsingAnimationEasingCurve = customValues["collapsingAnimationEasingCurve"]
 
-        if "expandingAnimationDuration" in customValues and int(customValues["expandingAnimationDuration"]) > 0:       
+        if "expandingAnimationDuration" in customValues and int(customValues["expandingAnimationDuration"]) > 0:
             self.expandingAnimationDuration = customValues["expandingAnimationDuration"]
 
         if "expandingAnimationEasingCurve" in customValues and len(str(customValues["expandingAnimationEasingCurve"])) > 0:
@@ -945,9 +945,9 @@ class QCustomSlideMenu(QWidget):
             toggleButton = values["buttonName"]
             if not hasattr(self, "targetBtn") or self.targetBtn != self:
                 toggleButton.menuCollapsedIcon = ""
-                toggleButton.menuExpandedIcon = "" 
-                toggleButton.menuCollapsedStyle = "" 
-                toggleButton.menuExpandedStyle = "" 
+                toggleButton.menuExpandedIcon = ""
+                toggleButton.menuCollapsedStyle = ""
+                toggleButton.menuExpandedStyle = ""
 
             toggleButton.targetMenu = self
 
@@ -956,17 +956,17 @@ class QCustomSlideMenu(QWidget):
             self.activateMenuButton(self.targetBtn)
 
 
-        if "iconWhenMenuIsCollapsed" in values and len(str(values["iconWhenMenuIsCollapsed"])) > 0:                                               
+        if "iconWhenMenuIsCollapsed" in values and len(str(values["iconWhenMenuIsCollapsed"])) > 0:
             toggleButton.menuCollapsedIcon = str(values["iconWhenMenuIsCollapsed"])
-                    
+
 
         if "iconWhenMenuIsExpanded" in values and len(str(values["iconWhenMenuIsExpanded"])) > 0:
-            toggleButton.menuExpandedIcon = str(values["iconWhenMenuIsExpanded"])               
+            toggleButton.menuExpandedIcon = str(values["iconWhenMenuIsExpanded"])
 
-        if "styleWhenMenuIsCollapsed" in values and len(str(values["iconWhenMenuIsExpanded"])) > 0:                            
+        if "styleWhenMenuIsCollapsed" in values and len(str(values["iconWhenMenuIsExpanded"])) > 0:
             toggleButton.menuCollapsedStyle = str(values["styleWhenMenuIsCollapsed"])
 
-        if "styleWhenMenuIsExpanded" in values and len(str(values["styleWhenMenuIsExpanded"])) > 0:                            
+        if "styleWhenMenuIsExpanded" in values and len(str(values["styleWhenMenuIsExpanded"])) > 0:
             toggleButton.menuExpandedStyle = str(values["styleWhenMenuIsExpanded"])
 
 
@@ -998,7 +998,7 @@ class QCustomSlideMenu(QWidget):
         self.animateMenu()
 
         self.collapsed = True
-        self.expanded = False 
+        self.expanded = False
 
         self.applyButtonStyle()
 
@@ -1008,7 +1008,7 @@ class QCustomSlideMenu(QWidget):
             self.setStyleSheet(str(self.expandedStyle))
 
         if self.collapsed and len(str(self.collapsedStyle)) > 0:
-                self.setStyleSheet(str(self.collapsedStyle))    
+                self.setStyleSheet(str(self.collapsedStyle))
 
     def applyButtonStyle(self):
         if hasattr(self, "targetBtn"):
@@ -1038,7 +1038,7 @@ class QCustomSlideMenu(QWidget):
             self._widthAnimation = QPropertyAnimation(self, b"maximumWidth")
             self._widthAnimation.setDuration(self.expandingAnimationDuration)
             self._widthAnimation.setEasingCurve(self.expandingAnimationEasingCurve)
-                
+
 
             if self.expandedHeight != "auto" and self.expandedHeight != 16777215 and self.expandedHeight != "parent":
                 startHeight = self.height()
@@ -1050,8 +1050,8 @@ class QCustomSlideMenu(QWidget):
             self._heightAnimation = QPropertyAnimation(self, b"maximumHeight")
             self._heightAnimation.setDuration(self.expandingAnimationDuration)
             self._heightAnimation.setEasingCurve(self.expandingAnimationEasingCurve)
-            
-            
+
+
 
         if self.expanded:
             if self.collapsedWidth != "auto" and self.collapsedWidth != "parent":
@@ -1067,7 +1067,7 @@ class QCustomSlideMenu(QWidget):
             self._widthAnimation = QPropertyAnimation(self, b"maximumWidth")
             self._widthAnimation.setDuration(self.collapsingAnimationDuration)
             self._widthAnimation.setEasingCurve(self.collapsingAnimationEasingCurve)
-                
+
 
             if self.collapsedHeight != "auto" and self.collapsedHeight != "parent":
                 startHeight = self.height()
@@ -1097,7 +1097,7 @@ class QCustomSlideMenu(QWidget):
         self._widthAnimation.setStartValue(startWidth)
         self._widthAnimation.setEndValue(endWidth)
         self._widthAnimation.start()
-        
+
         self._widthAnimation.finished.connect(lambda: self.applyWidgetStyle())
 
 
@@ -1196,7 +1196,7 @@ class QCustomSlideMenu(QWidget):
                     if self.expandedWidth == "parent":
                         self.setMinimumWidth(self.parent().width())
                         self.setMaximumWidth(self.parent().width())
-                    
+
 
         if hasattr(self, "_heightAnimation"):
             if self._heightAnimation.finished:
@@ -1233,6 +1233,322 @@ def loadJsonStyle(self, ui):
     self.ui = ui
 
     ########################################################################
+    ## ANALOG GAUGE WIDGET
+    ########################################################################
+    if "AnalogGaugeWidget" in data:
+        for AnalogGaugeWidget in data['AnalogGaugeWidget']:
+            if "name" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["name"])) > 0:
+                if hasattr(self.ui, str(AnalogGaugeWidget["name"])):
+                    gaugeWidget = getattr(self.ui, str(AnalogGaugeWidget["name"]))
+
+                    if not gaugeWidget.metaObject().className() == "AnalogGaugeWidget":
+                        raise Exception("Error: "+str(AnalogGaugeWidget["name"])+" is not a AnalogGaugeWidget object")
+                        return
+
+                    if "units" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["units"])) > 0:
+                        ################################################################################################
+                        # Set gauge units
+                        ################################################################################################
+                        gaugeWidget.units = str(AnalogGaugeWidget["units"])
+
+                    if "minValue" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set gauge min value
+                        ################################################################################################
+                        gaugeWidget.minValue = int(AnalogGaugeWidget["minValue"])
+
+
+                    if "maxValue" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set gauge max value
+                        ################################################################################################
+                        gaugeWidget.maxValue = int(AnalogGaugeWidget["maxValue"])
+
+                    if "scalaCount" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set scala count
+                        ################################################################################################
+                        gaugeWidget.scalaCount = int(AnalogGaugeWidget["scalaCount"])
+
+                    if "startValue" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set start value
+                        ################################################################################################
+                        gaugeWidget.updateValue(int(AnalogGaugeWidget["startValue"]))
+
+                    if "gaugeTheme" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set gauge theme
+                        ################################################################################################
+                        gaugeWidget.setGaugeTheme(int(AnalogGaugeWidget["gaugeTheme"]))
+
+                    if "offsetAngle" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set offset angle
+                        ################################################################################################
+                        gaugeWidget.updateAngleOffset(int(AnalogGaugeWidget["offsetAngle"]))
+
+                    if "innerRadius" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set inner radius
+                        ################################################################################################
+                        gaugeWidget.setGaugeColorInnerRadiusFactor(int(AnalogGaugeWidget["innerRadius"]))
+
+                    if "outerRadius" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set outer radius
+                        ################################################################################################
+                        gaugeWidget.setGaugeColorOuterRadiusFactor(int(AnalogGaugeWidget["outerRadius"]))
+
+                    if "scaleStartAngle" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set start angle
+                        ################################################################################################
+                        gaugeWidget.setScaleStartAngle(int(AnalogGaugeWidget["scaleStartAngle"]))
+
+
+                    if "totalScaleAngle" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set total scale angle
+                        ################################################################################################
+                        gaugeWidget.setTotalScaleAngleSize(int(AnalogGaugeWidget["totalScaleAngle"]))
+
+                    if "enableBarGraph" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set enable bar graph
+                        ################################################################################################
+                        gaugeWidget.setEnableBarGraph(bool(AnalogGaugeWidget["enableBarGraph"]))
+
+                    if "enableValueText" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set enable text value
+                        ################################################################################################
+                        gaugeWidget.setEnableValueText(bool(AnalogGaugeWidget["enableValueText"]))
+
+                    if "enableNeedlePolygon" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set enable needle polygon
+                        ################################################################################################
+                        gaugeWidget.setEnableNeedlePolygon(bool(AnalogGaugeWidget["enableNeedlePolygon"]))
+
+                    if "enableCenterPoint" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set enable needle center
+                        ################################################################################################
+                        gaugeWidget.setEnableCenterPoint(bool(AnalogGaugeWidget["enableCenterPoint"]))
+
+
+                    if "enableScaleText" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set enable scale text
+                        ################################################################################################
+                        gaugeWidget.setEnableScaleText(bool(AnalogGaugeWidget["enableScaleText"]))
+
+                    if "enableScaleBigGrid" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set enable big scale grid
+                        ################################################################################################
+                        gaugeWidget.setEnableBigScaleGrid(bool(AnalogGaugeWidget["enableScaleBigGrid"]))
+
+                    if "enableScaleFineGrid" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set enable big scale grid
+                        ################################################################################################
+                        gaugeWidget.setEnableFineScaleGrid(bool(AnalogGaugeWidget["enableScaleFineGrid"]))
+
+                    if "needleColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["needleColor"])) > 0:
+                        ################################################################################################
+                        # Set needle color
+                        ################################################################################################
+                        gaugeWidget.NeedleColor = QColor(str(AnalogGaugeWidget["needleColor"]))
+                        gaugeWidget.NeedleColorReleased = QColor(str(AnalogGaugeWidget["needleColor"]))
+
+
+                    if "needleColorOnDrag" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["needleColorOnDrag"])) > 0:
+                        ################################################################################################
+                        # Set needle color on drag
+                        ################################################################################################
+                        gaugeWidget.NeedleColorDrag = QColor(str(AnalogGaugeWidget["needleColorOnDrag"]))
+
+                    if "scaleValueColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["scaleValueColor"])) > 0:
+                        ################################################################################################
+                        # Set value color
+                        ################################################################################################
+                        gaugeWidget.ScaleValueColor = QColor(str(AnalogGaugeWidget["scaleValueColor"]))
+
+                    if "displayValueColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["displayValueColor"])) > 0:
+                        ################################################################################################
+                        # Set display value color
+                        ################################################################################################
+                        gaugeWidget.DisplayValueColor = QColor(str(AnalogGaugeWidget["displayValueColor"]))
+
+                    if "bigScaleColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["bigScaleColor"])) > 0:
+                        ################################################################################################
+                        # Set big scale color
+                        ################################################################################################
+                        gaugeWidget.setBigScaleColor(QColor(str(AnalogGaugeWidget["bigScaleColor"])))
+
+                    if "fineScaleColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["fineScaleColor"])) > 0:
+                        ################################################################################################
+                        # Set fine scale color
+                        ################################################################################################
+                        gaugeWidget.setFineScaleColor(QColor(str(AnalogGaugeWidget["fineScaleColor"])))
+
+                    if "customGaugeTheme" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set custom gauge theme
+                        ################################################################################################
+                        colors = AnalogGaugeWidget['customGaugeTheme']
+
+                        for x in colors: 
+
+                            if "color1" in x and len(str(x['color1'])) > 0:
+                                if "color2" in x and len(str(x['color2'])) > 0:
+                                    if "color3" in x and len(str(x['color3'])) > 0:
+
+                                        gaugeWidget.setCustomGaugeTheme(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                                color3 = str(x['color3'])
+                                            )
+
+                                    else:
+
+                                        gaugeWidget.setCustomGaugeTheme(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                            )
+
+                                else:
+
+                                    gaugeWidget.setCustomGaugeTheme(
+                                            color1 = str(x['color1']),
+                                        )
+
+                    if "scalePolygonColor" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set scale polygon color
+                        ################################################################################################
+                        colors = AnalogGaugeWidget['scalePolygonColor']
+
+                        for x in colors: 
+
+                            if "color1" in x and len(str(x['color1'])) > 0:
+                                if "color2" in x and len(str(x['color2'])) > 0:
+                                    if "color3" in x and len(str(x['color3'])) > 0:
+
+                                        gaugeWidget.setScalePolygonColor(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                                color3 = str(x['color3'])
+                                            )
+
+                                    else:
+
+                                        gaugeWidget.setScalePolygonColor(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                            )
+
+                                else:
+
+                                    gaugeWidget.setScalePolygonColor(
+                                            color1 = str(x['color1']),
+                                        )
+
+                    if "needleCenterColor" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set needle center color
+                        ################################################################################################
+                        colors = AnalogGaugeWidget['needleCenterColor']
+
+                        for x in colors: 
+
+                            if "color1" in x and len(str(x['color1'])) > 0:
+                                if "color2" in x and len(str(x['color2'])) > 0:
+                                    if "color3" in x and len(str(x['color3'])) > 0:
+
+                                        gaugeWidget.setNeedleCenterColor(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                                color3 = str(x['color3'])
+                                            )
+
+                                    else:
+
+                                        gaugeWidget.setNeedleCenterColor(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                            )
+
+                                else:
+
+                                    gaugeWidget.setNeedleCenterColor(
+                                            color1 = str(x['color1']),
+                                        )
+
+                    if "outerCircleColor" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set outer circle color
+                        ################################################################################################
+                        colors = AnalogGaugeWidget['outerCircleColor']
+
+                        for x in colors: 
+
+                            if "color1" in x and len(str(x['color1'])) > 0:
+                                if "color2" in x and len(str(x['color2'])) > 0:
+                                    if "color3" in x and len(str(x['color3'])) > 0:
+
+                                        gaugeWidget.setOuterCircleColor(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                                color3 = str(x['color3'])
+                                            )
+
+                                    else:
+
+                                        gaugeWidget.setOuterCircleColor(
+                                                color1 = str(x['color1']),
+                                                color2= str(x['color2']),
+                                            )
+
+                                else:
+
+                                    gaugeWidget.setOuterCircleColor(
+                                            color1 = str(x['color1']),
+                                        )
+
+                    if "valueFontFamily" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set value font family
+                        ################################################################################################
+                        font = AnalogGaugeWidget['valueFontFamily']
+
+                        for x in font: 
+                            if "path" in x and len(str(x['path'])) > 0:
+                                QFontDatabase.addApplicationFont(os.path.join(os.path.dirname(__file__), str(x['path'])) )
+
+                            if "name" in x and len(str(x['name'])) > 0:
+                                gaugeWidget.setValueFontFamily(str(x['name']))
+
+                    if "scaleFontFamily" in AnalogGaugeWidget:
+                        ################################################################################################
+                        # Set scale font family
+                        ################################################################################################
+                        font = AnalogGaugeWidget['scaleFontFamily']
+                        for x in font:                            
+                            if "path" in x and len(str(x['path'])) > 0:
+
+                                QFontDatabase.addApplicationFont(os.path.join(os.path.dirname(__file__), str(x['path'])) )
+
+                            if "name" in x and len(str(x['name'])) > 0:
+                                gaugeWidget.setScaleFontFamily(str(x['name']))
+
+
+                else:
+                    raise Exception(str(AnalogGaugeWidget["name"])+" is not a AnalogGaugeWidget, no widget found")
+
+    ########################################################################
     ## MENUS
     ########################################################################
     if "QCustomSlideMenu" in data:
@@ -1245,31 +1561,31 @@ def loadJsonStyle(self, ui):
                         raise Exception("Error: "+str(QCustomSlideMenu["name"])+" is not a QCustomSlideMenu object")
                         return
 
-                    # 
-                    defaultWidth = 0 
+                    #
+                    defaultWidth = 0
                     defaultHeight = 0
                     collapsedWidth = 0
                     collapsedHeight = 0
                     expandedWidth = 0
-                    expandedHeight = 0 
+                    expandedHeight = 0
                     animationDuration = 0
                     collapsingAnimationDuration = 0
                     expandingAnimationDuration = 0
                     animationEasingCurve = returnAnimationEasingCurve("Linear")
                     collapsingAnimationEasingCurve = returnAnimationEasingCurve("Linear")
                     expandingAnimationEasingCurve = returnAnimationEasingCurve("Linear")
-                    collapsedStyle = "" 
+                    collapsedStyle = ""
                     expandedStyle = ""
-                    buttonObject = "" 
-                    menuCollapsedIcon = "" 
+                    buttonObject = ""
+                    menuCollapsedIcon = ""
                     menuExpandedIcon = ""
-                    menuCollapsedStyle = "" 
+                    menuCollapsedStyle = ""
                     menuExpandedStyle = ""
 
                     if "defaultSize" in QCustomSlideMenu:
                         for defaultSize in QCustomSlideMenu["defaultSize"]:
 
-                            if "width" in defaultSize:                                
+                            if "width" in defaultSize:
                                 defaultWidth = defaultSize["width"]
 
                             if "height" in defaultSize:
@@ -1301,9 +1617,9 @@ def loadJsonStyle(self, ui):
                             if "animationDuration" in menuTransitionAnimation:
                                 animationDuration = menuTransitionAnimation["animationDuration"]
                                 collapsingAnimationDuration = menuTransitionAnimation["animationDuration"]
-                                expandingAnimationDuration = menuTransitionAnimation["animationDuration"]      
+                                expandingAnimationDuration = menuTransitionAnimation["animationDuration"]
 
-                            if "animationEasingCurve" in menuTransitionAnimation:                          
+                            if "animationEasingCurve" in menuTransitionAnimation:
                                 animationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
                                 collapsingAnimationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
                                 expandingAnimationEasingCurve = returnAnimationEasingCurve(menuTransitionAnimation["animationEasingCurve"])
@@ -1313,7 +1629,7 @@ def loadJsonStyle(self, ui):
                                     if "animationDuration" in whenCollapsing:
                                         collapsingAnimationDuration = whenCollapsing["animationDuration"]
 
-                                    if "animationEasingCurve" in whenCollapsing:     
+                                    if "animationEasingCurve" in whenCollapsing:
                                         collapsingAnimationEasingCurve = returnAnimationEasingCurve(whenCollapsing["animationEasingCurve"])
 
 
@@ -1322,7 +1638,7 @@ def loadJsonStyle(self, ui):
                                     if "animationDuration" in whenExpanding:
                                         expandingAnimationDuration = whenExpanding["animationDuration"]
 
-                                    if "animationEasingCurve" in whenExpanding:                          
+                                    if "animationEasingCurve" in whenExpanding:
                                         expandingAnimationEasingCurve = returnAnimationEasingCurve(whenExpanding["animationEasingCurve"])
 
 
@@ -1331,17 +1647,17 @@ def loadJsonStyle(self, ui):
                             if "whenMenuIsCollapsed" in menuContainerStyle:
                                 colSty = ""
                                 for collapsedStyle in menuContainerStyle["whenMenuIsCollapsed"]:
-                                    colSty +=str(collapsedStyle) 
+                                    colSty +=str(collapsedStyle)
 
-                                if len(colSty) > 0: 
+                                if len(colSty) > 0:
                                     collapsedStyle = colSty
 
-                            if "whenMenuIsExpanded" in menuContainerStyle and len(str(menuContainerStyle["whenMenuIsExpanded"])) > 0: 
+                            if "whenMenuIsExpanded" in menuContainerStyle and len(str(menuContainerStyle["whenMenuIsExpanded"])) > 0:
                                 expSty = ""
                                 for expandedStyle in menuContainerStyle["whenMenuIsExpanded"]:
-                                    expSty += str(expandedStyle) 
+                                    expSty += str(expandedStyle)
 
-                                if len(expSty) > 0: 
+                                if len(expSty) > 0:
                                     expandedStyle = expSty
 
                     containerWidget.customizeQCustomSlideMenu(
@@ -1363,20 +1679,20 @@ def loadJsonStyle(self, ui):
 
                     if "toggleButton" in QCustomSlideMenu:
                         for toggleButton in QCustomSlideMenu["toggleButton"]:
-                            if "buttonName" in toggleButton and len(str(toggleButton["buttonName"])) > 0: 
+                            if "buttonName" in toggleButton and len(str(toggleButton["buttonName"])) > 0:
                                 if hasattr(self.ui, str(toggleButton["buttonName"])):
 
                                     buttonObject = getattr(self.ui, str(toggleButton["buttonName"]))
 
                                     if "icons" in toggleButton:
                                         for icons in toggleButton["icons"]:
-                                            if "whenMenuIsCollapsed" in icons and len(str(icons["whenMenuIsCollapsed"])) > 0:                                                
+                                            if "whenMenuIsCollapsed" in icons and len(str(icons["whenMenuIsCollapsed"])) > 0:
                                                 menuCollapsedIcon = str(icons["whenMenuIsCollapsed"])
-                                                    
 
-                                            if "whenMenuIsExpanded" in icons and len(str(icons["whenMenuIsExpanded"])) > 0:                                                
+
+                                            if "whenMenuIsExpanded" in icons and len(str(icons["whenMenuIsExpanded"])) > 0:
                                                 menuExpandedIcon = str(icons["whenMenuIsExpanded"])
-                    
+
 
 
                                     if "style" in toggleButton:
@@ -1384,20 +1700,20 @@ def loadJsonStyle(self, ui):
                                             if "whenMenuIsCollapsed" in style:
                                                 colSty = ""
                                                 for collapsedStyle in style["whenMenuIsCollapsed"]:
-                                                    colSty += str(collapsedStyle) 
+                                                    colSty += str(collapsedStyle)
 
-                                                if len(colSty) > 0:                                                                                               
+                                                if len(colSty) > 0:
                                                     menuCollapsedStyle = colSty
-                                         
+
 
                                             if "whenMenuIsExpanded" in style:
                                                 expSty = ""
                                                 for collapsedStyle in style["whenMenuIsExpanded"]:
-                                                    expSty += str(collapsedStyle) 
+                                                    expSty += str(collapsedStyle)
 
-                                                if len(expSty) > 0:                                                                                               
+                                                if len(expSty) > 0:
                                                     menuExpandedStyle = expSty
-                                 
+
 
                                     containerWidget.toggleButton(
                                         buttonName = buttonObject,
@@ -1406,12 +1722,12 @@ def loadJsonStyle(self, ui):
                                         styleWhenMenuIsCollapsed = menuCollapsedStyle,
                                         styleWhenMenuIsExpanded = menuExpandedStyle
                                     )
-                                    
+
                                 else:
-                                    raise Exception(str(toggleButton["buttonName"])+" toggle button could not be found")   
+                                    raise Exception(str(toggleButton["buttonName"])+" toggle button could not be found")
 
                     containerWidget.refresh()
-                    
+
 
                 else:
                     raise Exception(str(QCustomSlideMenu["name"])+" is not a QCustomSlideMenu, no widget found")
@@ -1458,7 +1774,7 @@ def loadJsonStyle(self, ui):
                 #######################################################################
                 ## # Shadow effect style
                 ########################################################################
-                
+
                 for shadow in QMainWindow["shadow"]:
                     if "centralWidget" in shadow and len(str(shadow['centralWidget'])) > 0:
                         if hasattr(self.ui, str(shadow["centralWidget"])):
@@ -1477,7 +1793,7 @@ def loadJsonStyle(self, ui):
                             else:
                                 self.shadow.setYOffset(0)
 
-                    
+
                             #######################################################################
                             ## # Appy shadow to central widget
                             ########################################################################
