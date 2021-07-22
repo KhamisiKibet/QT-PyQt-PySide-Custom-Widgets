@@ -4,22 +4,19 @@
 # Author: Stefan Holstein
 # inspired by: https://github.com/Werkov/PyQt4/blob/master/examples/widgets/analogclock.py
 # Thanks to https://stackoverflow.com/
-#
-# Sorry for mixing english & german notes
-#
-# ToDo: Fix Bug: Rundungsfehler Max Value / Grid
-# ToDo: mehrere Zeiger ermöglichen. z.b. über ein ZeigerArray mit allen valiablen
-#       Signal erzeugung (self.valueChange.emit()) pruefen wie es dann möglich ist.
-#       Evtl MausTracking(Teil)-deaktivieren
-#       Farben separat handeln
-# todo: aktuell ist nur eine Zeigerrichtung klein nach gross im Uhrzeigersinn moeglich
-# -> erweiterung Anzeige von gross nach klein um Uhrzeigersin
-# todo: auf timer event verzichten um effizienz zu steigern
-#       self.update() an allen stellen einfügen, an denen es notwendig ist.
-#       It is possible to En-/disable timerevents. Use: self.use_timer_event = True/False
-# todo: Bug Fix: Offset Berechnung bezogen auf den Winkel ist falsch
-# Todo: print() in logging() ausgabe aendern
-###
+
+# Updated by 
+########################################################################
+## SPINN DESIGN CODE
+# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+# WEBSITE: spinndesign.com
+# GitHub : https://github.com/KhamisiKibet
+########################################################################
+
+
+########################################################################
+## IMPORTS
+########################################################################
 
 import os
 import sys
@@ -28,7 +25,7 @@ import math
 try:
     from PyQt5.QtWidgets import QMainWindow, QWidget, QApplication
 
-    from PyQt5.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient
+    from PyQt5.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
 
     from PyQt5.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject, pyqtSignal
 
@@ -93,13 +90,6 @@ class AnalogGaugeWidget(QWidget):
         self.value_needle_count = 1
 
         self.value_needle = QObject
-        self.change_value_needle_style([QPolygon([
-            QPoint(4, 4),
-            QPoint(-4, 4),
-            QPoint(-3, -120),
-            QPoint(0, -126),
-            QPoint(3, -120)
-        ])])
 
         ################################################################################################
         # DEFAULT MINIMUM AND MAXIMUM VALUE
@@ -131,9 +121,6 @@ class AnalogGaugeWidget(QWidget):
         self.center_horizontal_value = 0
         self.center_vertical_value = 0
 
-        # self.debug1 = None
-        # self.debug2 = None
-
         ################################################################################################
         # DEFAULT SCALE VALUE
         ################################################################################################
@@ -142,35 +129,44 @@ class AnalogGaugeWidget(QWidget):
 
         self.angle_offset = 0
 
-        # self.scalaCount = 10
         self.setScalaCount(10)
         self.scala_subdiv_count = 5
 
         self.pen = QPen(QColor(0, 0, 0))
-        self.font = QFont('Decorative', 20, QFont.Bold)
+
+        ################################################################################################
+        # LOAD CUSTOM FONT
+        ################################################################################################     
+        QFontDatabase.addApplicationFont(os.path.join(os.path.dirname(__file__), 'fonts/Orbitron/Orbitron-VariableFont_wght.ttf') )
 
         ################################################################################################
         # DEFAULT POLYGON COLOR
         ################################################################################################
         self.scale_polygon_colors = []
-        self.set_scale_polygon_colors([[.00, Qt.red],
-                                     [.1, Qt.yellow],
-                                     [.15, Qt.green],
-                                     [1, Qt.transparent]])
+
+        ################################################################################################
+        # BIG SCALE COLOR
+        ################################################################################################
+        self.bigScaleMarker = Qt.black
+
+        ################################################################################################
+        # FINE SCALE COLOR
+        ################################################################################################
+        self.fineScaleColor = Qt.black
 
         ################################################################################################
         # DEFAULT SCALE TEXT STATUS
         ################################################################################################
         self.setEnableScaleText(True)
-        self.scale_fontname = "Decorative"
-        self.initial_scale_fontsize = 15
+        self.scale_fontname = "Orbitron"
+        self.initial_scale_fontsize = 14
         self.scale_fontsize = self.initial_scale_fontsize
 
         ################################################################################################
         # DEFAULT VALUE TEXT STATUS
         ################################################################################################
         self.enable_value_text = True
-        self.value_fontname = "Decorative"
+        self.value_fontname = "Orbitron"
         self.initial_value_fontsize = 40
         self.value_fontsize = self.initial_value_fontsize
         self.text_radius_factor = 0.5
@@ -226,18 +222,39 @@ class AnalogGaugeWidget(QWidget):
         else:
             self.update()
 
+        ################################################################################################
+        # SET DEFAULT THEME
+        ################################################################################################
         self.setGaugeTheme(0)
 
-        self.setGaugeTheme(0)
-
-
-        # self.connect(self, SIGNAL("resize()"), self.rescaleMethod)
-
-        # self.resize(300 , 300)
         ################################################################################################
         # RESIZE GAUGE
         ################################################################################################
         self.rescale_method()
+
+    ################################################################################################
+    # SET SCALE FONT FAMILY
+    ################################################################################################
+    def setScaleFontFamily(self, font):
+        self.scale_fontname = str(font)
+
+    ################################################################################################
+    # SET VALUE FONT FAMILY
+    ################################################################################################
+    def setValueFontFamily(self, font):
+        self.value_fontname = str(font)
+
+    ################################################################################################
+    # SET BIG SCALE COLOR
+    ################################################################################################
+    def setBigScaleColor(self, color):
+        self.bigScaleMarker = QColor(color)      
+
+    ################################################################################################
+    # SET FINE SCALE COLOR
+    ################################################################################################
+    def setFineScaleColor(self, color):
+        self.fineScaleColor = QColor(color)    
 
     ################################################################################################
     # GAUGE THEMES
@@ -321,6 +338,9 @@ class AnalogGaugeWidget(QWidget):
                                     [0, Qt.white], 
                                     ]
 
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
         elif Theme == 4:
             self.set_scale_polygon_colors([[1, Qt.black]])
 
@@ -331,6 +351,9 @@ class AnalogGaugeWidget(QWidget):
             self.outer_circle_bg =  [
                                     [0, Qt.black], 
                                     ]
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
 
         elif Theme == 5:
             self.set_scale_polygon_colors([[1, QColor("#029CDE")]])  
@@ -361,6 +384,9 @@ class AnalogGaugeWidget(QWidget):
                                     [1, QColor(0, 69, 94, 255)]
                                     ]
 
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
         elif Theme == 7:
             self.set_scale_polygon_colors([[.25, QColor("#01ADEF")],
                                      [.5, QColor("#0086BF")],
@@ -379,60 +405,320 @@ class AnalogGaugeWidget(QWidget):
                                     [1, QColor(0, 69, 94, 255)]
                                     ]
 
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
         elif Theme == 8:
-            self.set_scale_polygon_colors([[.25, QColor("#ffaa00")],
-                                     [.5, QColor("#7d5300")],
-                                     [.75, QColor("#3e2900")]])
+            self.setCustomGaugeTheme(
+                color1 = "#ffaa00",
+                color2= "#7d5300",
+                color3 = "#3e2900"
+            )
 
-            self.needle_center_bg = [
-                                    [0, QColor("#3e2900")], 
-                                    [0.322581, QColor("#ffaa00")], 
-                                    [0.571429, QColor("#8c5b00")],
-                                    [1, QColor("#3e2900")]
-                                    ]
-
-            self.outer_circle_bg =  [
-                                    [0.0645161, QColor("#ffaa00")], 
-                                    [0.37788, QColor("#3e2900")], 
-                                    [1, QColor("#ffaa00")]
-                                    ]
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
 
         elif Theme == 9:
-            self.set_scale_polygon_colors([[.25, QColor("#ff007f")],
-                                     [.5, QColor("#aa0055")],
-                                     [.75, QColor("#830042")]])
+            self.setCustomGaugeTheme(
+                color1 = "#3e2900",
+                color2= "#7d5300",
+                color3 = "#ffaa00"
+            )
 
-            self.needle_center_bg = [
-                                    [0, QColor("#830042")], 
-                                    [0.322581, QColor("#ff007f")], 
-                                    [0.571429, QColor("#aa0055")],
-                                    [1, QColor("#830042")]
-                                    ]
-
-            self.outer_circle_bg =  [
-                                    [0.0645161, QColor("#830042")], 
-                                    [0.37788, QColor("#ff007f")], 
-                                    [1, QColor("#ff007f")]
-                                    ]
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
 
         elif Theme == 10:
-            self.set_scale_polygon_colors([[.25, QColor("#ffe75d")],
-                                     [.5, QColor("#896c1a")],
-                                     [.75, QColor("#232803")]])
+            self.setCustomGaugeTheme(
+                color1 = "#ff007f",
+                color2= "#aa0055",
+                color3 = "#830042"
+            )
 
-            self.needle_center_bg = [
-                                    [0, QColor("#232803")], 
-                                    [0.322581, QColor("#ffe75d")], 
-                                    [0.571429, QColor("#896c1a")],
-                                    [1, QColor("#232803")]
-                                    ]
 
-            self.outer_circle_bg =  [
-                                    [0.0645161, QColor("#232803")], 
-                                    [0.37788, QColor("#ffe75d")], 
-                                    [1, QColor("#ffe75d")]
-                                    ]
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
 
+        elif Theme == 11:
+            self.setCustomGaugeTheme(
+                color1 = "#830042",
+                color2= "#aa0055",
+                color3 = "#ff007f"
+            )
+            
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+        elif Theme == 12:
+            self.setCustomGaugeTheme(
+                color1 = "#ffe75d",
+                color2= "#896c1a",
+                color3 = "#232803"
+            )
+
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
+        elif Theme == 13:
+            self.setCustomGaugeTheme(
+                color1 = "#ffe75d",
+                color2= "#896c1a",
+                color3 = "#232803"
+            )
+
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
+        elif Theme == 14:
+            self.setCustomGaugeTheme(
+                color1 = "#232803",
+                color2= "#821600",
+                color3 = "#ffe75d"
+            )
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+        elif Theme == 15:
+            self.setCustomGaugeTheme(
+                color1 = "#00FF11",
+                color2= "#00990A",
+                color3 = "#002603"
+            )
+
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
+        elif Theme == 16:
+            self.setCustomGaugeTheme(
+                color1 = "#002603",
+                color2= "#00990A",
+                color3 = "#00FF11"
+            )
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+        elif Theme == 17:
+            self.setCustomGaugeTheme(
+                color1 = "#00FFCC",
+                color2= "#00876C",
+                color3 = "#00211B"
+            )
+
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
+        elif Theme == 18:
+            self.setCustomGaugeTheme(
+                color1 = "#00211B",
+                color2= "#00876C",
+                color3 = "#00FFCC"
+            )
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+        elif Theme == 19:
+            self.setCustomGaugeTheme(
+                color1 = "#001EFF",
+                color2= "#001299",
+                color3 = "#000426"
+            )
+
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
+        elif Theme == 20:
+            self.setCustomGaugeTheme(
+                color1 = "#000426",
+                color2= "#001299",
+                color3 = "#001EFF"
+            )
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+        elif Theme == 21:
+            self.setCustomGaugeTheme(
+                color1 = "#F200FF",
+                color2= "#85008C",
+                color3 = "#240026"
+            )
+
+            self.bigScaleMarker = Qt.black
+            self.fineScaleColor = Qt.black
+
+        elif Theme == 22:
+            self.setCustomGaugeTheme(
+                color1 = "#240026",
+                color2= "#85008C",
+                color3 = "#F200FF"
+            )
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+        elif Theme == 23:
+            self.setCustomGaugeTheme(
+                color1 = "#FF0022",
+                color2= "#080001",
+                color3 = "#009991"
+            )
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+        elif Theme == 24:
+            self.setCustomGaugeTheme(
+                color1 = "#009991",
+                color2= "#080001",
+                color3 = "#FF0022"
+            )
+
+            self.bigScaleMarker = Qt.white
+            self.fineScaleColor = Qt.white
+
+    ################################################################################################
+    # SET CUSTOM GAUGE THEME
+    ################################################################################################
+    def setCustomGaugeTheme(self, **colors):
+        if "color1" in colors and len(str(colors['color1'])) > 0:
+            if "color2" in colors and len(str(colors['color2'])) > 0:
+                if "color3" in colors and len(str(colors['color3'])) > 0:
+
+                    self.set_scale_polygon_colors([[.25, QColor(str(colors['color1']))],
+                                            [.5, QColor(str(colors['color2']))],
+                                            [.75, QColor(str(colors['color3']))]])
+
+                    self.needle_center_bg = [
+                                            [0, QColor(str(colors['color3']))], 
+                                            [0.322581, QColor(str(colors['color1']))], 
+                                            [0.571429, QColor(str(colors['color2']))],
+                                            [1, QColor(str(colors['color3']))]
+                                            ]
+
+                    self.outer_circle_bg =  [
+                                            [0.0645161, QColor(str(colors['color3']))], 
+                                            [0.36, QColor(str(colors['color1']))], 
+                                            [1, QColor(str(colors['color2']))]
+                                            ]
+
+                else:
+
+                    self.set_scale_polygon_colors([[.5, QColor(str(colors['color1']))],
+                                             [1, QColor(str(colors['color2']))]])
+
+                    self.needle_center_bg = [
+                                            [0, QColor(str(colors['color2']))], 
+                                            [1, QColor(str(colors['color1']))]
+                                            ]
+
+                    self.outer_circle_bg =  [
+                                            [0, QColor(str(colors['color2']))], 
+                                            [1, QColor(str(colors['color2']))]
+                                            ]
+
+            else:
+
+                self.set_scale_polygon_colors([[1, QColor(str(colors['color1']))]])
+
+                self.needle_center_bg = [
+                                        [1, QColor(str(colors['color1']))]
+                                        ]
+
+                self.outer_circle_bg =  [
+                                        [1, QColor(str(colors['color1']))]
+                                        ]
+
+        else:
+
+            self.setGaugeTheme(0)
+            print("color1 is not defined")
+
+    ################################################################################################
+    # SET SCALE POLYGON COLOR
+    ################################################################################################
+    def setScalePolygonColor(self, **colors):
+        if "color1" in colors and len(str(colors['color1'])) > 0:
+            if "color2" in colors and len(str(colors['color2'])) > 0:
+                if "color3" in colors and len(str(colors['color3'])) > 0:
+
+                    self.set_scale_polygon_colors([[.25, QColor(str(colors['color1']))],
+                                            [.5, QColor(str(colors['color2']))],
+                                            [.75, QColor(str(colors['color3']))]])
+
+                else:
+
+                    self.set_scale_polygon_colors([[.5, QColor(str(colors['color1']))],
+                                             [1, QColor(str(colors['color2']))]])
+
+            else:
+
+                self.set_scale_polygon_colors([[1, QColor(str(colors['color1']))]])
+
+        else:
+            print("color1 is not defined")
+
+    ################################################################################################
+    # SET NEEDLE CENTER COLOR
+    ################################################################################################
+    def setNeedleCenterColor(self, **colors):
+        if "color1" in colors and len(str(colors['color1'])) > 0:
+            if "color2" in colors and len(str(colors['color2'])) > 0:
+                if "color3" in colors and len(str(colors['color3'])) > 0:
+
+                    self.needle_center_bg = [
+                                            [0, QColor(str(colors['color3']))], 
+                                            [0.322581, QColor(str(colors['color1']))], 
+                                            [0.571429, QColor(str(colors['color2']))],
+                                            [1, QColor(str(colors['color3']))]
+                                            ]
+
+                else:
+
+                    self.needle_center_bg = [
+                                            [0, QColor(str(colors['color2']))], 
+                                            [1, QColor(str(colors['color1']))]
+                                            ]
+
+            else:
+
+                self.needle_center_bg = [
+                                        [1, QColor(str(colors['color1']))]
+                                        ]
+        else:
+            print("color1 is not defined")
+
+    ################################################################################################
+    # SET OUTER CIRCLE COLOR
+    ################################################################################################
+    def setOuterCircleColor(self, **colors):
+        if "color1" in colors and len(str(colors['color1'])) > 0:
+            if "color2" in colors and len(str(colors['color2'])) > 0:
+                if "color3" in colors and len(str(colors['color3'])) > 0:
+
+                    self.outer_circle_bg =  [
+                                            [0.0645161, QColor(str(colors['color3']))], 
+                                            [0.37788, QColor(str(colors['color1']))], 
+                                            [1, QColor(str(colors['color2']))]
+                                            ]
+
+                else:
+
+                    self.outer_circle_bg =  [
+                                            [0, QColor(str(colors['color2']))], 
+                                            [1, QColor(str(colors['color2']))]
+                                            ]
+
+            else:
+
+                self.outer_circle_bg =  [
+                                        [1, QColor(str(colors['color1']))]
+                                        ]
+
+        else:
+            print("color1 is not defined")
 
 
 
@@ -825,23 +1111,29 @@ class AnalogGaugeWidget(QWidget):
             # grad.setColorAt(.1, Qt.yellow)
             # grad.setColorAt(.15, Qt.green)
             # grad.setColorAt(1, Qt.transparent)
-            painter_filled_polygon.setBrush(grad)
             # self.brush = QBrush(QColor(255, 0, 255, 255))
+            # grad.setStyle(Qt.Dense6Pattern)
             # painter_filled_polygon.setBrush(self.brush)
+            painter_filled_polygon.setBrush(grad)
+           
+
             painter_filled_polygon.drawPolygon(colored_scale_polygon)
             # return painter_filled_polygon
+
+    def draw_icon_image(self):
+        pass
 
     ###############################################################################################
     # BIG SCALE MARKERS
     ###############################################################################################
-    def draw_big_scaled_markter(self):
+    def draw_big_scaled_marker(self):
         my_painter = QPainter(self)
         my_painter.setRenderHint(QPainter.Antialiasing)
         # Koordinatenursprung in die Mitte der Flaeche legen
         my_painter.translate(self.width() / 2, self.height() / 2)
 
         # my_painter.setPen(Qt.NoPen)
-        self.pen = QPen(QColor(0, 0, 0, 255))
+        self.pen = QPen(self.bigScaleMarker)
         self.pen.setWidth(2)
         # # if outline_pen_with > 0:
         my_painter.setPen(self.pen)
@@ -903,7 +1195,7 @@ class AnalogGaugeWidget(QWidget):
         # Koordinatenursprung in die Mitte der Flaeche legen
         my_painter.translate(self.width() / 2, self.height() / 2)
 
-        my_painter.setPen(Qt.black)
+        my_painter.setPen(self.fineScaleColor)
         my_painter.rotate(self.scale_angle_start_value - self.angle_offset)
         steps_size = (float(self.scale_angle_size) / float(self.scalaCount * self.scala_subdiv_count))
         scale_line_outer_start = self.widget_diameter/2
@@ -1098,6 +1390,7 @@ class AnalogGaugeWidget(QWidget):
         # print("event", event)
 
         self.draw_outer_circle()
+        self.draw_icon_image()
         # colored pie area
         if self.enable_filled_Polygon:
             self.draw_filled_polygon()
@@ -1106,7 +1399,7 @@ class AnalogGaugeWidget(QWidget):
         if self.enable_fine_scaled_marker:
             self.create_fine_scaled_marker()
         if self.enable_big_scaled_marker:
-            self.draw_big_scaled_markter()
+            self.draw_big_scaled_marker()
 
         # draw scale marker value text
         if self.enable_scale_text:
@@ -1195,22 +1488,6 @@ class AnalogGaugeWidget(QWidget):
                     self.valueChanged.emit(int(value))
 
                 self.updateValue(value)            
-
-
-
-                # todo: mouse event debug output
-
-                # self.updateValue(value, mouse_controlled=True)
-
-                # self.valueChanged.emit(int(value))
-                # print(str(int(value)))
-            # self.valueChanged.emit()
-
-            # todo: convert print to logging debug
-            # print('mouseMoveEvent: x=%d, y=%d, a=%s, v=%s, fmod=%s, temp=%s, state=%s' % (
-                # x, y, angle, value, fmod, temp, state))
-
-
 
 ################################################################################################
 # END ==>
