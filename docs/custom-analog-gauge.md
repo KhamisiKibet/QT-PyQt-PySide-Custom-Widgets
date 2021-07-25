@@ -7,6 +7,11 @@ Continue reading...
 
 # PyQt/PySide Analog Gauge Meter
 
+## Video Tutorial
+
+[Watch Video tutorial](https://youtu.be/5WHnlRQcUy4)  
+
+
 ## Download
 
 Download the source code plus examples below

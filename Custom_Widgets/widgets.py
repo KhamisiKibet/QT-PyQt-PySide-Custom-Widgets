@@ -1526,7 +1526,7 @@ def loadJsonStyle(self, ui):
 
                         for x in font: 
                             if "path" in x and len(str(x['path'])) > 0:
-                                QFontDatabase.addApplicationFont(os.path.join(os.path.dirname(__file__), str(x['path'])) )
+                                QFontDatabase.addApplicationFont(os.path.join( str(x['path']))
 
                             if "name" in x and len(str(x['name'])) > 0:
                                 gaugeWidget.setValueFontFamily(str(x['name']))
@@ -1539,7 +1539,7 @@ def loadJsonStyle(self, ui):
                         for x in font:                            
                             if "path" in x and len(str(x['path'])) > 0:
 
-                                QFontDatabase.addApplicationFont(os.path.join(os.path.dirname(__file__), str(x['path'])) )
+                                QFontDatabase.addApplicationFont(str(x['path']))
 
                             if "name" in x and len(str(x['name'])) > 0:
                                 gaugeWidget.setScaleFontFamily(str(x['name']))
