@@ -7,6 +7,8 @@ Continue reading...
 
 # PyQt/PySide Analog Gauge Meter
 
+![Custom Analog Gauge](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/analog_qt_widget.png?raw=true)
+
 ## Video Tutorial
 
 [Watch Video tutorial](https://youtu.be/5WHnlRQcUy4)  
