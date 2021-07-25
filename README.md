@@ -27,10 +27,13 @@ Read the full documentation plus video guides [here](https://khamisikibet.github
 
 # Sample Images
 Analog Gauge Widget
+
 ![Analog Gauge Widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/analog_qt_widget.png?raw=true)
 
 Responsive Animated GUI
+
 ![Resposive PyQt PySide GUI](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/responsive-qt-gui-python-intarface.png?raw=true)
 
 Animated QStacked Widget
+
 ![Custom QStacked Widgets](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/qstacked.png?raw=true)

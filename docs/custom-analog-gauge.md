@@ -20,12 +20,9 @@ Download the source code plus examples below
 [Download](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/AnalogGaugeMeterWidget)  
 
 
-## PyQT
+# PyQT
 For pyqt5 users click [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/AnalogGaugeMeterWidget)  to download the "analoggaugewidget.py" file and put it in 
 the main root directory of your project folder.
-
-## PySide
-PySide6/2 guide coming soon, Please check back later
 
 ## PyQt5
 
@@ -245,6 +242,99 @@ self.ui.widget.setScaleValueColor(R=R, G=G, B=B, Transparency=Transparency)
 ```python
 # RGBA int values range from 0- 255
 self.ui.widget.setDisplayValueColor(R=R, G=G, B=B, Transparency=Transparency)
+
+```
+
+# PySide
+
+Pyside users need to install the Custom_Widgets module from pip. Run
+
+```cmd
+pip install QT-PyQt-PySide-Custom-Widgets
+```
+
+Or upgrade it if you had installed it
+
+```cmd
+pip install --upgrade QT-PyQt-PySide-Custom-Widgets
+```
+
+### Creating Widget
+
+The process is similar to PyQt (above) the only difference is renaming the promote class name and the header file name
+
+Class name: "AnalogGaugeWidget"
+Header file name: "Custom_Widgets.AnalogGaugeWidget.h"
+
+![Adding QT Designer Promote Widget class](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/27.png?raw=true)
+
+### Customizing Widget
+
+If you want to customize the gauge widget from your python files, then the process is similar to PyQt (above).
+in PySide, you can also customize the widget using a JSon stylesheet.
+
+Create a "style.json" file inside your project folder. Below is the full JSon sample stylesheet. Also watch the video tutorial for the full guide. [Watch the tutorial videos here](https://youtu.be/5WHnlRQcUy4)
+
+## Full JSON stylesheet sample
+
+```json
+{
+	"AnalogGaugeWidget": [{
+		"name": "widget",
+		"units": "Mph",
+		"minValue": "100",
+		"maxValue": "500",
+		"scalaCount": "5",
+		"startValue": "250",
+		"gaugeTheme": "0",
+		"offsetAngle": "0",
+		"outerRadius": "1000",
+		"innerRadius": "900",
+		"scaleStartAngle": "135",
+		"totalScaleAngle": "270",
+		"enableBarGraph": true,
+		"enableValueText": true,
+		"enableCenterPoint": true,
+		"enableNeedlePolygon": true,
+		"enableScaleText": true,
+		"enableScaleBigGrid": true,
+		"enableScaleFineGrid": true,
+		"needleColor": "#002523",
+		"needleColorOnDrag": "red",
+		"scaleValueColor": "#fff",
+		"displayValueColor": "#00F6E9",
+		"bigScaleColor" : "#005275",
+		"fineScaleColor" : "#005275",
+		"customGaugeTheme": [{
+			"color1": "#002523",
+			"color2": "#990008",
+			"color3": "#00F6E9"
+		}],
+		"scalePolygonColor": [{
+			"color1": "#002523",
+			"color2": "#990008",
+			"color3": "#00F6E9"
+		}],
+		"needleCenterColor": [{
+			"color1": "#002523",
+			"color2": "#990008",
+			"color3": "#00F6E9"
+		}],
+		"outerCircleColor": [{
+			"color1": "#002523",
+			"color2": "#0000",
+			"color3": "#00F6E9"
+		}],
+		"valueFontFamily": [{
+			"path": "fonts/ds_digital/DS-DIGIB.TTF",
+			"name": "DS-Digital"
+		}],
+		"scaleFontFamily": [{
+			"path": "fonts/ds_digital/DS-DIGIB.TTF",
+			"name": "DS-Digital"
+		}]
+	}]
+}
 
 ```
 
