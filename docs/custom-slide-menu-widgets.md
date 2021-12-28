@@ -55,7 +55,7 @@ This is how my project folder looks like:
 
 ![Python project folder](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/24.png?raw=true)
 
-Inside the "style.json" file create "QCustomSlideMenu" mein object:
+Inside the "style.json" file create "QCustomSlideMenu" main object:
 
 ```json
 {
@@ -247,6 +247,96 @@ You can also add button icons which will be used to indicate if the associated w
 	}]
 }
 ```
+#### Floating "menu"/absolute positioned widget:
+
+The new update will now let you decide if you want your widget to float(be positioned on top of other widgets). 
+One thing you should keep in mind is that, in order for the widget to have an absolute position, the widget has to be removed from the parent layout. So when ddesigning you UI, its advised that you dont place your floating widget directly inside the "main central widget". 
+Use "floatPosition" to float your widget:
+
+```json
+{
+	"QCustomSlideMenu": [{
+		"name": "my_widget_name",
+		"floatPosition": [
+			{
+			
+			}
+		]
+	}]
+}
+```
+
+Select the relative position to place the widget, use a differnt widget which does not directly house your floating widget, I recommend that you use the "central widget":
+
+```json
+{
+	"QCustomSlideMenu": [{
+		"name": "my_widget_name",
+		"floatPosition": [
+			{
+				"relativeTo": "centralwidget"
+			}
+		]
+	}]
+}
+```
+
+Select the widget floating position(relative to the new parent-"relativeTo": "centralwidget"). Available options:
+
+top-right
+top-left
+top-center
+bottom-left
+bottom-right
+bottom-center
+center-center
+center-left
+center-right
+
+![Floating pyqt pyside menu widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/floating_qt_widget_1.png?raw=true)
+![Floating pyqt pyside menu widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/floating_qt_widget_2.png?raw=true)
+![Floating pyqt pyside menu widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/floating_qt_widget_3.png?raw=true)
+![Floating pyqt pyside menu widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/floating_qt_widget_4.png?raw=true)
+
+```json
+{
+	"QCustomSlideMenu": [{
+		"name": "my_widget_name",
+		"floatPosition": [
+			{
+				"relativeTo": "centralwidget",
+				"position": "center-right"
+			}
+		]
+	}]
+}
+```
+
+You can also apply a shadow to your floating widget:
+
+```json
+{
+	"QCustomSlideMenu": [{
+		"name": "my_widget_name",
+		"floatPosition": [
+			{
+				"relativeTo": "centralwidget",
+				"position": "center-right",
+				"shadow":[
+					{
+						"color": "#000",
+						"blurRadius": 20,
+						"xOffset": 0,
+						"yOffset": 0
+					}
+				]
+			}
+		]
+	}]
+}
+```
+
+
 #### Adding button styles:
 
 If you want to apply defferent styles to your button when the widget is minimized or maximized then you can use the "style" object as shown:
@@ -336,7 +426,21 @@ loadJsonStyle(self, self.ui)
 			"whenMenuIsExpanded": [
 				"border: 2px solid rgb(9, 5, 13); background-color: rgb(9, 5, 13)"
 			]
-		}]
+		}],
+		"floatPosition": [
+			{
+				"relativeTo": "centralwidget",
+				"position": "center-right",
+				"shadow":[
+					{
+						"color": "#000",
+						"blurRadius": 20,
+						"xOffset": 0,
+						"yOffset": 0
+					}
+				]
+			}
+		]
 	}]
 }
 ```
@@ -378,7 +482,15 @@ my_widget.customizeQCustomSlideMenu(
     expandingAnimationEasingCurve = QtCore.QEasingCurve.Linear,
     # PASS THE STYLESHEET THAT WILL BE APPLIED TO THE WIDGET WHEN EXPANDED OR COLLAPSED
     collapsedStyle = "",
-    expandedStyle = ""
+    expandedStyle = "",
+    # FLOAT OPTIONS
+    floatMenu = True, #bool
+    relativeTo = self.ui.centralwidget,
+    position = "top-right",
+    shadowColor = "#000",
+    shadowBlurRadius    = 20,
+    shadowXOffset   = 0,
+    shadowYOffset   = 0
 )
 ```
 
@@ -412,6 +524,13 @@ my_widget.expandingAnimationEasingCurve = QtCore.QEasingCurve.OutQuad
 # PASS THE STYLESHEET THAT WILL BE APPLIED TO THE WIDGET WHEN EXPANDED OR COLLAPSED
 my_widget.collapsedStyle = ""
 my_widget.expandedStyle = ""
+
+#FLOAT THE WIDGET
+my_widget.float = True
+my_widget.floatPosition = "center-center"
+#YOU CAN ALSO APPL THE SHADOW EFFECT TO THE FLOATING WIDGET
+# (CREATE SHADOW EFFECT)
+my_widget.setGraphicsEffect(SHADOW_EFFECT)
 ```
 ### Animate the widget:
 
@@ -436,7 +555,7 @@ my_widget.expandMenu()
 
 # More
 
-Watch the full video tutorial here [COMING SOON...]
+Watch the full video tutorial here https://youtu.be/rC6uR9gR6w4
 
 Download the source code [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/QCustomSlideMenu) 
 

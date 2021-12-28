@@ -29,7 +29,7 @@ elif 'PySide6' in sys.modules:
 import json
 
 
-class QPushButton(QtWidgets.QPushButton):
+class QCustomQPushButton(QtWidgets.QPushButton):
     def __init__(self, parent=None):
         super().__init__(parent)
         ########################################################################
@@ -763,10 +763,11 @@ class QMainWindow(QMainWindow):
         cursor = QtGui.QCursor()
         xPos = cursor.pos().x()
         yPos = cursor.pos().y()
-        for x in self.floatingWidgets:
-            x.collapseMenu()                
-        
-            
+        if hasattr(self, "floatingWidgets"):
+            for x in self.floatingWidgets:
+                x.collapseMenu()
+
+
     #######################################################################
     #######################################################################
 
@@ -819,6 +820,22 @@ class QMainWindow(QMainWindow):
         else:
             self.showMaximized()
 
+    ########################################################################
+    ## Check Button Groups
+    ########################################################################
+    def checkButtonGroup(self):
+        btn = self.sender()
+        group = btn.group
+        groupBtns = getattr(self, "group_btns_"+str(group))
+        active = getattr(self, "group_active_"+str(group))
+        notActive = getattr(self, "group_not_active_"+str(group))
+
+        for x in groupBtns:
+            if not x == btn:
+                x.setStyleSheet(notActive)
+
+        btn.setStyleSheet(active)
+
     #######################################################################
 
 
@@ -850,7 +867,7 @@ class QCustomSlideMenu(QWidget):
 
         self.collapsed = False
         self.expanded = True
-        
+
         self.float = False
         self.floatPosition = ""
 
@@ -930,19 +947,19 @@ class QCustomSlideMenu(QWidget):
         if "expandedStyle" in customValues and len(str(customValues["expandedStyle"])) > 0:
             self.expandedStyle = str(customValues["expandedStyle"])
             if self.expanded:
-                self.setStyleSheet(str(customValues["expandedStyle"]))  
-        
+                self.setStyleSheet(str(customValues["expandedStyle"]))
+
         if "floatMenu" in customValues and customValues["floatMenu"] == True:
             self.float = True
-            if "relativeTo" in customValues and len(str(customValues["relativeTo"])) > 0:           
+            if "relativeTo" in customValues and len(str(customValues["relativeTo"])) > 0:
                 if "position" in customValues and len(str(customValues["position"])) > 0:
                     self.floatPosition = str(customValues["position"])
-                
+
                 effect = QtWidgets.QGraphicsDropShadowEffect(self)
                 if "shadowColor" in customValues and len(str(customValues["shadowColor"])) > 0:
-                    effect.setColor(QColor(str(customValues["shadowColor"]))) 
+                    effect.setColor(QColor(str(customValues["shadowColor"])))
                 else:
-                    effect.setColor(QColor(0,0,0,0)) 
+                    effect.setColor(QColor(0,0,0,0))
                 if "shadowBlurRadius" in customValues and int(customValues["shadowBlurRadius"]) > 0:
                     effect.setBlurRadius(int(customValues["shadowBlurRadius"]))
                 else:
@@ -954,34 +971,43 @@ class QCustomSlideMenu(QWidget):
                 if "shadowYOffset" in customValues and int(customValues["shadowYOffset"]) > 0:
                     effect.setYOffset(int(customValues["shadowYOffset"]))
                 else:
-                    effect.setYOffset(0)    
-                
-                 
-                self.setGraphicsEffect(effect) 
+                    effect.setYOffset(0)
+
+
+                self.setGraphicsEffect(effect)
 
 
         self.refresh()
-    
+
     ########################################################################
     # Float menu
     ########################################################################
     def floatMenu(self):
-        if self.float:      
+        if self.float:
             if len(str(self.floatPosition)) > 0:
                 position = str(self.floatPosition)
-                
+
                 if position == "top-left":
                     self.setGeometry(QRect(self.parent().x(), self.parent().y(), self.width(), self.height()))
-                
+
                 if position == "top-right":
                     self.setGeometry(QRect(self.parent().width() - self.width(), self.parent().y(), self.width(), self.height()))
-                
+
+                if position == "top-center":
+                    self.setGeometry(QRect((self.parent().width() - self.width()) / 2, self.parent().y(), self.width(), self.height()))
+
                 if position == "bottom-right":
                     self.setGeometry(QRect(self.parent().width() - self.width(), self.parent().height() - self.height(), self.width(), self.height()))
-                
-    
+
+
                 if position == "bottom-left":
                     self.setGeometry(QRect(self.parent().x(), self.parent().height() - self.height(), self.width(), self.height()))
+
+                if position == "bottom-center":
+                    self.setGeometry(QRect((self.parent().width() - self.width()) / 2, self.parent().height() - self.height(), self.width(), self.height()))
+
+                if position == "center-center":
+                    self.setGeometry(QRect((self.parent().width() - self.width()) / 2, (self.parent().height() - self.height()) / 2, self.width(), self.height()))
 
     ########################################################################
     # Menu Toggle Button
@@ -1153,6 +1179,7 @@ class QCustomSlideMenu(QWidget):
 
 
     def animateWidth(self, startWidth, endWidth):
+        # print(startWidth, endWidth)
         if self.expandedWidth == "auto" or self.expandedWidth == 16777215:
             if self.collapsed:
                 self._widthAnimation.finished.connect(lambda: self.setMaximumWidth(16777215))
@@ -1166,6 +1193,7 @@ class QCustomSlideMenu(QWidget):
         self._widthAnimation.finished.connect(lambda: self.applyWidgetStyle())
 
     def animateHeight(self, startHeight, endHeight):
+        # print(startHeight, endHeight)
         if self.expandedHeight == "auto" or self.expandedHeight == 16777215:
             if self.collapsed:
                 self._heightAnimation.finished.connect(lambda: self.setMaximumHeight(16777215))
@@ -1192,7 +1220,7 @@ class QCustomSlideMenu(QWidget):
         self.applyWidgetStyle()
         if hasattr(self, "targetBtn"):
             self.applyButtonStyle()
-                
+
 
     def isExpanded(self):
         if self.width() > self.getCollapsedWidth() or self.width() > self.getCollapsedHeight():
@@ -1251,37 +1279,41 @@ class QCustomSlideMenu(QWidget):
             return self.parent().width()
 
     def paintEvent(self, event: QPaintEvent):
-        if hasattr(self, "_widthAnimation"):
-            if self._widthAnimation.finished:
-                if self.collapsed:
-                    if self.collapsedWidth == "parent":
-                        self.setMinimumWidth(self.parent().width())
-                        self.setMaximumWidth(self.parent().width())
-                if self.expanded:
-                    if self.expandedWidth == "parent":
-                        self.setMinimumWidth(self.parent().width())
-                        self.setMaximumWidth(self.parent().width())
+        try:
+            if hasattr(self, "_widthAnimation"):
+                if self._widthAnimation.finished:
+                    if self.collapsed:
+                        if self.collapsedWidth == "parent":
+                            self.setMinimumWidth(self.parent().width())
+                            self.setMaximumWidth(self.parent().width())
+                    if self.expanded:
+                        if self.expandedWidth == "parent":
+                            self.setMinimumWidth(self.parent().width())
+                            self.setMaximumWidth(self.parent().width())
 
 
-        if hasattr(self, "_heightAnimation"):
-            if self._heightAnimation.finished:
-                if self.collapsed:
-                    if self.collapsedHeight == "parent":
-                        self.setMinimumHeight(self.parent().height())
-                        self.setMaximumHeight(self.parent().height())
-                if self.expanded:
-                    if self.expandedHeight == "parent":
-                        self.setMinimumHeight(self.parent().height())
-                        self.setMaximumHeight(self.parent().height())
+            if hasattr(self, "_heightAnimation"):
+                if self._heightAnimation.finished:
+                    if self.collapsed:
+                        if self.collapsedHeight == "parent":
+                            self.setMinimumHeight(self.parent().height())
+                            self.setMaximumHeight(self.parent().height())
+                    if self.expanded:
+                        if self.expandedHeight == "parent":
+                            self.setMinimumHeight(self.parent().height())
+                            self.setMaximumHeight(self.parent().height())
 
-        if not hasattr(self, "_widthAnimation") and not hasattr(self, "_heightAnimation"):
-            if self.defaultWidth == "parent":
-                self.setMinimumWidth(self.parent().width())
-                self.setMaximumWidth(self.parent().width())
-            if self.defaultHeight == "parent":
-                self.setMinimumHeight(self.parent().height())
-                self.setMaximumHeight(self.parent().height())
-        
+            if not hasattr(self, "_widthAnimation") and not hasattr(self, "_heightAnimation"):
+                if self.defaultWidth == "parent":
+                    self.setMinimumWidth(self.parent().width())
+                    self.setMaximumWidth(self.parent().width())
+                if self.defaultHeight == "parent":
+                    self.setMinimumHeight(self.parent().height())
+                    self.setMaximumHeight(self.parent().height())
+
+        except Exception as e:
+            print(e)
+
         self.floatMenu()
 
 
@@ -1289,8 +1321,10 @@ class QCustomSlideMenu(QWidget):
 
 def mouseReleaseEvent(self, QMouseEvent):
     cursor = QtGui.QCursor()
-    print(cursor.pos(),  self.ui.pushButton.geometry().x())
+    # print(cursor.pos(),  self.ui.pushButton.geometry().x())
     # self.ui.frame.setGeometry(QRect(cursor.pos().x(), cursor.pos().y(), 151, 111))
+
+
 
 ########################################################################
 ## Read JSon stylesheet
@@ -1300,6 +1334,77 @@ def loadJsonStyle(self, ui):
     data = json.load(file)
 
     self.ui = ui
+
+    ########################################################################
+    ## QCARDS
+    ########################################################################
+    if "QCard" in data:
+        for QCard in data['QCard']:
+            if "cards" in QCard:
+                for card in QCard['cards']:
+
+                    if "shadow" in QCard:
+                        if hasattr(self.ui, str(card)):
+                            cardWidget = getattr(self.ui, str(card))
+                            effect = QtWidgets.QGraphicsDropShadowEffect(cardWidget)
+                            for shadow in QCard['shadow']:
+                                if "color" in shadow and len(str(shadow["color"])) > 0:
+                                    effect.setColor(QColor(str(shadow["color"])))
+                                else:
+                                    effect.setColor(QColor(0,0,0,0))
+                                if "blurRadius" in shadow and int(shadow["blurRadius"]) > 0:
+                                    effect.setBlurRadius(int(shadow["blurRadius"]))
+                                else:
+                                    effect.setBlurRadius(0)
+                                if "xOffset" in shadow and int(shadow["xOffset"]) > 0:
+                                    effect.setXOffset(int(shadow["xOffset"]))
+                                else:
+                                    effect.setXOffset(0)
+                                if "yOffset" in shadow and int(shadow["yOffset"]) > 0:
+                                    effect.setYOffset(int(shadow["yOffset"]))
+                                else:
+                                    effect.setYOffset(0)
+
+                            cardWidget.setGraphicsEffect(effect)
+
+    ########################################################################
+    ## BUTTON GROUPS
+    ########################################################################
+    if "QPushButtonGroup" in data:
+        grp_count = 0
+        for QPushButtonGroup in data['QPushButtonGroup']:
+            if "Buttons" in QPushButtonGroup:
+                grp_count += 1
+                for button in QPushButtonGroup["Buttons"]:
+                    if hasattr(self.ui, str(button)):
+                        btn = getattr(self.ui, str(button))
+                        if not btn.metaObject().className() == "QPushButton":
+                            raise Exception("Error: "+str(button)+" is not a QPushButton object.")
+                            return
+                        setattr(btn, "group", grp_count)
+                        if not hasattr(self, "group_btns_"+str(grp_count)):
+                            setattr(self, "group_btns_"+str(grp_count), [])
+
+                        getattr(self, "group_btns_"+str(grp_count)).append(btn)
+
+                        btn.clicked.connect(self.checkButtonGroup)
+                    else:
+                        raise Exception("Error: Button named"+str(button)+" was not found.")
+                        return
+
+
+            activeStyle = ""
+            notActiveStyle = ""
+            if "Style" in QPushButtonGroup:
+                for style in QPushButtonGroup["Style"]:
+                    if "Active" in style:
+                        activeStyle = style['Active']
+                    if "NotActive" in style:
+                        notActiveStyle = style['NotActive']
+
+            setattr(self, "group_active_"+str(grp_count), activeStyle)
+            setattr(self, "group_not_active_"+str(grp_count), notActiveStyle)
+
 
     ########################################################################
     ## ANALOG GAUGE WIDGET
@@ -1625,16 +1730,7 @@ def loadJsonStyle(self, ui):
             if "name" in QCustomSlideMenu and len(str(QCustomSlideMenu["name"])) > 0:
                 if hasattr(self.ui, str(QCustomSlideMenu["name"])):
                     containerWidget = getattr(self.ui, str(QCustomSlideMenu["name"]))
-                    if hasattr(self, "floatingWidgets"):
-                        self.floatingWidgets.append(containerWidget)
-                    else:
 
-                        #######################################################################
-                        # Floating widgets
-                        #######################################################################
-                        self.floatingWidgets = []
-                        self.floatingWidgets.append(containerWidget)
-                    
 
                     if not containerWidget.metaObject().className() == "QCustomSlideMenu":
                         raise Exception("Error: "+str(QCustomSlideMenu["name"])+" is not a QCustomSlideMenu object")
@@ -1670,28 +1766,38 @@ def loadJsonStyle(self, ui):
 
                     if "floatPosition" in QCustomSlideMenu:
                         floatMenu = True
+                        if hasattr(self, "floatingWidgets"):
+                            self.floatingWidgets.append(containerWidget)
+                        else:
+
+                            #######################################################################
+                            # Floating widgets
+                            #######################################################################
+                            self.floatingWidgets = []
+                            self.floatingWidgets.append(containerWidget)
+
                         for floatPosition in QCustomSlideMenu["floatPosition"]:
 
                             if "relativeTo" in floatPosition:
                                 if hasattr(self.ui, floatPosition["relativeTo"]):
                                     relativeTo = getattr(self.ui, str(floatPosition["relativeTo"]))
-                                    
+
                                     relativeTo = containerWidget.setParent(relativeTo)
                                 else:
                                     relativeTo = floatPosition["relativeTo"]
-                            
+
                             if "position" in floatPosition:
                                 position = floatPosition["position"]
-                            
+
                             if "shadow" in floatPosition:
                                 for shadow in floatPosition["shadow"]:
-                                    if "color" in shadow:                                   
+                                    if "color" in shadow:
                                         shadowColor = shadow["color"]
-                                    if "blurRadius" in shadow:                                  
+                                    if "blurRadius" in shadow:
                                         shadowBlurRadius = shadow["blurRadius"]
-                                    if "xOffset" in shadow:                                 
+                                    if "xOffset" in shadow:
                                         shadowXOffset = shadow["xOffset"]
-                                    if "yOffset" in shadow:                                 
+                                    if "yOffset" in shadow:
                                         shadowYOffset = shadow["yOffset"]
 
                     if "defaultSize" in QCustomSlideMenu:
@@ -1702,7 +1808,7 @@ def loadJsonStyle(self, ui):
 
                             if "height" in defaultSize:
                                 defaultHeight = defaultSize["height"]
-                    
+
 
                     if "collapsedSize" in QCustomSlideMenu:
                         for collapsedSize in QCustomSlideMenu["collapsedSize"]:
@@ -1982,7 +2088,7 @@ def loadJsonStyle(self, ui):
                 if hasattr(self.ui, str(button["name"])):
                     buttonObject = getattr(self.ui, str(button["name"]))
                     # VERIFY IF THE OBJECT IS A BUTTON
-                    if not str(buttonObject.metaObject().className()) == "QPushButton":
+                    if not str(buttonObject.metaObject().className()) == "QCustomQPushButton":
                         raise Exception(buttonObject.metaObject().className(), buttonObject, " is not of type QPushButton")
                         return
 
