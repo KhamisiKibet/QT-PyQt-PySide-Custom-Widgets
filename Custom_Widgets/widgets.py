@@ -137,6 +137,7 @@ class QCustomQPushButton(QtWidgets.QPushButton):
     def setObjectCustomTheme(self, color1, color2):
         self.color1 = QtGui.QColor(color1)
         self.color2 = QtGui.QColor(color2)
+        self._animate(0)
 
     ########################################################################
     ## SET BUTTON ANIMATION
