@@ -1,6 +1,10 @@
 # QT-PyQt-PySide-Custom-Widgets - Analog Gauge
-This module will be soon available for Pip installations, please check back later.
 
+## Install
+```
+pip install QT-PyQt-PySide-Custom-Widgets
+
+```
 Continue reading...
 
 ![Custom Analog Gauge](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-pyqt-pyside-analog-gauge.png?raw=true)

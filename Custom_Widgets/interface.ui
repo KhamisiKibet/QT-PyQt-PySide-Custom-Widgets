@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>471</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">*{
+	border: none;
+	background-color: transparent;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	color: #fff;
+}
+#centralwidget{
+	background-color: #1f232a;
+}
+#leftMenuSubContainer{
+	background-color: #16191d;
+}
+#leftMenuSubContainer QPushButton{
+	text-align: left;
+	padding: 5px 10px;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+#centerMenuSubContainer, #rightMenuSubContainer{
+	background-color: #2c313c;
+}
+#frame_4, #frame_8, #popupNotificationSubContainer{
+	background-color: #16191d;
+	border-radius: 2px;
+}
+#headerContainer, #footerContainter{
+	background-color: #2c313c;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+ </widget>
+ <resources>
+  <include location="QSS/QSS_Resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

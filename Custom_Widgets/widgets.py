@@ -11,6 +11,19 @@ import os
 import sys
 import iconify as ico #pip install iconify
 from iconify.qt import QtGui, QtWidgets, QtCore
+import __main__
+
+########################################################################
+## COMPILE SASS
+########################################################################
+from .Qss import SassCompiler
+CompileStyleSheet = SassCompiler.CompileStyleSheet
+from . Qss.SvgToPngIcons import NewIconsGenerator
+
+########################################################################
+## MOCK FOR OBJECTS
+########################################################################
+import mock
 
 if 'PySide2' in sys.modules:
     from PySide2 import QtWidgets, QtGui, QtCore
@@ -28,6 +41,57 @@ elif 'PySide6' in sys.modules:
 # JSON FOR READING THE JSON STYLESHEET
 import json
 
+########################################################################
+## IMPORT WORKER
+########################################################################
+from . WidgetsWorker import Worker, WorkerResponse
+
+
+        
+class QCustomPushButtonGroup(QPushButton):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.group = None
+        print("pusvv brn", self)
+
+    ########################################################################
+    ## BUTTON GROUP
+    ########################################################################
+    def getButtonGroup(self):
+        return self.group
+    def getButtonGroupActiveStyle(self):
+        group = self.getButtonGroup()
+        if group == None:
+            return None
+        return getattr(self.groupParent, "group_active_"+str(group))
+    def getButtonGroupNotActiveStyle(self):
+        group = self.getButtonGroup()
+        if group == None:
+            return None
+        return getattr(self.groupParent, "group_not_active_"+str(group))
+    def getButtonGroupButtons(self):
+        group = self.getButtonGroup()
+        if group == None:
+            return None
+        return getattr(self.groupParent, "group_btns_"+str(group))
+
+    def setButtonGroupActiveStyle(self, style):
+        group = self.getButtonGroup()
+        if group == None:
+            raise Exception("Unknown button group. The button does not belong to any group")
+        setattr(self.groupParent, "group_active_"+str(group), style)
+        groupBtns = self.getButtonGroupButtons()
+        for x in groupBtns:
+            if x.active:
+                x.setStyleSheet(style)
+
+    def setButtonGroupNotActiveStyle(self, style):
+        group = self.getButtonGroup()
+        if group == None:
+            raise Exception("Unknown button group. The button does not belong to any group")
+        setattr(self.groupParent, "group_not_active_"+str(group), style)
+        
 
 class QCustomQPushButton(QtWidgets.QPushButton):
     def __init__(self, parent=None):
@@ -80,6 +144,7 @@ class QCustomQPushButton(QtWidgets.QPushButton):
 
         # SET DEFAULT SHADOW EVENT TO NONE
         self.applyShadowOn = None
+        
 
 
     ########################################################################
@@ -750,6 +815,7 @@ class FadeWidgetTransition(QWidget):
 class QMainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
+        
     #######################################################################
     # Add mouse events to the window
     #######################################################################
@@ -765,7 +831,8 @@ class QMainWindow(QMainWindow):
         yPos = cursor.pos().y()
         if hasattr(self, "floatingWidgets"):
             for x in self.floatingWidgets:
-                x.collapseMenu()
+                if hasattr(x, "autoHide") and x.autoHide:
+                    x.collapseMenu()
 
 
     #######################################################################
@@ -826,6 +893,7 @@ class QMainWindow(QMainWindow):
     def checkButtonGroup(self):
         btn = self.sender()
         group = btn.group
+        # print(self)
         groupBtns = getattr(self, "group_btns_"+str(group))
         active = getattr(self, "group_active_"+str(group))
         notActive = getattr(self, "group_not_active_"+str(group))
@@ -833,8 +901,32 @@ class QMainWindow(QMainWindow):
         for x in groupBtns:
             if not x == btn:
                 x.setStyleSheet(notActive)
+                x.active = False
 
         btn.setStyleSheet(active)
+        btn.active = True
+
+    def compileSassTheme(self, progress_callback):
+        ########################################################################
+        ## GENERATE NEW ICONS FOR CURRENT THEME
+        NewIconsGenerator.generateNewIcons(self, progress_callback)
+
+    def makeAllIcons(self, progress_callback):
+        ########################################################################
+        ## GENERATE ALL ICONS FOR ALL THEMES
+        NewIconsGenerator.generateNewIcons(self, progress_callback)
+
+    def sassCompilationProgress(self, n):
+        pass
+        # print(n)
+        # self.ui.activityProgress.setValue(n)
+
+    def restart(self):
+        try:
+            # Restart
+            os.execl(sys.executable, os.path.abspath(__main__.__file__), *sys.argv) 
+        except Exception as e:
+            print("Failed to restart the app, please close and open the app again.") 
 
     #######################################################################
 
@@ -976,6 +1068,11 @@ class QCustomSlideMenu(QWidget):
 
                 self.setGraphicsEffect(effect)
 
+                if "autoHide" in customValues:
+                    self.autoHide = customValues["autoHide"]
+                else:
+                    self.autoHide = True
+
 
         self.refresh()
 
@@ -1008,6 +1105,12 @@ class QCustomSlideMenu(QWidget):
 
                 if position == "center-center":
                     self.setGeometry(QRect((self.parent().width() - self.width()) / 2, (self.parent().height() - self.height()) / 2, self.width(), self.height()))
+
+                if position == "center-left":
+                    self.setGeometry(QRect(self.parent().x(), (self.parent().height() - self.height()) / 2, self.width(), self.height()))
+
+                if position == "center-right":
+                    self.setGeometry(QRect(self.parent().width() - self.width(), (self.parent().height() - self.height()) / 2, self.width(), self.height()))
 
     ########################################################################
     # Menu Toggle Button
@@ -1330,6 +1433,10 @@ def mouseReleaseEvent(self, QMouseEvent):
 ## Read JSon stylesheet
 ########################################################################
 def loadJsonStyle(self, ui):
+    #######################################################################
+    # START THREAD
+    self.customWidgetsThreadpool = QThreadPool()
+    #######################################################################
     file = open('style.json',)
     data = json.load(file)
 
@@ -1370,6 +1477,14 @@ def loadJsonStyle(self, ui):
     ########################################################################
     ## BUTTON GROUPS
     ########################################################################
+    # Add Class To PushButtons
+    QPushButton.getButtonGroup = QCustomPushButtonGroup.getButtonGroup
+    QPushButton.getButtonGroupActiveStyle = QCustomPushButtonGroup.getButtonGroupActiveStyle
+    QPushButton.getButtonGroupNotActiveStyle = QCustomPushButtonGroup.getButtonGroupNotActiveStyle
+    QPushButton.getButtonGroupButtons = QCustomPushButtonGroup.getButtonGroupButtons
+    QPushButton.getButtonGroupActiveStyle = QCustomPushButtonGroup.getButtonGroupActiveStyle
+    QPushButton.setButtonGroupActiveStyle = QCustomPushButtonGroup.setButtonGroupActiveStyle
+    QPushButton.setButtonGroupActiveStyle = QCustomPushButtonGroup.setButtonGroupActiveStyle
     if "QPushButtonGroup" in data:
         grp_count = 0
         for QPushButtonGroup in data['QPushButtonGroup']:
@@ -1378,10 +1493,16 @@ def loadJsonStyle(self, ui):
                 for button in QPushButtonGroup["Buttons"]:
                     if hasattr(self.ui, str(button)):
                         btn = getattr(self.ui, str(button))
+                        btn.groupParent = self
+                        btn.active = False
+
                         if not btn.metaObject().className() == "QPushButton":
                             raise Exception("Error: "+str(button)+" is not a QPushButton object.")
                             return
                         setattr(btn, "group", grp_count)
+
+                        
+
                         if not hasattr(self, "group_btns_"+str(grp_count)):
                             setattr(self, "group_btns_"+str(grp_count), [])
 
@@ -1402,8 +1523,10 @@ def loadJsonStyle(self, ui):
                     if "NotActive" in style:
                         notActiveStyle = style['NotActive']
 
+            getattr(self, "group_btns_"+str(grp_count))[0].active = True
             setattr(self, "group_active_"+str(grp_count), activeStyle)
             setattr(self, "group_not_active_"+str(grp_count), notActiveStyle)
+
 
 
     ########################################################################
@@ -1763,6 +1886,7 @@ def loadJsonStyle(self, ui):
                     shadowXOffset = ""
                     shadowYOffset = ""
                     floatMenu = False
+                    autoHide = True
 
                     if "floatPosition" in QCustomSlideMenu:
                         floatMenu = True
@@ -1799,6 +1923,14 @@ def loadJsonStyle(self, ui):
                                         shadowXOffset = shadow["xOffset"]
                                     if "yOffset" in shadow:
                                         shadowYOffset = shadow["yOffset"]
+
+                            if "autoHide" in floatPosition:
+                                if floatPosition["position"] == True:
+                                    autoHide = True
+                                else:
+                                    autoHide = False
+                            else:
+                                autoHide = False
 
                     if "defaultSize" in QCustomSlideMenu:
                         for defaultSize in QCustomSlideMenu["defaultSize"]:
@@ -1899,7 +2031,8 @@ def loadJsonStyle(self, ui):
                         shadowColor = shadowColor,
                         shadowBlurRadius    = shadowBlurRadius,
                         shadowXOffset   = shadowXOffset,
-                        shadowYOffset   = shadowYOffset
+                        shadowYOffset   = shadowYOffset,
+                        autoHide = autoHide
                     )
 
                     if "toggleButton" in QCustomSlideMenu:
@@ -2239,6 +2372,9 @@ def loadJsonStyle(self, ui):
 
                         buttonObject.wasFound = True
 
+    ########################################################################
+    ## Qstacked Widget
+    ########################################################################
     if "QStackedWidget" in data:
         for stackedWidget in data['QStackedWidget']:
             if "name" in stackedWidget and len(str(stackedWidget["name"])) > 0:
@@ -2295,11 +2431,115 @@ def loadJsonStyle(self, ui):
                                             pushBtn = getattr(self.ui, str(button))
                                             widgetPg = getattr(self.ui, str(widgetPage))
                                             navigationButtons(widget, pushBtn, widgetPg)
+    ########################################################################
+    ## QSETTINGS
+    ########################################################################
+    if "QSettings" in data:
+        for settings in data['QSettings']:
+            if "AppSettings" in settings:
+                appSettings = settings['AppSettings']
+                # print(appSettings)
+                if "OrginizationName" in appSettings and len(str(appSettings["OrginizationName"])) > 0:
+                    self.orginazationName = str(appSettings["OrginizationName"])
+                else:
+                    self.orginazationName = ""
+
+                if "ApplicationName" in settings['AppSettings'] and len(str(appSettings["ApplicationName"])) > 0:
+                    self.applicationName = str(appSettings["ApplicationName"])
+
+                else:
+                    self.applicationName = ""
+                    
+
+                if "OrginizationDormain" in settings['AppSettings'] and len(str(appSettings["OrginizationDormain"])) > 0:
+                    self.orginazationDomain = str(appSettings["OrginizationDormain"])
+                else:
+                    self.orginazationDomain = ""
+
+            if "ThemeSettings" in settings:
+                for themeSettings in settings['ThemeSettings']:
+                    if "CustomTheme" in themeSettings:
+                        # Create themes
+                        if not hasattr(self.ui, "themes"):
+                            setattr(self.ui, "themes", [])
+                            themes = getattr(self.ui, "themes")
+
+                        for customTheme in themeSettings['CustomTheme']:
+                            if "Theme-name" in customTheme and len(str(customTheme['Theme-name'])) > 0:
+                                if not hasattr(self.ui, str(customTheme['Theme-name'])):
+                                    setattr(self.ui, str(customTheme['Theme-name']), Object())
+
+                                    theme = getattr(self.ui, str(customTheme["Theme-name"]))
+                                    theme.name = str(customTheme["Theme-name"])
+                                    
+                                if "Background-color" in customTheme and len(str(customTheme['Background-color'])) > 0:
+                                    # theme.backgroundColor = str(customTheme['Background-color'])
+                                    setattr(theme, "backgroundColor", str(customTheme['Background-color']))
+
+                                else: 
+                                    theme.backgroundColor = ""
+
+                                if "Text-color" in customTheme and len(str(customTheme['Text-color'])) > 0:
+                                    theme.textColor = str(customTheme['Text-color'])
+
+                                else: 
+                                    theme.textColor = ""
+
+                                if "Accent-color" in customTheme and len(str(customTheme['Accent-color'])) > 0:
+                                    theme.accentColor = str(customTheme['Accent-color'])
+
+                                else: 
+                                    theme.accentColor = ""
+
+                                if "Icons-color" in customTheme and len(str(customTheme['Icons-color'])) > 0:
+                                    theme.iconsColor = str(customTheme['Icons-color'])
+
+                                else: 
+                                    theme.iconsColor = ""
+
+                                if "Default-Theme" in customTheme and bool(customTheme['Default-Theme']) == True:
+                                    # THEME = settings.value("THEME")
+                                    setngs = QSettings()
+                                    if setngs.contains("THEME"):
+                                        theme.defaultTheme = False
+                                    else:
+                                        theme.defaultTheme = True
+
+                                else: 
+                                    theme.defaultTheme = False
+
+                                if "Create-icons" in customTheme and bool(customTheme['Create-icons']) == False:
+                                    theme.createNewIcons = False
+                                else: 
+                                    theme.createNewIcons = True
+
+                                themes.append(theme)
+
+        if not hasattr(self.ui, "DARK"):
+            setattr(self.ui, "DARK", Object())
+            darkTheme = getattr(self.ui, "DARK")
+            darkTheme.name = "DARK"
+            darkTheme.defaultTheme = False
+            darkTheme.createNewIcons = True
+            themes.append(darkTheme)
+        if not hasattr(self.ui, "LIGHT"):
+            setattr(self.ui, "LIGHT", Object())
+            lightTheme = getattr(self.ui, "LIGHT")
+            lightTheme.name = "LIGHT"
+            lightTheme.defaultTheme = False
+            lightTheme.createNewIcons = True
+            themes.append(lightTheme)
+
+        # QAppSettings.updateAppSettings(self)
+
+
+ 
 
 ########################################################################
 ##
 ########################################################################
-
+class Object(object):
+    pass
 ########################################################################
 ##
 ########################################################################
@@ -2752,6 +2992,48 @@ class FormProgressIndicator(QWidget):
         self.progressIndicator.setStyleSheet(u"background-color: transparent; padding: 0;")
 
         self.progressIndicatorBg.setStyleSheet(u"background-color: "+self.fillColor+"; border-radius: "+str(int(self.formProgressHeight / 6)))
+
+
+########################################################################
+## END
+########################################################################
+
+########################################################################
+## FORM PROGRESS INDICATOR
+########################################################################
+class QAppSettings():
+    def __init__(self, parent=None):
+        super(QAppSettings, self).__init__(parent)
+
+        ########################################################################
+        ## CREATE APP SETTINGS
+        ########################################################################
+
+
+    def updateAppSettings(self):
+        if len(str(self.orginazationName)) > 0:
+            QCoreApplication.setOrganizationName(str(self.orginazationName))
+        if len(str(self.applicationName)) > 0:
+            QCoreApplication.setApplicationName(str(self.applicationName))
+        if len(str(self.orginazationDomain)) > 0:
+            QCoreApplication.setOrganizationDomain(str(self.orginazationDomain))
+
+        settings = QSettings()
+        for theme in self.ui.themes:
+            if theme.defaultTheme:
+                # generate app theme
+                settings.setValue("THEME", theme.name);
+
+        #######################################################################
+        # APPLY COMPILED STYLESHEET
+        #######################################################################
+        CompileStyleSheet.applyCompiledSass(self)
+
+        
+
+
+            
+
 ########################################################################
 ## END
 ########################################################################
