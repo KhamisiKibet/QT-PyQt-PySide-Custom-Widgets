@@ -1,6 +1,14 @@
 import pathlib
 from setuptools import setup
 import platform
+import ctypes, os
+import subprocess
+def isAdmin(): #Credit to https://raccoon.ninja/en/dev/using-python-to-check-if-the-application-is-running-as-an-administrator/
+    try:
+        is_admin = (os.geteuid() == 0)
+    except AttributeError:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+    return is_admin #If this is not run as an admin on Windows, you will get WinError permission denied for Local/Temp folder in %appdata%.
 if platform.system() == "Linux" or platform.system() == "Darwin":
     install_requires=[
         "PySide2",
@@ -16,6 +24,17 @@ if platform.system() == "Linux" or platform.system() == "Darwin":
         "colorsys"
     ]
 else:
+    if not isAdmin():
+        print("This script needs to be run as administrator.")
+        exit(-1)
+    from urllib.request import urlretrieve #This has to be done here, not at the top of the file because only Windows users have access to this from the STDLIB
+    print("Downloading GTK installer. This is not optional. Without this installed, Custom_Widgets will fail.")
+    urlretrieve("https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/download/2022-01-04/gtk3-runtime-3.24.31-2022-01-04-ts-win64.exe", "gtk.exe")
+    """Code above downloads the GTK3+ installer. Without this, cairosvg will spit out multiple errors about GTK DLLs being missing."""
+    print("GTK installer downloaded. Leave all settings at default. Running now...")
+    subprocess.call("gtk.exe", shell=True)
+    print("GTK installed.")
+    os.remove(os.getcwd()+"\\gtk.exe")
     install_requires=[
         "PySide2",
         "PyQt5",
