@@ -16,7 +16,7 @@ import codecs
 import shutil
 import json
 from urllib.parse import urlparse
-
+import platform
 from PySide2.QtCore import QUrl
 from PySide2.QtGui import QColor
 
@@ -145,15 +145,19 @@ def generateIcons(iconsColor = "#fff"):
     # Check resource file
     resource_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
     if not os.path.exists(resource_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))  
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
     py_resource_path = resource_path.replace(".qrc", ".py")
     py_resource_path = py_resource_path.replace("QSS/", "")
     py_resource_path = py_resource_path.replace("QSS_Resources", "QSS_Resources_rc")
     # Convert qrc to py
     try:
-        os.system("pyrcc5 '"+resource_path+"' -o '"+py_resource_path+"'")
+        if platform.system() == "Darwin" or platform.system() == "Linux":
+            os.system(f"pyrcc5 '{resource_path}' -o '{py_resource_path}'")
+        else:
+            os.system(f"pyrcc5 {resource_path} -o {py_resource_path}") #Single quotes round the parameters caused a "File not found" in pyrcc5 on Windows.
+            """Also made these an f-string, much nicer."""
     except Exception as e:
-        raise e  
+        raise e
 
     print("Resources (py) file created")
 
