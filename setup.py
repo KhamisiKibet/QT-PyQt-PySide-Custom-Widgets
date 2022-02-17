@@ -1,6 +1,32 @@
 import pathlib
 from setuptools import setup
-
+import platform
+if platform.system() == "Linux" or platform.system() == "Darwin":
+    install_requires=[
+        "PySide2",
+        "PyQt5",
+        "iconify",
+        "cairosvg",
+        "codecs",
+        "shutil",
+        "qtsass",
+        "matplotlib",
+        "mock",
+        "urllib",
+        "colorsys"
+    ]
+else:
+    install_requires=[
+        "PySide2",
+        "PyQt5",
+        "iconify",
+        "cairosvg",
+        "qtsass",
+        "matplotlib",
+        "mock",
+    ]
+    """Python 3.9 for Windows already includes shutil, codecs, colorsys and urllib. This change will remove the error preventing
+    installation on Windows devices."""
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
 
@@ -25,19 +51,7 @@ setup(
     url = 'https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets',   # Provide either the link to your github or to your website
     # download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',    # I explain this later on
     keywords = ['PySide', 'PyQt', 'animation', 'custom', 'widgets', "QML", "C++", "QT Creator"],   # Keywords that define your package best
-    install_requires=[
-        "PySide2",
-        "PyQt5",
-        "iconify",
-        "cairosvg",
-        "codecs",
-        "shutil",
-        "qtsass",
-        "matplotlib",
-        "mock",
-        "urllib",
-        "colorsys"
-    ],
+    install_requires=install_requires,
     classifiers=[
         'Development Status :: 3 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
         'Intended Audience :: Developers',      # Define that your audience are developers
