@@ -151,7 +151,7 @@ def generateIcons(iconsColor = "#fff"):
     py_resource_path = py_resource_path.replace("QSS_Resources", "QSS_Resources_rc")
     # Convert qrc to py
     try:
-        os.system("pyrcc5 '"+resource_path+"' -o '"+py_resource_path+"'")
+        os.system('pyrcc5 '+'"'+resource_path+'" -o "'+py_resource_path+'"')
     except Exception as e:
         raise e  
 
