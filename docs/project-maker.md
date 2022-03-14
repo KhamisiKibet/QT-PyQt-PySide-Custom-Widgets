@@ -29,5 +29,5 @@ This wizard will:
 Now you can open and edit your project!!
 
 ## What Next?
-It is time to improve your UI design skills with QT, watch these [tutorials](https://www.youtube.com/c/SpinnTV/videos)
+Its time to improve your UI design skills with QT, watch these [tutorials](https://www.youtube.com/c/SpinnTV/videos)
 
