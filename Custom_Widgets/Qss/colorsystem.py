@@ -108,6 +108,8 @@ class CreateColorVariable():
         super(CreateColorVariable, self).__init__(parent)
 
     def getCurrentThemeInfo(self):
+        settings = QSettings()
+
         THEME = settings.value("THEME")
                 
         currentThemeInfo = {}
@@ -163,6 +165,8 @@ class CreateColorVariable():
         return currentThemeInfo
         
     def CreateVariables(self):
+        settings = QSettings()
+        
         THEME = settings.value("THEME")
         themeFound = False
         if THEME == "LIGHT":
@@ -181,6 +185,7 @@ class CreateColorVariable():
                     theme.bg_color = themes.backgroundColor
                     theme.txt_color = themes.textColor
                     theme.accent_color = themes.accentColor
+                    theme.icons_color = theme.iconsColor
                     themeFound = True
 
             if not themeFound:

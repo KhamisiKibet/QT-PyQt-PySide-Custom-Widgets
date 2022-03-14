@@ -43,6 +43,8 @@ class CompileStyleSheet():
     ## APPLY COMPILED STYLESHEET
     ########################################################################
     def applyCompiledSass(self):
+        settings = QSettings()
+        
         qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'QSS'))
         if not os.path.exists(qcss_folder):
             os.makedirs(qcss_folder)

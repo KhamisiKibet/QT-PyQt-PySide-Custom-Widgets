@@ -1,0 +1,2 @@
+recursive-include Custom_Widgets *
+recursive-exclude Custom_Widgets/__pycache__ *

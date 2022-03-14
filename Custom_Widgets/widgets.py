@@ -924,7 +924,20 @@ class QMainWindow(QMainWindow):
     def restart(self):
         try:
             # Restart
-            os.execl(sys.executable, os.path.abspath(__main__.__file__), *sys.argv) 
+            # print("restarting", '"'+os.path.abspath(__main__.__file__)+'"')
+            # os.execl(sys.executable, str(os.path.abspath(__main__.__file__)), *sys.argv)
+
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Information)
+
+            msg.setText("Your app theme has been successfuly generated. Please restart your app to fully apply your new theme")
+            msg.setInformativeText("Show more details...")
+            msg.setWindowTitle("Finished generating app theme!")
+            msg.setDetailedText("The app needs to be restarted in order to apply the new Icons")
+            msg.setStandardButtons(QMessageBox.Ok)
+
+            retval = msg.exec_()
+
         except Exception as e:
             print("Failed to restart the app, please close and open the app again.") 
 
@@ -2452,7 +2465,7 @@ def loadJsonStyle(self, ui):
                     
 
                 if "OrginizationDormain" in settings['AppSettings'] and len(str(appSettings["OrginizationDormain"])) > 0:
-                    self.orginazationDomain = str(appSettings["OrginizationDormain"])
+                    self.orginazationDomain = str(appSettings["OrginizationDormain"]).replace(" ", "")
                 else:
                     self.orginazationDomain = ""
 
@@ -2500,7 +2513,7 @@ def loadJsonStyle(self, ui):
                                 if "Default-Theme" in customTheme and bool(customTheme['Default-Theme']) == True:
                                     # THEME = settings.value("THEME")
                                     setngs = QSettings()
-                                    if setngs.contains("THEME"):
+                                    if setngs.contains("THEME") and setngs.contains("THEME") is not None:
                                         theme.defaultTheme = False
                                     else:
                                         theme.defaultTheme = True
@@ -3011,6 +3024,7 @@ class QAppSettings():
 
 
     def updateAppSettings(self):
+
         if len(str(self.orginazationName)) > 0:
             QCoreApplication.setOrganizationName(str(self.orginazationName))
         if len(str(self.applicationName)) > 0:
@@ -3019,10 +3033,14 @@ class QAppSettings():
             QCoreApplication.setOrganizationDomain(str(self.orginazationDomain))
 
         settings = QSettings()
-        for theme in self.ui.themes:
-            if theme.defaultTheme:
-                # generate app theme
-                settings.setValue("THEME", theme.name);
+
+        if settings.value("THEME") is None:
+            for theme in self.ui.themes:
+                if theme.defaultTheme:
+                    print("Default theme: ", theme.name)
+                    # update app theme
+                    settings.setValue("THEME", theme.name);
+                
 
         #######################################################################
         # APPLY COMPILED STYLESHEET
