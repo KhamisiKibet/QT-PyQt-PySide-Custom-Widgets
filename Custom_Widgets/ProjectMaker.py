@@ -148,6 +148,7 @@ def generateIcons(iconsColor = "#fff"):
         shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))  
     py_resource_path = resource_path.replace(".qrc", ".py")
     py_resource_path = py_resource_path.replace("QSS/", "")
+    py_resource_path = py_resource_path.replace("QSS\\", "") #for win
     py_resource_path = py_resource_path.replace("QSS_Resources", "QSS_Resources_rc")
     # Convert qrc to py
     try:
