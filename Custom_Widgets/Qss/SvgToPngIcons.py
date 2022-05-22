@@ -150,7 +150,11 @@ class NewIconsGenerator():
                 if os.name == 'nt':
                     shutil.copy(os.path.join(source_dir, file_name), target_dir)
                 else:
-                    shutil.move(os.path.join(source_dir, file_name), target_dir)
+                    try:
+                        shutil.move(os.path.join(source_dir, file_name), target_dir)
+                    except Exception as e:
+                        shutil.copy(os.path.join(source_dir, file_name), target_dir)
+                    
 
                 filesMoved += 1
                 # EMMIT PROGRESS VALUE
