@@ -14,8 +14,16 @@ You can create a QStacked Widgets directly from your python file or use the QT D
 
 ![Custom QStacked Widgets QT Designer](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/4.png?raw=true)
 
-To create the above user interface...
+- Add the promote class to the QStacked Widget
+> Right click on the QStacked then select ``promote to..`` then enter the ``class`` and ``header file`` name as shown below:
 
+![Screenshot_20220722_080559.png](https://www.dropbox.com/s/h35haep9nu4n9ut/Screenshot_20220722_080559.png?dl=0&raw=1)
+
+![Screenshot_20220722_080958.png](https://www.dropbox.com/s/pazrn5kh8tiogb1/Screenshot_20220722_080958.png?dl=0&raw=1)
+
+- Click ``add``, then click ``promote``
+ 
+> To create the above user interface...
 Create a folder for your project, "myProject".
 Inside this folder, create a file called "interface.ui", and paste the following code in "interface.ui" file. Open the file in QT Designer.
 
@@ -38,7 +46,7 @@ Inside this folder, create a file called "interface.ui", and paste the following
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QStackedWidget" name="myStackedWidget">
+     <widget class="QCustomStackedWidget" name="myStackedWidget">
       <widget class="QWidget" name="page">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 0, 127);</string>
@@ -156,28 +164,38 @@ Inside this folder, create a file called "interface.ui", and paste the following
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header location="global">Custom_Widgets.Widgets.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
-
-
 ```
+
+- Import your UI python code.
 From the QT Designer app, you can generate the user interface python code, but I have already done that for you. So, just create a file inside your project folder, name it "ui_interface.py". Copy and paste the follownig code inside "ui_interface.py".
 
 ```python
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfacentpqeq.ui'
+## Form generated from reading UI file 'interfacedaHCcH.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 5.15.5
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+from PySide2.QtCore import *  # type: ignore
+from PySide2.QtGui import *  # type: ignore
+from PySide2.QtWidgets import *  # type: ignore
+
+from Custom_Widgets.Widgets import QCustomStackedWidget
 
 
 class Ui_MainWindow(object):
@@ -189,7 +207,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.myStackedWidget = QStackedWidget(self.centralwidget)
+        self.myStackedWidget = QCustomStackedWidget(self.centralwidget)
         self.myStackedWidget.setObjectName(u"myStackedWidget")
         self.page = QWidget()
         self.page.setObjectName(u"page")
@@ -267,40 +285,9 @@ class Ui_MainWindow(object):
         self.page2.setText(QCoreApplication.translate("MainWindow", u"Page 2", None))
         self.prev.setText(QCoreApplication.translate("MainWindow", u"Previous", None))
     # retranslateUi
-
-
-
 ```
 
-Import "Custom_Widgets.Widgets" to the user interface file, "ui_interface.py", you just created as shown below.
-
-```python
-# -*- coding: utf-8 -*-
-
-################################################################################
-## Form generated from reading UI file 'interfaceuuvypD.ui'
-##
-## Created by: Qt User Interface Compiler version 5.15.2
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
-
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
-
-########################################################################
-# IMPORT CUSTOM BUTTONS FILE
-from Custom_Widgets.Widgets import *
-########################################################################
-
-
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-..........
-```
-
-Now create a file inside your project folder and name it "main.py". Inside this file, copy and paste the following code.
+- Now create a file inside your project folder and name it "main.py". Inside this file, copy and paste the following code.
 
 ```python
 ########################################################################
@@ -313,7 +300,6 @@ Now create a file inside your project folder and name it "main.py". Inside this 
 ## IMPORTS
 ########################################################################
 import sys
-from PySide2.QtCore import *
 
 ########################################################################
 # IMPORT GUI FILE
@@ -484,6 +470,7 @@ Inside this file, copy and paste the following code:
 ## IMPORTS
 ########################################################################
 import sys
+from PySide2 import QtCore
 from PySide2.QtCore import *
 
 ########################################################################
@@ -558,7 +545,7 @@ RUN "main.py"
 
 ### Customize QStacked Widgets from your JSon file. 
 
-The best recommended way to customize your QStacked widgets using QT-PyQt-PySide-Custom-Widgets library is through a JSon file. 
+The recommended way to customize your QStacked widgets using QT-PyQt-PySide-Custom-Widgets library is through a JSon file. 
 
 Inside your project folder, create a file and name it "style.json". 
 Inside this file, create a "QStackedWidget" object which will contain all QStackedWidget names and their custom values.
@@ -916,8 +903,8 @@ To apply your JSon style from "style.json" to the user inteface, just call loadJ
 ########################################################################
 ## LOAD QSTACKWIDGETS ANIMATION AND NAVIGATIONS FROM JSON FILE
 ########################################################################
-# ui  is the window class that contains the user interface wodgets
-loadJsonStyle(ui)
+# ui  is the window class that contains the user interface widgets
+loadJsonStyle(self, ui)
 ```
 
 Now lets apply the JSon stylesheet from "main.py" file we created earlier,
@@ -934,13 +921,16 @@ Inside this file, copy and paste the following code:
 ## IMPORTS
 ########################################################################
 import sys
-from PySide2.QtCore import *
 
 ########################################################################
 # IMPORT GUI FILE
 from ui_interface import *
 ########################################################################
 
+########################################################################
+# IMPORT CUSTOM WIDGETS MODULE
+from Custom_Widgets.Widgets import *
+########################################################################
 
 ########################################################################
 ## MAIN WINDOW CLASS
@@ -954,7 +944,7 @@ class MainWindow(QMainWindow):
         ########################################################################
         ## LOAD QSTACKWIDGETS ANIMATION AND NAVIGATIONS FROM JSON FILE
         ########################################################################
-        loadJsonStyle(self.ui)
+        loadJsonStyle(self, self.ui)
         ########################################################################
         ## 
         ########################################################################
@@ -988,7 +978,12 @@ RUN "main.py"
 
 
 # Navigation
-[Video Tutorial](https://youtu.be/UHRP5pRZSiU) [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html) [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html)  [Customize QMainWindow](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qmainwindow.html)  [Customize slide menu widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-slide-menu-widgets.html)
+[Video Tutorial](https://youtu.be/UHRP5pRZSiU)
+[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
+[Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html) 
+[Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html)  
+[Customize QMainWindow](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qmainwindow.html)  
+[Customize slide menu widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-slide-menu-widgets.html)
 
 
 
