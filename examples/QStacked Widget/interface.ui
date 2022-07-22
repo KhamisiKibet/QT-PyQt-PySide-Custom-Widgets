@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QStackedWidget" name="myStackedWidget">
+     <widget class="QCustomStackedWidget" name="myStackedWidget">
       <widget class="QWidget" name="page">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(255, 0, 127);</string>
@@ -134,6 +134,14 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header location="global">Custom_Widgets.Widgets.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
