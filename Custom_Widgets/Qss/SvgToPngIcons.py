@@ -44,8 +44,9 @@ class NewIconsGenerator():
             oldIconsDestinationFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+settings.value("ICONS-COLOR").replace("#", "")))
 
         if not settings.value("ICONS-COLOR") == normal_color and color["icons-color"] is not None:
-            print("Current icons color ", settings.value("ICONS-COLOR"), "New icons color", normal_color)
-            print("Generating icons for your theme, please wait. This may take long")
+            if self.showCustomWidgetsLogs:
+                print("Current icons color ", settings.value("ICONS-COLOR"), "New icons color", normal_color)
+                print("Generating icons for your theme, please wait. This may take long")
 
             for root, dirs, files in os.walk(filename):
                 for file in files:
@@ -58,15 +59,14 @@ class NewIconsGenerator():
                 name_2 =  os.path.basename(urlparse(name).path).replace(".svg", ".png")
                 if os.path.exists(os.path.join(oldIconsFolder, name_2)) and not os.path.exists(os.path.join(oldIconsDestinationFolder, name_2)):
                     shutil.move(os.path.join(oldIconsFolder, name_2), oldIconsDestinationFolder)
-                    # print("Moved", name_2)
+
                 name_2 =  os.path.basename(urlparse(name).path).replace(".svg", "_focus.png")
                 if os.path.exists(os.path.join(oldIconsFolder, name_2)) and not os.path.exists(os.path.join(oldIconsDestinationFolder, name_2)):
                     shutil.move(os.path.join(oldIconsFolder, name_2), oldIconsDestinationFolder)
-                    # print("Moved", name_2)
+
                 name_2 =  os.path.basename(urlparse(name).path).replace(".svg", "_disabled.png")
                 if os.path.exists(os.path.join(oldIconsFolder, name_2)) and not os.path.exists(os.path.join(oldIconsDestinationFolder, name_2)):
                     shutil.move(os.path.join(oldIconsFolder, name_2), oldIconsDestinationFolder)
-                    # print("Moved", name_2)
 
             for name in list_of_files:
                 # Create normal icons
@@ -195,7 +195,8 @@ class NewIconsGenerator():
             # if theme.defaultTheme or theme.name == THEME:
                 # continue
 
-            print("Checking icons for "+theme.name)
+            if self.showCustomWidgetsLogs:
+                print("Checking icons for "+theme.name)
                 
 
             if hasattr(theme, "iconsColor"):
@@ -219,7 +220,8 @@ class NewIconsGenerator():
                     normal_color = str(themeProperty.icons_color)
 
             else:
-                print("No icons color specified for theme", theme.name)
+                if self.showCustomWidgetsLogs:
+                    print("No icons color specified for theme", theme.name)
                 continue
             
             focused_color = adjust_lightness(normal_color, 1.5)
@@ -229,7 +231,8 @@ class NewIconsGenerator():
 
             iconsFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+iconsFolderName))
 
-            print("Generating missing icons for your theme",  normal_color, "please wait. This may take long")
+            if self.showCustomWidgetsLogs:
+                print("Generating missing icons for your theme",  normal_color, "please wait. This may take long")
 
             for root, dirs, files in os.walk(filename):
                 for file in files:

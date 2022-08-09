@@ -17,8 +17,16 @@ import shutil
 import json
 from urllib.parse import urlparse
 
-from PySide2.QtCore import QUrl
-from PySide2.QtGui import QColor
+if 'PySide2' in sys.modules:
+    from PySide2.QtCore import QUrl
+    from PySide2.QtGui import QColor
+
+elif 'PySide6' in sys.modules:
+    from PySide6.QtCore import QUrl
+    from PySide6.QtGui import QColor
+
+else:
+    raise Exception("PySide2 or PySide6 is required, please install it!")
 
 from . Qss.colorsystem import *
 

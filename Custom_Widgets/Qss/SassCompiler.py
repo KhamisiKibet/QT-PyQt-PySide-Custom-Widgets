@@ -5,10 +5,17 @@
 ########################################################################
 ## IMPORTS
 ########################################################################
+import sys
 ########################################################################
-from PySide2.QtCore import *
-from PySide2.QtGui import *
-from PySide2.QtWidgets import *
+if 'PySide2' in sys.modules:
+    from PySide2.QtCore import *
+    from PySide2.QtGui import *
+    from PySide2.QtWidgets import *
+if 'PySide6' in sys.modules:
+    from PySide6.QtCore import *
+    from PySide6.QtGui import *
+    from PySide6.QtWidgets import *
+
 # IMPORT QTSASS
 import qtsass
 ########################################################################
@@ -95,12 +102,12 @@ class CompileStyleSheet():
         # ALL THEME ICONS
         allIconsWorker = Worker(self.makeAllIcons)
         allIconsWorker.signals.result.connect(WorkerResponse.print_output)
-        allIconsWorker.signals.finished.connect(lambda: print("all icons have been checked and missing icons generated!"))
+        if self.showCustomWidgetsLogs:
+            allIconsWorker.signals.finished.connect(lambda: print("all icons have been checked and missing icons generated!"))
         allIconsWorker.signals.progress.connect(self.sassCompilationProgress)
 
         color = CreateColorVariable.getCurrentThemeInfo(self)
         normal_color = str(color["icons-color"])
-        # print(settings.value("ICONS-COLOR"), normal_color)
         if not settings.value("ICONS-COLOR") == normal_color and color["icons-color"] is not None:     
             # Execute
             self.customWidgetsThreadpool.start(iconsWorker)

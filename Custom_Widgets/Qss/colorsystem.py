@@ -10,7 +10,10 @@ import sys
 
 ########################################################################
 # IMPORT PYSIDE
-from PySide2.QtCore import *
+if 'PySide2' in sys.modules:
+    from PySide2.QtCore import *
+elif 'PySide6' in sys.modules:
+    from PySide6.QtCore import *
 
 import matplotlib.colors as mc
 import colorsys
@@ -37,7 +40,6 @@ def adjust_lightness(color, amount=0.5):
     return newColor
 
 def rgb_to_hex(rgb):
-    # print(rgb)
     hexColor = '%02x%02x%02x' % rgb
     return "#"+str(hexColor)
 

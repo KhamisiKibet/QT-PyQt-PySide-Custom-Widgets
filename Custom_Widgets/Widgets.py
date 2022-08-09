@@ -38,6 +38,7 @@ elif 'PySide6' in sys.modules:
     from PySide6.QtGui import *
     from PySide6.QtWidgets import *
     from PySide6.QtCore import Signal
+    
 # JSON FOR READING THE JSON STYLESHEET
 import json
 
@@ -86,7 +87,6 @@ class QCustomPushButtonGroup(QPushButton):
         super().__init__(parent)
 
         self.group = None
-        print("pusvv brn", self)
 
     ########################################################################
     ## BUTTON GROUP
@@ -366,7 +366,6 @@ class QCustomQPushButton(QtWidgets.QPushButton):
     ## AND STOP ICON ANIMATIONS
     ########################################################################
     def applyDefaultStyle(self):
-        # print(self.setIconAnimatedOn, self.clickPosition, self.mousePosition)
         if self.mousePosition == "out" or self.clickPosition == "up":
             if self.fallBackStyle is None:
                 pass
@@ -379,17 +378,14 @@ class QCustomQPushButton(QtWidgets.QPushButton):
             if hasattr(self, 'anim'):
                 if (self.setIconAnimatedOn == "click" and self.clickPosition == "up") or (self.setIconAnimatedOn == "hover" and self.mousePosition == "out"):
                     try:
-                        # print("stopping icon animation")
                         self.anim.stop()
                     except Exception as e:
-                        # print(e)
                         pass
 
     ########################################################################
     ## ANIMATE BUTTON BACKGROUND AND BORDER
     ########################################################################
     def _animate(self, value):
-        # print(self, value)
         color_stop = 1
         if self.defaultStyle is not None:
             qss = str(self.defaultStyle)
@@ -422,7 +418,6 @@ class QCustomQPushButton(QtWidgets.QPushButton):
 
             self.setStyleSheet(qss)
 
-            # print(self.color2.name())
 
     ########################################################################
     ## ANIMATE BUTTON SHADOW
@@ -475,7 +470,7 @@ def iconify(buttonObject, **iconCustomization):
             else:
                 raise Exception("Please specify the button icon animation. Supported signature is 'animation': 'spinn' or 'animation': 'breathe'")
     else:
-        print("Failed to create the icon, please define the icon image i.e icon = 'icon.image'")
+        raise Exception("Failed to create the icon, please define the icon image i.e icon = 'icon.image'")
 
 
 #######################################################################
@@ -569,7 +564,6 @@ def applyStylesFromColor(buttonObject, color1, color2):
         buttonObject.setStyleSheet(qss + grad + style)
 
         # buttonObject.setObjectFallBackStyle(qss + grad + style)
-        # print(buttonObject, color1.name(), color2.name())
 
 
 ########################################################################
@@ -796,7 +790,6 @@ class QCustomStackedWidget(QtWidgets.QStackedWidget):
     def setCurrentWidget(self, widget):
         currentIndex = self.currentIndex()
         nextIndex = self.indexOf(widget)
-        # print(currentIndex, nextIndex)
         if self.currentIndex() == self.indexOf(widget):
             return
         if self.slideTransition:
@@ -857,7 +850,6 @@ class QMainWindow(QMainWindow):
         # Get the current position of the mouse
         self.clickPosition = event.globalPos()
         # We will use this value to move the window
-        # print(self.floatingWidgets)
         # Hide floating widgets
         cursor = QtGui.QCursor()
         xPos = cursor.pos().x()
@@ -926,7 +918,6 @@ class QMainWindow(QMainWindow):
     def checkButtonGroup(self):
         btn = self.sender()
         group = btn.group
-        # print(self)
         groupBtns = getattr(self, "group_btns_"+str(group))
         active = getattr(self, "group_active_"+str(group))
         notActive = getattr(self, "group_not_active_"+str(group))
@@ -951,13 +942,11 @@ class QMainWindow(QMainWindow):
 
     def sassCompilationProgress(self, n):
         pass
-        # print(n)
         # self.ui.activityProgress.setValue(n)
 
     def restart(self):
         try:
             # Restart
-            # print("restarting", '"'+os.path.abspath(__main__.__file__)+'"')
             # os.execl(sys.executable, str(os.path.abspath(__main__.__file__)), *sys.argv)
 
             msg = QMessageBox()
@@ -972,7 +961,7 @@ class QMainWindow(QMainWindow):
             retval = msg.exec_()
 
         except Exception as e:
-            print("Failed to restart the app, please close and open the app again.") 
+            raise Exception("Failed to restart the app, please close and open the app again.") 
 
     #######################################################################
 
@@ -1328,7 +1317,6 @@ class QCustomSlideMenu(QWidget):
 
 
     def animateWidth(self, startWidth, endWidth):
-        # print(startWidth, endWidth)
         if self.expandedWidth == "auto" or self.expandedWidth == 16777215:
             if self.collapsed:
                 self._widthAnimation.finished.connect(lambda: self.setMaximumWidth(16777215))
@@ -1342,7 +1330,6 @@ class QCustomSlideMenu(QWidget):
         self._widthAnimation.finished.connect(lambda: self.applyWidgetStyle())
 
     def animateHeight(self, startHeight, endHeight):
-        # print(startHeight, endHeight)
         if self.expandedHeight == "auto" or self.expandedHeight == 16777215:
             if self.collapsed:
                 self._heightAnimation.finished.connect(lambda: self.setMaximumHeight(16777215))
@@ -1470,7 +1457,6 @@ class QCustomSlideMenu(QWidget):
 
 def mouseReleaseEvent(self, QMouseEvent):
     cursor = QtGui.QCursor()
-    # print(cursor.pos(),  self.ui.pushButton.geometry().x())
     # self.ui.frame.setGeometry(QRect(cursor.pos().x(), cursor.pos().y(), 151, 111))
 
 
@@ -1478,15 +1464,61 @@ def mouseReleaseEvent(self, QMouseEvent):
 ########################################################################
 ## Read JSon stylesheet
 ########################################################################
-def loadJsonStyle(self, ui):
+def loadJsonStyle(self, ui, **jsonFiles):
     #######################################################################
     # START THREAD
     self.customWidgetsThreadpool = QThreadPool()
+    # Show Logs
+    self.showCustomWidgetsLogs = True
     #######################################################################
-    file = open('style.json',)
-    data = json.load(file)
-
     self.ui = ui
+    if not jsonFiles:
+        if os.path.isfile("style.json"):
+            file = open('style.json',)
+            data = json.load(file)
+            applyJsonStyle(self, self.ui, data)
+
+        elif os.path.isfile("json/style.json"):
+            file = open('json/style.json',)
+            data = json.load(file)
+            applyJsonStyle(self, self.ui, data)
+
+        elif os.path.isfile("jsonstyles/style.json"):
+            file = open('jsonstyles/style.json',)
+            data = json.load(file)
+            applyJsonStyle(self, self.ui, data)
+
+
+    for file in jsonFiles['jsonFiles']:
+        if os.path.isfile(file):
+            jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
+            jsonFile = open(jsonFile,)
+            # Read file
+            data = json.load(jsonFile)
+            ########################################################################
+            # APPLY JSON STYLESHEET
+            ########################################################################
+            # self = QMainWindow class
+            # self.ui = Ui_MainWindow / user interface class
+            applyJsonStyle(self, self.ui, data)
+            ########################################################################
+        else:
+            raise Exception("Error loading your JSON files : '"+str(file)+"' does not exist")
+
+########################################################################
+## Apply JSon stylesheet
+########################################################################
+def applyJsonStyle(self, ui, data):
+    ########################################################################
+    ## Show logs
+    ########################################################################
+    if "ShowLogs" in data:
+        if data["ShowLogs"]:
+            # Show Logs
+            self.showCustomWidgetsLogs = True
+        else:
+            # Hide Logs
+            self.showCustomWidgetsLogs = False
 
     ########################################################################
     ## QCARDS
@@ -2280,7 +2312,6 @@ def loadJsonStyle(self, ui):
 
                         if "customTheme" in button and len(button["customTheme"]) > 0:
                             for x in button["customTheme"]:
-                                # print(x)
                                 if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
                                     buttonObject.setObjectCustomTheme(x["color1"], x["color2"])
 
@@ -2303,14 +2334,10 @@ def loadJsonStyle(self, ui):
                             for x in button["fallBackStyle"]:
                                 fallBackStyle += x
 
-                        # print(fallBackStyle)
-
                         defaultStyle = ""
                         if "defaultStyle" in button:
                             for x in button["defaultStyle"]:
                                 defaultStyle += x
-
-                        # print(fallBackStyle)
 
                         buttonObject.wasThemed = True
 
@@ -2456,14 +2483,14 @@ def loadJsonStyle(self, ui):
                                         button = getattr(self.ui, str(navigation["nextPage"]))
                                         button.clicked.connect(lambda: widget.slideToNextWidget())
                                     else:
-                                        print("No button found")
+                                        raise Exception("Unknown button '" +str(button)+ "'. Please check your JSon file")
 
                                 if "previousPage" in navigation:
                                     if hasattr(self.ui, str(navigation["previousPage"])):
                                         button = getattr(self.ui, str(navigation["previousPage"]))
                                         button.clicked.connect(lambda: widget.slideToPreviousWidget())
                                     else:
-                                        print("No button found")
+                                        raise Exception("Unknown button '" +str(button)+ "'. Please check your JSon file")
 
                                 if "navigationButtons" in navigation:
                                     for navigationButton in navigation["navigationButtons"]:
@@ -2484,7 +2511,6 @@ def loadJsonStyle(self, ui):
         for settings in data['QSettings']:
             if "AppSettings" in settings:
                 appSettings = settings['AppSettings']
-                # print(appSettings)
                 if "OrginizationName" in appSettings and len(str(appSettings["OrginizationName"])) > 0:
                     self.orginazationName = str(appSettings["OrginizationName"])
                 else:
@@ -2740,7 +2766,6 @@ class FormProgressIndicator(QWidget):
         # self.formProgressAnimation.setDirection(QtCore.QAbstractAnimation.Forward)
 
         self.createFormProgressIndicator()
-        # print(self.createFormProgressIndicator())
 
     def selectFormProgressIndicatorTheme(self, themeNumber):
         if themeNumber == 1:
@@ -2911,7 +2936,6 @@ class FormProgressIndicator(QWidget):
 
             elif hasattr(self, 'step_'+str(x)+"_warning") and getattr(self, 'step_'+str(x)+"_warning"):
                 if hasattr(self, '_'+str(x)):
-                    # print(x, getattr(self, '_'+str(x)))
                     getattr(self, '_'+str(x)).setStyleSheet("""
                         color: """+self.color+""";
                         background-color: """+self.warningFillColor+""";
@@ -2923,7 +2947,6 @@ class FormProgressIndicator(QWidget):
 
             elif hasattr(self, 'step_'+str(x)+"_success") and getattr(self, 'step_'+str(x)+"_success"):
                 if hasattr(self, '_'+str(x)):
-                    # print(x, getattr(self, '_'+str(x)))
                     getattr(self, '_'+str(x)).setStyleSheet("""
                         color: """+self.color+""";
                         background-color: """+self.successFillColor+""";
@@ -3070,7 +3093,6 @@ class QAppSettings():
         if settings.value("THEME") is None:
             for theme in self.ui.themes:
                 if theme.defaultTheme:
-                    print("Default theme: ", theme.name)
                     # update app theme
                     settings.setValue("THEME", theme.name);
                 

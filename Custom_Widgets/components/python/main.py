@@ -35,7 +35,14 @@ class MainWindow(QMainWindow):
         ########################################################################
         # self = QMainWindow class
         # self.ui = Ui_MainWindow / user interface class
-        loadJsonStyle(self, self.ui)
+        #Use this if you only have one json file named "style.json" inside the root directory, "json" directory or "jsonstyles" folder.
+        loadJsonStyle(self, self.ui) 
+
+        # Use this to specify your json file(s) path/name
+        # loadJsonStyle(self, self.ui, jsonFiles = {
+        #     "mystyle.json", "style.json"
+        #     }) 
+
         ########################################################################
 
         #######################################################################

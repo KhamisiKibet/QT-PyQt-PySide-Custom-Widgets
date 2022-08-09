@@ -23,16 +23,25 @@ import sys
 import math
 
 try:
-    from PySide2.QtWidgets import QMainWindow, QWidget, QApplication
+    if 'PySide2' in sys.modules:
+        from PySide2.QtWidgets import QMainWindow, QWidget, QApplication
 
-    from PySide2.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
+        from PySide2.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
 
-    from PySide2.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject
+        from PySide2.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject
 
-    from PySide2.QtCore import Signal
+        from PySide2.QtCore import Signal
+    elif 'PySide6' in sys.modules:
+        from PySide6.QtWidgets import QMainWindow, QWidget, QApplication
+
+        from PySide6.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
+
+        from PySide6.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject
+
+        from PySide6.QtCore import Signal
 
 except:
-    print("Error while importing PySide2")
+    print("Error while importing PySide2 or PySide6")
     exit()
 
 ################################################################################################
@@ -634,9 +643,9 @@ class AnalogGaugeWidget(QWidget):
                                         ]
 
         else:
-
             self.setGaugeTheme(0)
-            print("color1 is not defined")
+            if self.showCustomWidgetsLogs:
+                print("Custom Gauge Theme: color1 is not defined")
 
     ################################################################################################
     # SET SCALE POLYGON COLOR
@@ -660,7 +669,8 @@ class AnalogGaugeWidget(QWidget):
                 self.set_scale_polygon_colors([[1, QColor(str(colors['color1']))]])
 
         else:
-            print("color1 is not defined")
+            if self.showCustomWidgetsLogs:
+                print("Custom Gauge Theme: color1 is not defined")
 
     ################################################################################################
     # SET NEEDLE CENTER COLOR
@@ -690,7 +700,8 @@ class AnalogGaugeWidget(QWidget):
                                         [1, QColor(str(colors['color1']))]
                                         ]
         else:
-            print("color1 is not defined")
+            if self.showCustomWidgetsLogs:
+                print("Custom Gauge Theme: color1 is not defined")
 
     ################################################################################################
     # SET OUTER CIRCLE COLOR
@@ -720,7 +731,8 @@ class AnalogGaugeWidget(QWidget):
                                         ]
 
         else:
-            print("color1 is not defined")
+            if self.showCustomWidgetsLogs:
+                print("Custom Gauge Theme: color1 is not defined")
 
 
 
@@ -728,7 +740,6 @@ class AnalogGaugeWidget(QWidget):
     # RESCALE
     ################################################################################################
     def rescale_method(self):
-        # print("slotMethod")
         ################################################################################################
         # SET WIDTH AND HEIGHT
         ################################################################################################
@@ -782,7 +793,6 @@ class AnalogGaugeWidget(QWidget):
             self.value = value
         # self.paintEvent("")
         self.valueChanged.emit(int(value))
-        # print(self.value)
 
         # ohne timer: aktiviere self.update()
         if not self.use_timer_event:
@@ -795,11 +805,9 @@ class AnalogGaugeWidget(QWidget):
 
     def center_horizontal(self, value):
         self.center_horizontal_value = value
-        # print("horizontal: " + str(self.center_horizontal_value))
 
     def center_vertical(self, value):
         self.center_vertical_value = value
-        # print("vertical: " + str(self.center_vertical_value))
 
     ################################################################################################
     # SET NEEDLE COLOR
@@ -980,7 +988,6 @@ class AnalogGaugeWidget(QWidget):
     def setScaleStartAngle(self, value):
         # Value range in DEG: 0 - 360
         self.scale_angle_start_value = value
-        # print("startFill: " + str(self.scale_angle_start_value))
 
         if not self.use_timer_event:
             self.update()
@@ -990,7 +997,6 @@ class AnalogGaugeWidget(QWidget):
     ################################################################################################
     def setTotalScaleAngleSize(self, value):
         self.scale_angle_size = value
-        # print("stopFill: " + str(self.scale_angle_size))
 
         if not self.use_timer_event:
             self.update()
@@ -1000,7 +1006,6 @@ class AnalogGaugeWidget(QWidget):
     ################################################################################################
     def setGaugeColorOuterRadiusFactor(self, value):
         self.gauge_color_outer_radius_factor = float(value) / 1000
-        # print(self.gauge_color_outer_radius_factor)
 
         if not self.use_timer_event:
             self.update()
@@ -1010,7 +1015,6 @@ class AnalogGaugeWidget(QWidget):
     ################################################################################################
     def setGaugeColorInnerRadiusFactor(self, value):
         self.gauge_color_inner_radius_factor = float(value) / 1000
-        # print(self.gauge_color_inner_radius_factor)
 
         if not self.use_timer_event:
             self.update()
@@ -1019,7 +1023,6 @@ class AnalogGaugeWidget(QWidget):
     # SET SCALE POLYGON COLOR
     ################################################################################################
     def set_scale_polygon_colors(self, color_array):
-        # print(type(color_array))
         if 'list' in str(type(color_array)):
             self.scale_polygon_colors = color_array
         elif color_array == None:
@@ -1050,7 +1053,6 @@ class AnalogGaugeWidget(QWidget):
         # lenght = self.scale_angle_size
         # lenght = 180
         # inner_raduis = self.width()/4
-        # print(start)
         n = 360     # angle steps size for full circle
         # changing n value will causes drawing issues
         w = 360 / n   # angle per step
@@ -1062,8 +1064,7 @@ class AnalogGaugeWidget(QWidget):
         if not self.enableBarGraph and bar_graph:
             # float_value = ((lenght / (self.maxValue - self.minValue)) * (self.value - self.minValue))
             lenght = int(round((lenght / (self.maxValue - self.minValue)) * (self.value - self.minValue)))
-            # print("f: %s, l: %s" %(float_value, lenght))
-            pass
+            
 
         # mymax = 0
 
@@ -1074,7 +1075,6 @@ class AnalogGaugeWidget(QWidget):
             polygon_pie.append(QPointF(x, y))
         # create inner circle line from "start + lenght"-angle to "start"-angle
         for i in range(lenght+1):                                              # add the points of polygon
-            # print("2 " + str(i))
             t = w * (lenght - i) + start - self.angle_offset
             x = inner_raduis * math.cos(math.radians(t))
             y = inner_raduis * math.sin(math.radians(t))
@@ -1144,7 +1144,6 @@ class AnalogGaugeWidget(QWidget):
         steps_size = (float(self.scale_angle_size) / float(self.scalaCount))
         scale_line_outer_start = self.widget_diameter/2
         scale_line_lenght = (self.widget_diameter / 2) - (self.widget_diameter / 20)
-        # print(stepszize)
         for i in range(self.scalaCount+1):
             my_painter.drawLine(scale_line_lenght, 0, scale_line_outer_start, 0)
             my_painter.rotate(steps_size)
@@ -1180,7 +1179,6 @@ class AnalogGaugeWidget(QWidget):
             angle = angle_distance * i + float(self.scale_angle_start_value - self.angle_offset)
             x = text_radius * math.cos(math.radians(angle))
             y = text_radius * math.sin(math.radians(angle))
-            # print(w, h, x, y, text)
 
             text = [x - int(w/2), y - int(h/2), int(w), int(h), Qt.AlignCenter, text]
             painter.drawText(text[0], text[1], text[2], text[3], text[4], text[5])
@@ -1243,7 +1241,6 @@ class AnalogGaugeWidget(QWidget):
 
         x = text_radius * math.cos(math.radians(angle))
         y = text_radius * math.sin(math.radians(angle))
-        # print(w, h, x, y, text)
         text = [x - int(w/2), y - int(h/2), int(w), int(h), Qt.AlignCenter, text]
         painter.drawText(text[0], text[1], text[2], text[3], text[4], text[5])
 
@@ -1278,7 +1275,6 @@ class AnalogGaugeWidget(QWidget):
 
         x = text_radius * math.cos(math.radians(angle))
         y = text_radius * math.sin(math.radians(angle))
-        # print(w, h, x, y, text)
         text = [x - int(w/2), y - int(h/2), int(w), int(h), Qt.AlignCenter, text]
         painter.drawText(text[0], text[1], text[2], text[3], text[4], text[5])
 
@@ -1376,11 +1372,8 @@ class AnalogGaugeWidget(QWidget):
     def resizeEvent(self, event):
         # self.resized.emit()
         # return super(self.parent, self).resizeEvent(event)
-        # print("resized")
-        # print(self.width())
         self.rescale_method()
         # self.emit(QtCore.SIGNAL("resize()"))
-        # print("resizeEvent")
 
     ################################################################################################
     # ON PAINT EVENT
@@ -1389,7 +1382,6 @@ class AnalogGaugeWidget(QWidget):
         # Main Drawing Event:
         # Will be executed on every change
         # vgl http://doc.qt.io/qt-4.8/qt-demos-affine-xform-cpp.html
-        # print("event", event)
 
         self.draw_outer_circle()
         self.draw_icon_image()
@@ -1453,7 +1445,6 @@ class AnalogGaugeWidget(QWidget):
 
     def mouseMoveEvent(self, event):
         x, y = event.x() - (self.width() / 2), event.y() - (self.height() / 2)
-        # print(event.x(), event.y(), self.width(), self.height())
         if not x == 0: 
             angle = math.atan2(y, x) / math.pi * 180
             # winkellaenge der anzeige immer positiv 0 - 360deg
