@@ -6,7 +6,7 @@ First time installer:
 ```
 pip install QT-PyQt-PySide-Custom-Widgets
 ```
-Upgrate/install the latest version:
+Upgrade/install the latest version:
 ```
 pip install --upgrade QT-PyQt-PySide-Custom-Widgets
 ```
