@@ -38,7 +38,7 @@ elif 'PySide6' in sys.modules:
     from PySide6.QtGui import *
     from PySide6.QtWidgets import *
     from PySide6.QtCore import Signal
-    
+
 # JSON FOR READING THE JSON STYLESHEET
 import json
 
@@ -49,11 +49,11 @@ from . WidgetsWorker import Worker, WorkerResponse
 
 ########################################################################
 ## CUSTOM QSLIDER
-########################################################################   
+########################################################################
 class CustomQSlider(QtWidgets.QSlider):
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+
     def mousePressEvent(self, event):
         super(CustomQSlider, self).mousePressEvent(event)
         if event.button() == QtCore.Qt.LeftButton:
@@ -81,7 +81,7 @@ class CustomQSlider(QtWidgets.QSlider):
 
 ########################################################################
 ## GROUP BUTTONS
-########################################################################       
+########################################################################
 class QCustomPushButtonGroup(QPushButton):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -124,7 +124,7 @@ class QCustomPushButtonGroup(QPushButton):
         if group == None:
             raise Exception("Unknown button group. The button does not belong to any group")
         setattr(self.groupParent, "group_not_active_"+str(group), style)
-        
+
 
 class QCustomQPushButton(QtWidgets.QPushButton):
     def __init__(self, parent=None):
@@ -177,7 +177,7 @@ class QCustomQPushButton(QtWidgets.QPushButton):
 
         # SET DEFAULT SHADOW EVENT TO NONE
         self.applyShadowOn = None
-        
+
 
 
     ########################################################################
@@ -841,7 +841,7 @@ class FadeWidgetTransition(QWidget):
 class QMainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        
+
     #######################################################################
     # Add mouse events to the window
     #######################################################################
@@ -961,7 +961,7 @@ class QMainWindow(QMainWindow):
             retval = msg.exec_()
 
         except Exception as e:
-            raise Exception("Failed to restart the app, please close and open the app again.") 
+            raise Exception("Failed to restart the app, please close and open the app again.")
 
     #######################################################################
 
@@ -1488,22 +1488,22 @@ def loadJsonStyle(self, ui, **jsonFiles):
             data = json.load(file)
             applyJsonStyle(self, self.ui, data)
 
-
-    for file in jsonFiles['jsonFiles']:
-        if os.path.isfile(file):
-            jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
-            jsonFile = open(jsonFile,)
-            # Read file
-            data = json.load(jsonFile)
-            ########################################################################
-            # APPLY JSON STYLESHEET
-            ########################################################################
-            # self = QMainWindow class
-            # self.ui = Ui_MainWindow / user interface class
-            applyJsonStyle(self, self.ui, data)
-            ########################################################################
-        else:
-            raise Exception("Error loading your JSON files : '"+str(file)+"' does not exist")
+    else:
+        for file in jsonFiles['jsonFiles']:
+            if os.path.isfile(file):
+                jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
+                jsonFile = open(jsonFile,)
+                # Read file
+                data = json.load(jsonFile)
+                ########################################################################
+                # APPLY JSON STYLESHEET
+                ########################################################################
+                # self = QMainWindow class
+                # self.ui = Ui_MainWindow / user interface class
+                applyJsonStyle(self, self.ui, data)
+                ########################################################################
+            else:
+                raise Exception("Error loading your JSON files : '"+str(file)+"' does not exist")
 
 ########################################################################
 ## Apply JSon stylesheet
@@ -1579,7 +1579,7 @@ def applyJsonStyle(self, ui, data):
                             return
                         setattr(btn, "group", grp_count)
 
-                        
+
 
                         if not hasattr(self, "group_btns_"+str(grp_count)):
                             setattr(self, "group_btns_"+str(grp_count), [])
@@ -2521,7 +2521,7 @@ def applyJsonStyle(self, ui, data):
 
                 else:
                     self.applicationName = ""
-                    
+
 
                 if "OrginizationDormain" in settings['AppSettings'] and len(str(appSettings["OrginizationDormain"])) > 0:
                     self.orginazationDomain = str(appSettings["OrginizationDormain"]).replace(" ", "")
@@ -2543,30 +2543,30 @@ def applyJsonStyle(self, ui, data):
 
                                     theme = getattr(self.ui, str(customTheme["Theme-name"]))
                                     theme.name = str(customTheme["Theme-name"])
-                                    
+
                                 if "Background-color" in customTheme and len(str(customTheme['Background-color'])) > 0:
                                     # theme.backgroundColor = str(customTheme['Background-color'])
                                     setattr(theme, "backgroundColor", str(customTheme['Background-color']))
 
-                                else: 
+                                else:
                                     theme.backgroundColor = ""
 
                                 if "Text-color" in customTheme and len(str(customTheme['Text-color'])) > 0:
                                     theme.textColor = str(customTheme['Text-color'])
 
-                                else: 
+                                else:
                                     theme.textColor = ""
 
                                 if "Accent-color" in customTheme and len(str(customTheme['Accent-color'])) > 0:
                                     theme.accentColor = str(customTheme['Accent-color'])
 
-                                else: 
+                                else:
                                     theme.accentColor = ""
 
                                 if "Icons-color" in customTheme and len(str(customTheme['Icons-color'])) > 0:
                                     theme.iconsColor = str(customTheme['Icons-color'])
 
-                                else: 
+                                else:
                                     theme.iconsColor = ""
 
                                 if "Default-Theme" in customTheme and bool(customTheme['Default-Theme']) == True:
@@ -2577,12 +2577,12 @@ def applyJsonStyle(self, ui, data):
                                     else:
                                         theme.defaultTheme = True
 
-                                else: 
+                                else:
                                     theme.defaultTheme = False
 
                                 if "Create-icons" in customTheme and bool(customTheme['Create-icons']) == False:
                                     theme.createNewIcons = False
-                                else: 
+                                else:
                                     theme.createNewIcons = True
 
                                 themes.append(theme)
@@ -2605,7 +2605,7 @@ def applyJsonStyle(self, ui, data):
         # QAppSettings.updateAppSettings(self)
 
 
- 
+
 
 ########################################################################
 ##
@@ -3095,17 +3095,17 @@ class QAppSettings():
                 if theme.defaultTheme:
                     # update app theme
                     settings.setValue("THEME", theme.name);
-                
+
 
         #######################################################################
         # APPLY COMPILED STYLESHEET
         #######################################################################
         CompileStyleSheet.applyCompiledSass(self)
 
-        
 
 
-            
+
+
 
 ########################################################################
 ## END
