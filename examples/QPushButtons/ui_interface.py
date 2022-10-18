@@ -23,17 +23,17 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.horizontalLayout = QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton = QPushButton(self.centralwidget)
+        self.pushButton = QCustomQPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
 
         self.horizontalLayout.addWidget(self.pushButton)
 
-        self.pushButton_2 = QPushButton(self.centralwidget)
+        self.pushButton_2 = QCustomQPushButton(self.centralwidget)
         self.pushButton_2.setObjectName(u"pushButton_2")
 
         self.horizontalLayout.addWidget(self.pushButton_2)
 
-        self.pushButton_3 = QPushButton(self.centralwidget)
+        self.pushButton_3 = QCustomQPushButton(self.centralwidget)
         self.pushButton_3.setObjectName(u"pushButton_3")
 
         self.horizontalLayout.addWidget(self.pushButton_3)
