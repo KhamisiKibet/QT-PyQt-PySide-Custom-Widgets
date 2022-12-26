@@ -27,7 +27,7 @@ try:
 
     from PyQt5.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
 
-    from PyQt5.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject, pyqtSignal
+    from PyQt5.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QRectF, QSize, QSizeF, QObject, pyqtSignal
 
 except:
     print("Error while importing PyQt5")
@@ -195,7 +195,7 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # NEEDLE SCALE FACTOR/LENGTH
         ################################################################################################
-        self.needle_scale_factor = 0.8
+        self.needle_scale_factor = 1
         ################################################################################################
         # ENABLE NEEDLE POLYGON BY DEFAULT
         ################################################################################################
@@ -738,12 +738,12 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # SET NEEDLE SIZE
         ################################################################################################
-        self.change_value_needle_style([QPolygon([
-            QPoint(4, 30),
-            QPoint(-4, 30),
-            QPoint(-2, - self.widget_diameter / 2 * self.needle_scale_factor),
-            QPoint(0, - self.widget_diameter / 2 * self.needle_scale_factor - 6),
-            QPoint(2, - self.widget_diameter / 2 * self.needle_scale_factor)
+        self.change_value_needle_style([QPolygonF([
+            QPointF(4, 30),
+            QPointF(-4, 30),
+            QPointF(-2, - self.widget_diameter / 2 * self.needle_scale_factor),
+            QPointF(0, - self.widget_diameter / 2 * self.needle_scale_factor - 6),
+            QPointF(2, - self.widget_diameter / 2 * self.needle_scale_factor)
         ])])
 
 
@@ -1100,7 +1100,7 @@ class AnalogGaugeWidget(QWidget):
                 (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
                 self.scale_angle_start_value, self.scale_angle_size)
 
-            gauge_rect = QRect(QPoint(0, 0), QSize(self.widget_diameter / 2 - 1, self.widget_diameter - 1))
+            gauge_rect = QRectF(QPointF(0, 0), QSizeF(self.widget_diameter / 2 - 1, self.widget_diameter - 1))
             grad = QConicalGradient(QPointF(0, 0), - self.scale_angle_size - self.scale_angle_start_value +
                                     self.angle_offset - 1)
 
@@ -1144,7 +1144,7 @@ class AnalogGaugeWidget(QWidget):
         scale_line_lenght = (self.widget_diameter / 2) - (self.widget_diameter / 20)
         # print(stepszize)
         for i in range(self.scalaCount+1):
-            my_painter.drawLine(scale_line_lenght, 0, scale_line_outer_start, 0)
+            my_painter.drawLine(int(scale_line_lenght), 0, int(scale_line_outer_start), 0)
             my_painter.rotate(steps_size)
 
     def create_scale_marker_values_text(self):
@@ -1155,7 +1155,7 @@ class AnalogGaugeWidget(QWidget):
         # Koordinatenursprung in die Mitte der Flaeche legen
         painter.translate(self.width() / 2, self.height() / 2)
         # painter.save()
-        font = QFont(self.scale_fontname, self.scale_fontsize, QFont.Bold)
+        font = QFont(self.scale_fontname, int(self.scale_fontsize), QFont.Bold)
         fm = QFontMetrics(font)
 
         pen_shadow = QPen()
@@ -1174,10 +1174,10 @@ class AnalogGaugeWidget(QWidget):
             text = str(int(self.minValue + scale_per_div * i))
             w = fm.width(text) + 1
             h = fm.height()
-            painter.setFont(QFont(self.scale_fontname, self.scale_fontsize, QFont.Bold))
+            painter.setFont(QFont(self.scale_fontname, int(self.scale_fontsize), QFont.Bold))
             angle = angle_distance * i + float(self.scale_angle_start_value - self.angle_offset)
-            x = text_radius * math.cos(math.radians(angle))
-            y = text_radius * math.sin(math.radians(angle))
+            x = int(text_radius * math.cos(math.radians(angle)))
+            y = int(text_radius * math.sin(math.radians(angle)))
             # print(w, h, x, y, text)
 
             text = [x - int(w/2), y - int(h/2), int(w), int(h), Qt.AlignCenter, text]
@@ -1201,7 +1201,7 @@ class AnalogGaugeWidget(QWidget):
         scale_line_outer_start = self.widget_diameter/2
         scale_line_lenght = (self.widget_diameter / 2) - (self.widget_diameter / 40)
         for i in range((self.scalaCount * self.scala_subdiv_count)+1):
-            my_painter.drawLine(scale_line_lenght, 0, scale_line_outer_start, 0)
+            my_painter.drawLine(int(scale_line_lenght), 0, int(scale_line_outer_start), 0)
             my_painter.rotate(steps_size)
 
     ################################################################################################
@@ -1216,7 +1216,7 @@ class AnalogGaugeWidget(QWidget):
         # painter.save()
         # xShadow = 3.0
         # yShadow = 3.0
-        font = QFont(self.value_fontname, self.value_fontsize, QFont.Bold)
+        font = QFont(self.value_fontname, int(self.value_fontsize), QFont.Bold)
         fm = QFontMetrics(font)
 
         pen_shadow = QPen()
@@ -1231,7 +1231,7 @@ class AnalogGaugeWidget(QWidget):
         text = str(int(self.value))
         w = fm.width(text) + 1
         h = fm.height()
-        painter.setFont(QFont(self.value_fontname, self.value_fontsize, QFont.Bold))
+        painter.setFont(QFont(self.value_fontname, int(self.value_fontsize), QFont.Bold))
 
         # Mitte zwischen Skalenstart und Skalenende:
         # Skalenende = Skalenanfang - 360 + Skalenlaenge
@@ -1239,8 +1239,8 @@ class AnalogGaugeWidget(QWidget):
         angle_end = float(self.scale_angle_start_value + self.scale_angle_size - 360)
         angle = (angle_end - self.scale_angle_start_value) / 2 + self.scale_angle_start_value
 
-        x = text_radius * math.cos(math.radians(angle))
-        y = text_radius * math.sin(math.radians(angle))
+        x = int(text_radius * math.cos(math.radians(angle)))
+        y = int(text_radius * math.sin(math.radians(angle)))
         # print(w, h, x, y, text)
         text = [x - int(w/2), y - int(h/2), int(w), int(h), Qt.AlignCenter, text]
         painter.drawText(text[0], text[1], text[2], text[3], text[4], text[5])
@@ -1274,8 +1274,8 @@ class AnalogGaugeWidget(QWidget):
         angle_end = float(self.scale_angle_start_value + self.scale_angle_size + 180)
         angle = (angle_end - self.scale_angle_start_value) / 2 + self.scale_angle_start_value
 
-        x = text_radius * math.cos(math.radians(angle))
-        y = text_radius * math.sin(math.radians(angle))
+        x = int(text_radius * math.cos(math.radians(angle)))
+        y = int(text_radius * math.sin(math.radians(angle)))
         # print(w, h, x, y, text)
         text = [x - int(w/2), y - int(h/2), int(w), int(h), Qt.AlignCenter, text]
         painter.drawText(text[0], text[1], text[2], text[3], text[4], text[5])
