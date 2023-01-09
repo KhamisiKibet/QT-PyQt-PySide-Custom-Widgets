@@ -9,13 +9,22 @@
 ########################################################################
 import sys
 
-if 'PySide2' in sys.modules:
+try:
     from PySide2 import QtCore
     from PySide2.QtCore import *
 
-elif 'PySide6' in sys.modules:
-    from PySide6 import QtCore
-    from PySide6.QtCore import *
+except:
+    try:
+        from PySide6 import QtCore
+        from PySide6.QtCore import *
+
+    except:
+        print("No PySide2 or PySide6 found")
+        # exit
+        sys.exit()
+
+
+
 
 import random
 ########################################################################
@@ -246,6 +255,8 @@ def main():
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
+
+# main()
 ########################################################################
 ## END===>
 ######################################################################## 

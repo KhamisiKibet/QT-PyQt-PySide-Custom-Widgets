@@ -28,18 +28,29 @@ import sys
 # This import is not used here, if removed sys.modules did not work on my pc
 import iconify as ico 
 
-if 'PySide2' in sys.modules:
-    from PySide2 import QtWidgets, QtCore
-    from PySide2.QtCore import Qt, QSize
-    from PySide2.QtGui import QBrush, QColor, QPainter, QPen, QPaintEvent, QFont
+########################################################################
+## IMPORT PYSIDE2 OR PYSIDE6
+########################################################################
+# if 'PySide2' in sys.modules:
+#     from PySide2 import QtWidgets, QtCore
+#     from PySide2.QtCore import Qt, QSize
+#     from PySide2.QtGui import QBrush, QColor, QPainter, QPen, QPaintEvent, QFont
 
-elif 'PySide6' in sys.modules:
-    from PySide6 import QtWidgets, QtCore
-    from PySide6.QtCore import Qt, QSize
-    from PySide6.QtGui import QBrush, QColor, QPainter, QPen, QPaintEvent, QFont
+# elif 'PySide6' in sys.modules:
+#     from PySide6 import QtWidgets, QtCore
+#     from PySide6.QtCore import Qt, QSize
+#     from PySide6.QtGui import QBrush, QColor, QPainter, QPen, QPaintEvent, QFont
 
-else:
-    raise Exception("PySide or PySide6 is required, please install it!")
+# else:
+#     raise Exception("PySide or PySide6 is required, please install it!")
+
+########################################################################
+## MODULE UPDATED TO USE QTPY
+########################################################################
+from qtpy import QtWidgets, QtCore
+from qtpy.QtCore import Qt, QSize
+from qtpy.QtGui import QBrush, QColor, QPainter, QPen, QPaintEvent, QFont
+
 
 ########################################################################
 ## ROUND PROGRESSBAR

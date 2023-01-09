@@ -4,11 +4,20 @@
 import os
 import sys
 import traceback
-if 'PySide2' in sys.modules:
-    from PySide2.QtCore import QObject, Signal, QRunnable, Slot 
 
-elif 'PySide6' in sys.modules:
-    from PySide6.QtCore import QObject, Signal, QRunnable, Slot
+########################################################################
+## IMPORT PYSIDE2 OR PYSIDE6
+########################################################################
+# if 'PySide2' in sys.modules:
+#     from PySide2.QtCore import QObject, Signal, QRunnable, Slot 
+
+# elif 'PySide6' in sys.modules:
+#     from PySide6.QtCore import QObject, Signal, QRunnable, Slot
+
+########################################################################
+## MODULE UPDATED TO USE QTPY
+########################################################################
+from qtpy.QtCore import QObject, Signal, QRunnable, Slot
 
 ########################################################################
 ## WORKER SIGNAL CLASS

@@ -1,21 +1,16 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'interfaceGDMiNX.ui'
+## Form generated from reading UI file 'interfacesWaDqd.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 5.15.7
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
-if 'PySide2' in sys.modules:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
 
-elif 'PySide6' in sys.modules:
-    from PySide6.QtCore import *
-    from PySide6.QtGui import *
-    from PySide6.QtWidgets import *
+from PySide2.QtCore import *  # type: ignore
+from PySide2.QtGui import *  # type: ignore
+from PySide2.QtWidgets import *  # type: ignore
 
 from Custom_Widgets.Widgets import FormProgressIndicator
 

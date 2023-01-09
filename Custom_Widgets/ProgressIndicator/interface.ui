@@ -277,7 +277,7 @@ border: 2px solid rgb(32, 50, 84)
   <customwidget>
    <class>FormProgressIndicator</class>
    <extends>QWidget</extends>
-   <header location="global">custom_elements.h</header>
+   <header location="global">Custom_Widgets.Widgets.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

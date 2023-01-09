@@ -16,7 +16,7 @@ setup(
         'Custom_Widgets.Qss',
     ],
     include_package_data=True,
-    version = '0.6.3',      # Start with a small number and increase it with every change you make
+    version = '0.6.4',      # Start with a small number and increase it with every change you make
     license="GNU General Public License v3.0",        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description = 'Custom widgets and widget animations made for QT applications',   # Give a short description about your library
     long_description=README,
@@ -27,8 +27,9 @@ setup(
     # download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',    # I explain this later on
     keywords = ['PySide', 'PyQt', 'animation', 'custom', 'widgets', "QML", "C++", "QT Creator"],   # Keywords that define your package best
     install_requires=[
-        "PySide2",
-        "PyQt5",
+        # "PySide2",
+        # "PyQt5",
+        "qtpy",
         "iconify",
         "cairosvg",
         "qtsass",
@@ -36,14 +37,16 @@ setup(
         "mock"
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',      # Chose either "3 - Alpha", "4 - Beta" or "5 - Production/Stable" as the current state of your package
-        'Intended Audience :: Developers',      # Define that your audience are developers
+        'Development Status :: 3 - Alpha',      
+        'Intended Audience :: Developers',     
         'Topic :: Software Development :: Build Tools',
-        'License :: OSI Approved :: MIT License',   # Again, pick a license
+        'License :: OSI Approved :: MIT License',  
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
     ],
     entry_points={
 

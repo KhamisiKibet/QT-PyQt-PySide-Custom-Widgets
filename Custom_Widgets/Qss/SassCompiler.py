@@ -7,14 +7,26 @@
 ########################################################################
 import sys
 ########################################################################
-if 'PySide2' in sys.modules:
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
-if 'PySide6' in sys.modules:
-    from PySide6.QtCore import *
-    from PySide6.QtGui import *
-    from PySide6.QtWidgets import *
+
+########################################################################
+## IMPORT PYSIDE2 OR PYSIDE6
+########################################################################
+# if 'PySide2' in sys.modules:
+#     from PySide2.QtCore import *
+#     from PySide2.QtGui import *
+#     from PySide2.QtWidgets import *
+# if 'PySide6' in sys.modules:
+#     from PySide6.QtCore import *
+#     from PySide6.QtGui import *
+#     from PySide6.QtWidgets import *
+
+########################################################################
+## MODULE UPDATED TO USE QTPY
+########################################################################
+from qtpy.QtCore import *
+from qtpy.QtGui import *
+from qtpy.QtWidgets import *
+########################################################################
 
 # IMPORT QTSASS
 import qtsass

@@ -25,19 +25,32 @@ from . Qss.SvgToPngIcons import NewIconsGenerator
 ########################################################################
 import mock
 
-if 'PySide2' in sys.modules:
-    from PySide2 import QtWidgets, QtGui, QtCore
-    from PySide2.QtCore import *
-    from PySide2.QtGui import *
-    from PySide2.QtWidgets import *
-    from PySide2.QtCore import Signal
+########################################################################
+## IMPORT PYSIDE2 OR PYSIDE6
+########################################################################
+# if 'PySide2' in sys.modules:
+#     from PySide2 import QtWidgets, QtGui, QtCore
+#     from PySide2.QtCore import *
+#     from PySide2.QtGui import *
+#     from PySide2.QtWidgets import *
+#     from PySide2.QtCore import Signal
 
-elif 'PySide6' in sys.modules:
-    from PySide6 import QtWidgets, QtGui, QtCore
-    from PySide6.QtCore import *
-    from PySide6.QtGui import *
-    from PySide6.QtWidgets import *
-    from PySide6.QtCore import Signal
+# elif 'PySide6' in sys.modules:
+#     from PySide6 import QtWidgets, QtGui, QtCore
+#     from PySide6.QtCore import *
+#     from PySide6.QtGui import *
+#     from PySide6.QtWidgets import *
+#     from PySide6.QtCore import Signal
+
+########################################################################
+## MODULE UPDATED TO USE QT.PY
+########################################################################
+from qtpy import QtWidgets, QtGui, QtCore
+from qtpy.QtCore import *
+from qtpy.QtGui import *
+from qtpy.QtWidgets import *
+from qtpy.QtCore import Signal
+
 
 # JSON FOR READING THE JSON STYLESHEET
 import json
