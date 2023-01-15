@@ -16,21 +16,21 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QCustomQPushButton" name="pushButton">
       <property name="text">
        <string>PushButton 1</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QCustomQPushButton" name="pushButton_2">
       <property name="text">
        <string>PushButton 2</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QCustomQPushButton" name="pushButton_3">
       <property name="text">
        <string>PushButton 3</string>
       </property>
@@ -39,6 +39,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomQPushButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">Custom_Widgets.Widgets.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
