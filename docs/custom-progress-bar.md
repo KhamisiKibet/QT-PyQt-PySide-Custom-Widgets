@@ -416,7 +416,45 @@ To apply the progress bar theme:
 ```python
 # Slect progress bar theme (range 1-5)
 myProgressBar.selectFormProgressIndicatorTheme(4)
+
+## OR
+myProgressBar.updateFormProgressIndicator(
+    theme = 4
+)
 ```
+
+### Using custom widget's theme engine:
+You can also use the custom widget's theme engine to apply the progressbar theme style. The progressbar will inherit the app theme style:
+
+```python
+#Inherit app theme style
+myProgressBar.updateFormProgressIndicator(
+    inheritTheme = True
+)
+```
+
+You can also specify the colors you want to apply from your theme
+
+```python
+#Inherit app theme colors
+myProgressBar.updateFormProgressIndicator(
+    # NOTE: only choose one color i.e self.theme.COLOR_TEXT_1, self.theme.COLOR_ACCENT_3, self.theme.COLOR_BACKGROUND_5
+    
+    # Set font color
+    color = self.theme.COLOR_TEXT_1 ... self.theme.COLOR_TEXT_4, 
+    # Set fill color
+    fillColor = self.theme.COLOR_BACKGROUND_1 ..... self.theme.COLOR_BACKGROUND_6, 
+    # Set fill color for warnings
+    warningFillColor = self.theme.COLOR_ACCENT_1 ... self.theme.COLOR_ACCENT_4,
+    # Set fill color for errors
+    errorFillColor = self.theme.COLOR_ACCENT_1 ... self.theme.COLOR_ACCENT_4,
+    # Set fill color for success
+    successFillColor = self.theme.COLOR_ACCENT_1 ... self.theme.COLOR_ACCENT_4
+    
+)
+```
+
+Read more about the [theme engine here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/qt-theme-engine.html)
 
 ### Animating progress bar:
 
@@ -539,8 +577,93 @@ myProgressBar.setStepStatus(
 
 # Add and customize your progress bar using a JSon File.
 
-Am currently working on developing a way you can add and modify your custom progress bar using a JSon file.
-Subscribe to this [channel](https://www.youtube.com/channel/UCJVsWdUC3M8p-q67RXPujkg) to get notified when the update is available.
+[Read here on how to generate a project using the project creator](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/project-maker.html). Skip this part if your app already has a "json stylesheet" for the custom widgets.
+
+Once you have created your project, you can customize your progressbar from a json file as shown:
+
+```json
+{
+   "FormProgressIndicator": [
+        {
+            "name": "myProgressBar",
+            "color": "THEME.COLOR_TEXT_1",
+            "fillColor": "THEME.COLOR_BACKGROUND_2",
+            "warningFillColor": "THEME.COLOR_ACCENT_3",
+            "errorFillColor": "THEME.COLOR_ACCENT_2",
+            "successFillColor": "THEME.COLOR_ACCENT_1",
+            "formProgressCount": 5,
+            "formProgressAnimationDuration": 2000,
+            "formProgressAnimationEasingCurve": "OutBack",
+            "height": 5,
+            "width": 500,
+            "startPercentage": 0,
+            "theme": 3,
+            "inheritTheme": true
+        }
+    ]
+}
+```
+
+- "name" : your widget name
+- "color": the text color, in this case "THEME.COLOR_TEXT_1" is the theme text color. You can also pass a hex value ie "#fff". This also applies to "fillColor", "warningFillColor", "errorFillColor" and "successFillColor".
+- You can also ignore the above colors and apply one of the preset themes(We applied theme 3)
+- You can make your progressbar inherit the theme style without specifying a preset theme or theme colors by using "inheritTheme" bool, set it to true. 
+
+Json style for multiple progressbar might look like this:
+```json
+{
+   "FormProgressIndicator": [
+        {
+            "name": "myProgressBar",
+            "color": "THEME.COLOR_TEXT_1",
+            "fillColor": "THEME.COLOR_BACKGROUND_2",
+            "warningFillColor": "THEME.COLOR_ACCENT_3",
+            "errorFillColor": "THEME.COLOR_ACCENT_2",
+            "successFillColor": "THEME.COLOR_ACCENT_1",
+            "formProgressCount": 5,
+            "formProgressAnimationDuration": 2000,
+            "formProgressAnimationEasingCurve": "OutBack",
+            "height": 5,
+            "width": 500,
+            "startPercentage": 0
+        },
+        {
+            "name": "myProgressBar2",
+            "formProgressCount": 10,
+            "formProgressAnimationDuration": 1000,
+            "formProgressAnimationEasingCurve": "OutBack",
+            "height": 5,
+            "width": 600,
+            "startPercentage": 10,
+            "theme": 3,
+        },
+        {
+            "name": "myProgressBar3",
+            "formProgressCount": 5,
+            "formProgressAnimationDuration": 2000,
+            "formProgressAnimationEasingCurve": "OutBack",
+            "height": 5,
+            "width": 500,
+            "startPercentage": 0,
+            "inheritTheme": true
+        },
+        {
+            "name": "myProgressBar4",
+            "color": "#fff",
+            "fillColor": "#000",
+            "warningFillColor": "#E41F1F",
+            "errorFillColor": "#E4E41F",
+            "successFillColor": "#1FE430",
+            "formProgressCount": 5,
+            "formProgressAnimationDuration": 2000,
+            "formProgressAnimationEasingCurve": "Linear",
+            "height": 5,
+            "width": 500,
+            "startPercentage": 0
+        },
+    ]
+}
+```
 
 # Examples
 
