@@ -27,83 +27,69 @@ import colorsys
 ########################################################################
 settings = QSettings()
 
-
-########################################################################
-## 
-########################################################################
 def adjust_lightness(color, amount=0.5):
     try:
         c = mc.cnames[color]
-    except:
+    except KeyError:
         c = color
     c = colorsys.rgb_to_hls(*mc.to_rgb(c))
+    # print(c)
 
-    if c[1] > 0:
-        rgb = colorsys.hls_to_rgb(c[0], amount * c[1], c[2])
-    else:
-        rgb = colorsys.hls_to_rgb(c[0], 1 - (amount * 1), c[2])
+    # if c[1] > 0:
+    #     # adjusted_lightness = c[1] * amount
+    #     adjusted_lightness = c[1] * amount * amount 
+    # else:
+    #     adjusted_lightness = 1 - (amount * amount)
+    #     # adjusted_lightness = 1 - c[1] * amount * amount
 
-    newColor = rgb_to_hex((int(rgb[0] * 250), int(rgb[1] * 250), int(rgb[2] * 250)))
-    return newColor
+    adjusted_hue = c[0]
+    adjusted_lightness = c[1] * amount * amount * amount
+    adjusted_saturation = c[2] 
+
+    rgb = colorsys.hls_to_rgb(adjusted_hue, adjusted_lightness, adjusted_saturation)
+    new_color = rgb_to_hex((int(rgb[0] * 250), int(rgb[1] * 250), int(rgb[2] * 250)))
+
+    return new_color
+
 
 def rgb_to_hex(rgb):
-    hexColor = '%02x%02x%02x' % rgb
-    return "#"+str(hexColor)
+    hex_color = '%02x%02x%02x' % rgb
+    return "#" + hex_color
 
-########################################################################
-## THEMES
-########################################################################
-class Dark:
-    bg_color = "#0D0D14"
-    txt_color = "#fff"
-    accent_color = "#A8B9BD"
-    icons_color = "#fff"
+class Theme:
+    def __init__(self, bg_color, txt_color, accent_color, icons_color=""):
+        self.bg_color = bg_color
+        self.txt_color = txt_color
+        self.accent_color = accent_color
+        self.icons_color = icons_color
 
-    BG_1 = adjust_lightness(bg_color, 1)
-    BG_2 = adjust_lightness(bg_color, 0.9)
-    BG_3 = adjust_lightness(bg_color, 0.8)
-    BG_4 = adjust_lightness(bg_color, 0.7)
-    BG_5 = adjust_lightness(bg_color, 0.5)
-    BG_6 = adjust_lightness(bg_color, 0.4)
+        self.BG_1 = adjust_lightness(bg_color, 1)
+        self.BG_2 = adjust_lightness(bg_color, 0.95)
+        self.BG_3 = adjust_lightness(bg_color, 0.8)
+        self.BG_4 = adjust_lightness(bg_color, 0.75)
+        self.BG_5 = adjust_lightness(bg_color, 0.6)
+        self.BG_6 = adjust_lightness(bg_color, 0.55)
 
-    CT_1 = adjust_lightness(txt_color, 1)
-    CT_2 = adjust_lightness(txt_color, 0.9)
-    CT_3 = adjust_lightness(txt_color, 0.8)
-    CT_4 = adjust_lightness(txt_color, 0.7)
+        self.CT_1 = adjust_lightness(txt_color, 1)
+        self.CT_2 = adjust_lightness(txt_color, 0.9)
+        self.CT_3 = adjust_lightness(txt_color, 0.8)
+        self.CT_4 = adjust_lightness(txt_color, 0.7)
 
-    CA_1 = adjust_lightness(accent_color, 1)
-    CA_2 = adjust_lightness(accent_color, .8)
-    CA_3 = adjust_lightness(accent_color, .6)
-    CA_4 = adjust_lightness(accent_color, .4)
-    
-    ICONS = ":/icons/Icons/"
+        self.CA_1 = adjust_lightness(accent_color, 1)
+        self.CA_2 = adjust_lightness(accent_color, 0.9)
+        self.CA_3 = adjust_lightness(accent_color, 0.8)
+        self.CA_4 = adjust_lightness(accent_color, 0.7)
 
+        self.ICONS = ":/icons/Icons/"
 
+class Dark(Theme):
+    def __init__(self):
+        super().__init__("#0D0D14", "#fff", "#A8B9BD")
 
-class Light:
-    bg_color = "#fff"
-    txt_color = "#000"
-    accent_color = "#00bcff"
-    icons_color = ""
-    
-    BG_1 = adjust_lightness(bg_color, 1)
-    BG_2 = adjust_lightness(bg_color, 0.99)
-    BG_3 = adjust_lightness(bg_color, 0.95)
-    BG_4 = adjust_lightness(bg_color, 0.90)
-    BG_5 = adjust_lightness(bg_color, 0.85)
-    BG_6 = adjust_lightness(bg_color, 0.80)
+class Light(Theme):
+    def __init__(self):
+        super().__init__("#fff", "#000", "#00bcff")
 
-    CT_1 = adjust_lightness(txt_color, 1)
-    CT_2 = adjust_lightness(txt_color, 0.9)
-    CT_3 = adjust_lightness(txt_color, 0.8)
-    CT_4 = adjust_lightness(txt_color, 0.7)
-
-    CA_1 = adjust_lightness(accent_color, 1)
-    CA_2 = adjust_lightness(accent_color, .8)
-    CA_3 = adjust_lightness(accent_color, .6)
-    CA_4 = adjust_lightness(accent_color, .4)
-
-    ICONS = ":/icons/Icons/"
 
 ########################################################################
 ## 
@@ -204,9 +190,9 @@ class CreateColorVariable():
             theme.BG_1 = adjust_lightness(theme.bg_color, 1)
             theme.BG_2 = adjust_lightness(theme.bg_color, 0.90)
             theme.BG_3 = adjust_lightness(theme.bg_color, 0.80)
-            theme.BG_4 = adjust_lightness(theme.bg_color, 0.60)
-            theme.BG_5 = adjust_lightness(theme.bg_color, 0.50)
-            theme.BG_6 = adjust_lightness(theme.bg_color, 0.40)
+            theme.BG_4 = adjust_lightness(theme.bg_color, 0.70)
+            theme.BG_5 = adjust_lightness(theme.bg_color, 0.60)
+            theme.BG_6 = adjust_lightness(theme.bg_color, 0.50)
 
             theme.CT_1 = adjust_lightness(theme.txt_color, 1)
             theme.CT_2 = adjust_lightness(theme.txt_color, 0.9)
@@ -214,9 +200,9 @@ class CreateColorVariable():
             theme.CT_4 = adjust_lightness(theme.txt_color, 0.7)
 
             theme.CA_1 = adjust_lightness(theme.accent_color, 1)
-            theme.CA_2 = adjust_lightness(theme.accent_color, .8)
-            theme.CA_3 = adjust_lightness(theme.accent_color, .6)
-            theme.CA_4 = adjust_lightness(theme.accent_color, .4)
+            theme.CA_2 = adjust_lightness(theme.accent_color, .9)
+            theme.CA_3 = adjust_lightness(theme.accent_color, .8)
+            theme.CA_4 = adjust_lightness(theme.accent_color, .7)
 
             theme.ICONS = ":/icons/Icons/"
 

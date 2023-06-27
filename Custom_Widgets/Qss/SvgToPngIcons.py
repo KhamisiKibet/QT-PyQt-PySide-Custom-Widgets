@@ -3,9 +3,13 @@ import codecs
 import os
 import sys
 import shutil
+import importlib
+import random
+import string
 from urllib.parse import urlparse
 from pathlib import Path
 import __main__
+
 
 
 from . colorsystem import *
@@ -177,9 +181,32 @@ class NewIconsGenerator():
             except Exception as e:
                 # raise e
                 print("error while converting resource file")  
+
+            # Reload resources:
+            resource_module = "QSS_Resources_rc"  # Replace with your resource module name
+            # NewIconsGenerator.reload_resources(self, resource_module)
+
         else:
             ## GENERATE OTHER ICONS
             NewIconsGenerator.generateAllIcons(self, progress_callback) 
+
+    def reload_resources(self, resource_module):
+        # Generate a random name for the new resource file
+        random_name = ''.join(random.choices(string.ascii_lowercase, k=8))
+        new_resource_file = f"QSS_Resources_rc_{random_name}.py"
+
+        # Copy the resource.py file to the new name
+        os.rename("QSS_Resources_rc.py", new_resource_file)
+
+        # Delete any old resource files in the directory
+        for file in os.listdir():
+            if file.startswith("QSS_Resources_rc_") and file.endswith(".py") and file != new_resource_file:
+                os.remove(file)
+
+        # Import the new resource module
+        resource_module = importlib.import_module(new_resource_file[:-3])
+
+        print("resource loaded")
 
     def generateAllIcons(self, progress_callback):
         settings = QSettings()

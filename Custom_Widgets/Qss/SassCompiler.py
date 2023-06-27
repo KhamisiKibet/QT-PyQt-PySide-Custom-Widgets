@@ -100,6 +100,32 @@ class CompileStyleSheet():
         
         with open(css_path,"r") as css:
             self.setStyleSheet(css.read())
+        
+        # QPalette
+        palette = QPalette()
+
+        # Set the background color
+        palette.setColor(QPalette.Background, QColor(self.theme.COLOR_BACKGROUND_1))
+
+        # Set the text color
+        palette.setColor(QPalette.Text, QColor(self.theme.COLOR_TEXT_1))
+
+        # Set the button color
+        palette.setColor(QPalette.Button, QColor(self.theme.COLOR_BACKGROUND_3))
+
+        # Set the button text color
+        palette.setColor(QPalette.ButtonText, QColor(self.theme.COLOR_TEXT_1))
+
+        # Set the highlight color
+        palette.setColor(QPalette.Highlight, QColor(self.theme.COLOR_BACKGROUND_6))
+
+        # Set the highlight text color
+        palette.setColor(QPalette.HighlightedText, QColor(self.theme.COLOR_ACCENT_1))
+
+        # Apply the palette to the main window
+        self.setPalette(palette)
+
+        
 
 
         ########################################################################
