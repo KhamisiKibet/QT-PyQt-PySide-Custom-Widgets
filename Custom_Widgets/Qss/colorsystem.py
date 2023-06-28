@@ -35,15 +35,15 @@ def adjust_lightness(color, amount=0.5):
     c = colorsys.rgb_to_hls(*mc.to_rgb(c))
     # print(c)
 
-    # if c[1] > 0:
-    #     # adjusted_lightness = c[1] * amount
-    #     adjusted_lightness = c[1] * amount * amount 
-    # else:
-    #     adjusted_lightness = 1 - (amount * amount)
-    #     # adjusted_lightness = 1 - c[1] * amount * amount
+    if c[1] > 0:
+        # adjusted_lightness = c[1] * amount
+        adjusted_lightness = c[1] * amount * amount 
+    else:
+        adjusted_lightness = 1 - (amount * amount)
+        # adjusted_lightness = 1 - c[1] * amount * amount
 
     adjusted_hue = c[0]
-    adjusted_lightness = c[1] * amount * amount * amount
+    # adjusted_lightness = c[1] * amount * amount 
     adjusted_saturation = c[2] 
 
     rgb = colorsys.hls_to_rgb(adjusted_hue, adjusted_lightness, adjusted_saturation)

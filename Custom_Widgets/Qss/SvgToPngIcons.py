@@ -13,6 +13,8 @@ import __main__
 
 
 from . colorsystem import *
+import qtpy
+from qtpy.QtCore import *
 
 settings = QSettings()
 
@@ -176,7 +178,16 @@ class NewIconsGenerator():
             # Convert qrc to py
             try:
                 settings.setValue("ICONS-COLOR", normal_color)
-                os.system('pyrcc5 "'+resource_path+'" -o "'+py_resource_path+'"')
+                if qtpy.API_NAME == "PyQt5":
+                    os.system('pyrcc5 "'+resource_path+'" -o "'+py_resource_path+'"')
+                if qtpy.API_NAME == "PyQt6":
+                    os.system('pyrcc6 "'+resource_path+'" -o "'+py_resource_path+'"')
+                elif qtpy.API_NAME == "PySide2":
+                    os.system('pyside2-rcc "'+resource_path+'" -o "'+py_resource_path+'"')
+                elif qtpy.API_NAME == "PySide6":
+                    os.system('pyside6-rcc "'+resource_path+'" -o "'+py_resource_path+'"')
+                
+
                 settings.setValue("ICONS-COLOR", normal_color)
             except Exception as e:
                 # raise e
