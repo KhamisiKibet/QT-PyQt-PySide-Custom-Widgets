@@ -1,3 +1,5 @@
+![Pink Minimalist Photo Grid Photography YouTube Thumbnail (1)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/assets/82152373/a222096a-742e-42b4-ad72-15a99db6bfe2)
+
 # QT-PyQt-PySide-Custom-Widgets
 Awesome custom widgets made for QT Desktop Applications. Simplify your UI development process. These widgets can be used in QT Designer then imported to PySide code.
 
@@ -6,6 +8,7 @@ First time installer:
 ```
 pip install QT-PyQt-PySide-Custom-Widgets
 ```
+
 Upgrade/install the latest version:
 ```
 pip install --upgrade QT-PyQt-PySide-Custom-Widgets
