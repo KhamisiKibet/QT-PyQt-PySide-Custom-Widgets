@@ -1,0 +1,46 @@
+
+//===================================================//
+// FILE AUTO-GENERATED. PUT YOUR DEFAULT STYLES HERE. 
+// THESE STYLES WILL OVERIDE THE THEME STYLES
+//====================================================//
+
+*{
+    border: none;
+    background-color: transparent;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    color:  #fff;
+}
+#centralwidget, #widget{
+    background-color: $COLOR_BACKGROUND_1;
+}
+QLineEdit{
+    border: none;
+    padding: 5px 10px;
+}
+QPushButton{
+    padding: 10px 15px;
+}
+#frame_4, #frame_5, #frame_8, #frame_9, #frame_12{
+    border-bottom: 1px solid  $BORDER_2;
+    border-radius: 10px;
+    QPushButton{
+        background-color: transparent;
+    }
+}
+#loginResponse{
+    color: $COLOR_TEXT_3;
+}
+#label_24{
+    border: 1px solid $BORDER_1;
+    border-radius: 25px;
+}
+#frame_15{
+    border-bottom: 1px solid $BORDER_2;
+}
+
+//===================================================//
+// END //
+//====================================================//
+            

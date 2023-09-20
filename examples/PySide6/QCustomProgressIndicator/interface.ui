@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>531</width>
+    <height>332</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">#centralwidget{background-color: qlineargradient(spread:pad, x1:0.5, y1:0, x2:0.5, y2:1, stop:0 rgba(9, 27, 27, 255), stop:1 rgba(15, 24, 40, 255));}
+QPushButton{
+background-color: qlineargradient(spread:pad, x1:0.5, y1:0, x2:0.5, y2:1, stop:0 rgba(9, 27, 27, 255), stop:1 rgba(15, 24, 40, 255));
+padding: 5px;
+border-radius: 5px;
+border: 2px solid rgb(32, 50, 84)
+}</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item alignment="Qt::AlignTop">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:22pt; font-weight:600; color:#55ffff;&quot;&gt;F&lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600;&quot;&gt;orm &lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600; color:#55ffff;&quot;&gt;P&lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600;&quot;&gt;rogress &lt;/span&gt;&lt;span style=&quot; font-size:22pt; font-weight:600; color:#55ffff;&quot;&gt;I&lt;/span&gt;&lt;span style=&quot; font-size:18pt; font-weight:600;&quot;&gt;ndicator&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QCustomProgressIndicator" name="widget_3" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Simulating Download Task</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_3">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Height</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="height">
+         <property name="font">
+          <font>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>NA</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Steps</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="steps">
+         <property name="font">
+          <font>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>NA</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Theme</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="theme">
+         <property name="font">
+          <font>
+           <italic>true</italic>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>NA</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QCustomProgressIndicator" name="widget_2" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_2">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="step_6">
+         <property name="text">
+          <string>20%</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_7">
+         <property name="text">
+          <string>40%</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_8">
+         <property name="text">
+          <string>60%</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_9">
+         <property name="text">
+          <string>80%</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_10">
+         <property name="text">
+          <string>100%</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Simulating Navigation Through A Form With 10 Steps</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item alignment="Qt::AlignHCenter">
+     <widget class="QCustomProgressIndicator" name="widget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="step_1">
+         <property name="text">
+          <string>Step 1</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_2">
+         <property name="text">
+          <string>Step 2</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_3">
+         <property name="text">
+          <string>Step 3</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_4">
+         <property name="text">
+          <string>Step 4</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="step_5">
+         <property name="text">
+          <string>Step 5</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Simulating Navgation Through A Form With 5 Steps</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomProgressIndicator</class>
+   <extends>QWidget</extends>
+   <header location="global">Custom_Widgets.QCustomProgressIndicator.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

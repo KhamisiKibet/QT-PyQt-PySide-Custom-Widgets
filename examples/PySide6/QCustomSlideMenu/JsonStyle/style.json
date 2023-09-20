@@ -1,0 +1,52 @@
+{
+	"QCustomSlideMenu": [{
+		"name": "widget",
+		"defaultSize": [{
+			"width": "auto",
+			"height": "auto"
+		}],
+		"collapsedSize": [{
+			"width": 0,
+			"height": 0
+		}],
+		"expandedSize": [{
+			"width": "auto",
+			"height": "auto"
+		}],
+		"toggleButton": [{
+			"buttonName": "my_toggle_button",
+			"icons": [{
+				"whenMenuIsCollapsed": ":/icons/icons/arrow-up.svg",
+				"whenMenuIsExpanded": ":/icons/icons/arrow-down.svg"
+			}],
+			"style": [{
+				"whenMenuIsCollapsed": [
+					"background-color: rgb(255, 255, 255);"
+				],
+				"whenMenuIsExpanded": [
+					"background-color: rgb(85, 255, 255);"
+				]
+			}]
+		}],
+		"menuTransitionAnimation": [{
+			"animationDuration": 2000,
+			"animationEasingCurve": "Linear",
+			"whenCollapsing": [{
+				"animationDuration": 500,
+				"animationEasingCurve": "Linear"
+			}],
+			"whenExpanding": [{
+				"animationDuration": 500,
+				"animationEasingCurve": "OutInBack"
+			}]
+		}],
+		"menuContainerStyle": [{
+			"whenMenuIsCollapsed": [
+				"border: 2px solid transparent"
+			],
+			"whenMenuIsExpanded": [
+				"border: 2px solid rgb(9, 5, 13); background-color: white;"
+			]
+		}]
+	}]
+}

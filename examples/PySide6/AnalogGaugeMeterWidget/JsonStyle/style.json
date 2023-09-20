@@ -1,0 +1,71 @@
+{
+    "AnalogGaugeWidget": [
+      {
+        "name": "widget",
+        "units": "Mph",
+        "minValue": "100",
+        "maxValue": "500",
+        "scalaCount": "5",
+        "startValue": "250",
+        "gaugeTheme": "0",
+        "offsetAngle": "0",
+        "outerRadius": "1000",
+        "innerRadius": "900",
+        "scaleStartAngle": "135",
+        "totalScaleAngle": "270",
+        "enableBarGraph": true,
+        "enableValueText": true,
+        "enableCenterPoint": true,
+        "enableNeedlePolygon": true,
+        "enableScaleText": true,
+        "enableScaleBigGrid": true,
+        "enableScaleFineGrid": true,
+        "needleColor": "#002523",
+        "needleColorOnDrag": "red",
+        "scaleValueColor": "#fff",
+        "displayValueColor": "#00F6E9",
+        "bigScaleColor": "#005275",
+        "fineScaleColor": "#005275",
+        "customGaugeTheme": [
+          {
+            "color1": "#002523",
+            "color2": "#990008",
+            "color3": "#00F6E9"
+          }
+        ],
+        "scalePolygonColor": [
+          {
+            "color1": "#002523",
+            "color2": "#990008",
+            "color3": "#00F6E9"
+          }
+        ],
+        "needleCenterColor": [
+          {
+            "color1": "#002523",
+            "color2": "#990008",
+            "color3": "#00F6E9"
+          }
+        ],
+        "outerCircleColor": [
+          {
+            "color1": "#002523",
+            "color2": "#0000",
+            "color3": "#00F6E9"
+          }
+        ],
+        "valueFontFamily": [
+          {
+            "path": "fonts/ds_digital/DS-DIGIB.TTF",
+            "name": "DS-Digital"
+          }
+        ],
+        "scaleFontFamily": [
+          {
+            "path": "fonts/ds_digital/DS-DIGIB.TTF",
+            "name": "DS-Digital"
+          }
+        ]
+      }
+    ]
+  }

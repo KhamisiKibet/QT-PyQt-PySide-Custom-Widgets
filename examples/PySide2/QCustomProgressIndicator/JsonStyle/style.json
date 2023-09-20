@@ -1,0 +1,39 @@
+{
+  "QCustomProgressIndicator": [
+       {
+           "name": "widget",
+           "formProgressCount": 10,
+           "formProgressAnimationDuration": 1000,
+           "formProgressAnimationEasingCurve": "OutBack",
+           "height": 50,
+           "width": 600,
+           "startPercentage": 100,
+           "theme": 1
+       },
+       {
+           "name": "widget_2",
+           "formProgressCount": 5,
+           "formProgressAnimationDuration": 2000,
+           "formProgressAnimationEasingCurve": "OutBack",
+           "height": 30,
+           "width": 500,
+           "startPercentage": 60,
+           "theme": 5
+       },
+       {
+           "name": "widget_3",
+           "color": "#fff",
+           "fillColor": "#000",
+           "warningFillColor": "#E41F1F",
+           "errorFillColor": "#E4E41F",
+           "successFillColor": "#1FE430",
+           "formProgressCount": 5,
+           "formProgressAnimationDuration": 2000,
+           "formProgressAnimationEasingCurve": "Linear",
+           "height": 40,
+           "width": 500,
+           "startPercentage": 90,
+           "theme": 3
+       }
+   ]
+}

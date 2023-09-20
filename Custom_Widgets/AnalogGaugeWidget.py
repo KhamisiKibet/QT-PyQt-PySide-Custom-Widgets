@@ -9,7 +9,7 @@
 ########################################################################
 ## SPINN DESIGN CODE
 # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
-# WEBSITE: spinndesign.com
+# WEBSITE: spinncode.com
 # GitHub : https://github.com/KhamisiKibet
 ########################################################################
 
@@ -19,7 +19,6 @@
 ########################################################################
 
 import os
-import sys
 import math
 
 try:
@@ -46,14 +45,14 @@ try:
     ########################################################################
     ## MODULE UPDATED TO USE QTPY
     ########################################################################
-    from qtpy.QtWidgets import QMainWindow, QWidget, QApplication
+    from qtpy.QtWidgets import QWidget
     from qtpy.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
-    from qtpy.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject, Signal
+    from qtpy.QtCore import Qt, QTimer, QPoint, QPointF, QRect, QSize, QObject, Signal
     from qtpy.QtCore import Signal
 
 
 except:
-    print("Error while importing PySide2 or PySide6")
+    print("Error while importing PyQt6/6, PySide2 or PySide6")
     exit()
 
 ################################################################################################
@@ -1221,8 +1220,19 @@ class AnalogGaugeWidget(QWidget):
     ################################################################################################
     def create_values_text(self):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
-        # painter.setRenderHint(QPainter.Antialiasing)
+        try:
+            painter.setRenderHint(QPainter.HighQualityAntialiasing)
+        except AttributeError:
+            try:
+                painter.setRenderHint(QPainter.Antialiasing)
+            except AttributeError:
+                # Neither hint is available; you can handle this case as needed
+                pass
+
+        # painter.setRenderHint(QPainter.AA_HighDpiScaling)
+        # painter.setRenderHint(QPainter.SmoothPixmapTransform)
+
+
 
         painter.translate(self.width() / 2, self.height() / 2)
         # painter.save()
@@ -1262,8 +1272,15 @@ class AnalogGaugeWidget(QWidget):
     ################################################################################################
     def create_units_text(self):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.HighQualityAntialiasing)
-        # painter.setRenderHint(QPainter.Antialiasing)
+        try:
+            painter.setRenderHint(QPainter.HighQualityAntialiasing)
+        except AttributeError:
+            try:
+                painter.setRenderHint(QPainter.Antialiasing)
+            except AttributeError:
+                # Neither hint is available; you can handle this case as needed
+                pass
+
 
         painter.translate(self.width() / 2, self.height() / 2)
         font = QFont(self.value_fontname, int(self.value_fontsize / 2.5), QFont.Bold)

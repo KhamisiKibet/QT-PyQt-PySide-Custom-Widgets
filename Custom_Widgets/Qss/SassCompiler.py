@@ -105,7 +105,17 @@ class CompileStyleSheet():
         palette = QPalette()
 
         # Set the background color
-        palette.setColor(QPalette.Background, QColor(self.theme.COLOR_BACKGROUND_1))
+        try:
+            # pyside2
+            palette.setColor(QPalette.Background, QColor(self.theme.COLOR_BACKGROUND_1))
+        except AttributeError as e:
+            pass
+        try:
+            # pyside6
+            palette.setColor(QPalette.Window, QColor(self.theme.COLOR_BACKGROUND_1))
+        except AttributeError as e:
+            pass
+        
 
         # Set the text color
         palette.setColor(QPalette.Text, QColor(self.theme.COLOR_TEXT_1))

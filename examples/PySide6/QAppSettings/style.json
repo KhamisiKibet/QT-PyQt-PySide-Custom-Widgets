@@ -1,0 +1,131 @@
+{
+    "ShowLogs": false,
+    "QMainWindow": [
+        {
+            "tittle": "QT Settings Session",
+            "icon":":/icons/icons/tiktok_logo_icon_134006.png",
+            "frameless": true,
+            "transluscentBg": true,
+            "sizeGrip": "sizeGrip",
+            "navigation":[
+                {
+                    "close": "exit",
+                    "moveWindow": "header",
+                    "tittleBar": "header"
+                }
+            ]
+        }
+    ],
+    "QSettings": [
+        {
+            "ThemeSettings": [
+                {
+                    "CustomTheme": [
+                        {
+                            "Background-color": "#fff",
+                            "Text-color": "#000",
+                            "Accent-color": "#40a6e2",
+                            "Theme-name": "Default-Light",
+                            "Icons-color": "#8393a3",
+                            "Default-Theme": true
+                        },
+                        {
+                            "Background-color": "#283a4d",
+                            "Text-color": "#fff",
+                            "Accent-color": "#40a6e2",
+                            "Theme-name": "Default-Dark",
+                            "Icons-color": "#8393a3",
+                            "Default-Theme": false
+                        }
+                    ]
+                }
+            ],
+            "AppSettings": {
+                "OrginizationName": "QT Settings Session",
+                "ApplicationName": "QT Settings Session Company",
+                "OrginizationDormain": "QT Settings Session.org"
+            }
+        }
+    ],
+    "QCustomSlideMenu": [
+        {
+            "name": "userAccount",
+            "defaultSize": [
+                {
+                    "width": 0,
+                    "height": "auto"
+                }
+            ],
+            "collapsedSize": [
+                {
+                    "width": 0,
+                    "height": "auto"
+                }
+            ],
+            "expandedSize": [
+                {
+                    "width": 300,
+                    "height": "auto"
+                }
+            ],
+            "toggleButton": [
+                {
+                    "buttonName": "show_hide_user_account"
+                }
+            ],
+            "menuTransitionAnimation": [
+                {
+                    "animationDuration": 500,
+                    "animationEasingCurve": "Linear"
+                }
+            ]
+        },
+        {
+            "name": "exitPrompt",
+            "defaultSize": [
+                {
+                    "width": "auto",
+                    "height": 0
+                }
+            ],
+            "collapsedSize": [
+                {
+                    "width": "parent",
+                    "height": 0
+                }
+            ],
+            "expandedSize": [
+                {
+                    "width": "parent",
+                    "height": 70
+                }
+            ],
+            "toggleButton": [
+                {
+                    "buttonName": "show_hide_exit_prompt"
+                }
+            ],
+            "menuTransitionAnimation": [
+                {
+                    "animationDuration": 500,
+                    "animationEasingCurve": "Linear"
+                }
+            ]
+        }
+    ],
+    "QCustomQStackedWidget":[
+        {
+            "name":"mainPages",
+            "navigation":[
+                {
+                    "navigationButtons":[
+                        {
+                            "loginBtn": "loginPage",
+                            "signUpBtn": "signUpPage"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

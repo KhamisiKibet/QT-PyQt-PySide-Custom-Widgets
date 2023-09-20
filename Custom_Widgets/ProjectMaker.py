@@ -1,8 +1,8 @@
 ########################################################################
 ## SPINN DESIGN CODE
 # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
-# WEBSITE: spinntv.com
-# EMAIL: info@spinntv.com
+# WEBSITE: spinncode.com
+# EMAIL: info@spinncode.com
 ########################################################################
 
 ########################################################################
@@ -187,8 +187,8 @@ print("""
 # THE CUSTOM WIDGETS MODULE FOR QT
 # PROJECT MAKER
 # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
-# WEBSITE: spinntv.com
-# EMAIL: info@spinntv.com
+# WEBSITE: spinncode.com
+# EMAIL: info@spinncode.com
 ########################################################################
 
 ########################################################################

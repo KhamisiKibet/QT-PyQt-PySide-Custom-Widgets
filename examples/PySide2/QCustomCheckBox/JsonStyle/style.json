@@ -1,0 +1,12 @@
+{
+	"QCustomCheckBox":[
+		{
+			"name":"checkBox_3",
+			"bgColor":"#2e3739",
+			"circleColor":"#1dbf73",
+			"activeColor":"#7b7b7b",
+			"animationEasingCurve":"InOutCubic",
+			"animationDuration":500
+		}
+	]
+}

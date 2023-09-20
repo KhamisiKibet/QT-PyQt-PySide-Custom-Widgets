@@ -12,11 +12,11 @@ setup(
     name = 'QT-PyQt-PySide-Custom-Widgets',         # How you named your package folder (MyLib)
     packages = [
         'Custom_Widgets',
-        'Custom_Widgets.ProgressIndicator',
+        'Custom_Widgets.iconify',
         'Custom_Widgets.Qss',
     ],
     include_package_data=True,
-    version = '0.6.7',      # Start with a small number and increase it with every change you make
+    version = '0.6.8',      # Start with a small number and increase it with every change you make
     license="GNU General Public License v3.0",        # Chose a license from here: https://help.github.com/articles/licensing-a-repository
     description = 'Custom widgets and widget animations made for QT applications',   # Give a short description about your library
     long_description=README,
@@ -24,13 +24,12 @@ setup(
     author = 'Khamisi Kibet',                   # Type in your name
     author_email = 'kibetkhamisi@gmail.com',      # Type in your E-Mail
     url = 'https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets',   # Provide either the link to your github or to your website
-    # download_url = 'https://github.com/user/reponame/archive/v_01.tar.gz',    # I explain this later on
+    download_url = 'https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/archive/refs/heads/main.zip',    #
     keywords = ['PySide', 'PyQt', 'animation', 'custom', 'widgets', "QML", "C++", "QT Creator", "Moder GUI", "Desktop GUI", "Design"],   # Keywords that define your package best
     install_requires=[
         # "PySide2",
         # "PyQt5",
         "qtpy",
-        "iconify",
         "cairosvg",
         "qtsass",
         "matplotlib",

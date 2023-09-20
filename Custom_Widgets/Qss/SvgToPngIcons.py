@@ -186,6 +186,8 @@ class NewIconsGenerator():
                     os.system('pyside2-rcc "'+resource_path+'" -o "'+py_resource_path+'"')
                 elif qtpy.API_NAME == "PySide6":
                     os.system('pyside6-rcc "'+resource_path+'" -o "'+py_resource_path+'"')
+                else:
+                    raise Exception("Error: Uknown QT binding/API Name", qtpy.API_NAME)
                 
 
                 settings.setValue("ICONS-COLOR", normal_color)

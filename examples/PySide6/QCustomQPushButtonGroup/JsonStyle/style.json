@@ -1,0 +1,31 @@
+{
+	"QPushButtonGroup": [
+		{
+			"Buttons": [
+				"pushButton",
+				"pushButton_2",
+				"pushButton_3",
+				"pushButton_4"
+			],
+			"Style":[
+				{
+					"Active": "background-color: #015371;",
+					"NotActive": "background-color: transparent;"
+				}
+			]
+		},
+		{
+			"Buttons": [
+				"pushButton_5",
+				"pushButton_6",
+				"pushButton_7"
+			],
+			"Style":[
+				{
+					"Active": "background-color: #fff; border-radius: 0px; color: #000; padding: 10px 15px;",
+					"NotActive": "background-color: #000; border-radius: 20px; color: #fff; padding: 20px;"
+				}
+			]
+		}
+	]
+}

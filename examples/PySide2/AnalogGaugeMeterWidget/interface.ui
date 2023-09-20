@@ -1,0 +1,1508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>823</width>
+    <height>431</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>AnalogGaugeWidget_Demo</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QWidget" name="gauge_container" native="true">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="1">
+        <widget class="QWidget" name="widget_5" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>30</number>
+          </property>
+          <property name="topMargin">
+           <number>30</number>
+          </property>
+          <property name="rightMargin">
+           <number>30</number>
+          </property>
+          <property name="bottomMargin">
+           <number>30</number>
+          </property>
+          <item>
+           <widget class="AnalogGaugeWidget" name="widget" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>300</width>
+              <height>300</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>600</width>
+              <height>600</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>300</width>
+              <height>300</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout"/>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="widget" native="true">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item alignment="Qt::AlignHCenter">
+        <widget class="QFrame" name="frame_2">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QLabel" name="label_28">
+            <property name="font">
+             <font>
+              <pointsize>30</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>ANALOG GAUGE</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="widget_15" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QTabWidget" name="Parameter">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="tab_3">
+             <attribute name="title">
+              <string>Setup</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_16">
+              <item row="3" column="0">
+               <widget class="QScrollArea" name="scrollArea">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>366</width>
+                   <height>345</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_3">
+                  <item alignment="Qt::AlignTop">
+                   <widget class="QWidget" name="widget_2" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout">
+                     <item row="2" column="1">
+                      <widget class="QSlider" name="InnenRadiusSlider">
+                       <property name="maximum">
+                        <number>1000</number>
+                       </property>
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="QSlider" name="GaugeStartSlider">
+                       <property name="maximum">
+                        <number>360</number>
+                       </property>
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="2">
+                      <widget class="QLCDNumber" name="lcdInnerRadius">
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="1">
+                      <widget class="QSlider" name="offsetSlider">
+                       <property name="minimum">
+                        <number>-360</number>
+                       </property>
+                       <property name="maximum">
+                        <number>360</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="2">
+                      <widget class="QLCDNumber" name="lcdGaugeOffset">
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="1">
+                      <widget class="QSlider" name="GaugeSizeSlider">
+                       <property name="maximum">
+                        <number>360</number>
+                       </property>
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QSlider" name="ActualValueSlider">
+                       <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                         <horstretch>0</horstretch>
+                         <verstretch>0</verstretch>
+                        </sizepolicy>
+                       </property>
+                       <property name="maximum">
+                        <number>200</number>
+                       </property>
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_3">
+                       <property name="text">
+                        <string>OuterRadius</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label">
+                       <property name="text">
+                        <string>Value</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="2">
+                      <widget class="QLCDNumber" name="lcdGaugeStart">
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="0">
+                      <widget class="QLabel" name="label_6">
+                       <property name="text">
+                        <string>Gauge Size</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QLCDNumber" name="lcdGaugeValue">
+                       <property name="font">
+                        <font>
+                         <family>MS Shell Dlg 2</family>
+                        </font>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="2">
+                      <widget class="QLCDNumber" name="lcdGaugeSize">
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QLabel" name="label_5">
+                       <property name="text">
+                        <string>Gauge Start</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QSlider" name="OuterRadiusSlider">
+                       <property name="maximum">
+                        <number>1000</number>
+                       </property>
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="label_4">
+                       <property name="text">
+                        <string>InnenRadius</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="2">
+                      <widget class="QLCDNumber" name="lcdOuterRadius">
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="5" column="0">
+                      <widget class="QLabel" name="label_7">
+                       <property name="text">
+                        <string>Offset</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item alignment="Qt::AlignTop">
+                   <widget class="QWidget" name="widget_3" native="true">
+                    <layout class="QGridLayout" name="gridLayout_6">
+                     <item row="0" column="1">
+                      <widget class="QCheckBox" name="CB_ShowBarGraph">
+                       <property name="text">
+                        <string>Show BarGraph</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="QCheckBox" name="CB_fineGrid">
+                       <property name="text">
+                        <string>Show fine Scale Grid</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="0">
+                      <widget class="QCheckBox" name="CB_ValueText">
+                       <property name="text">
+                        <string>Show Display</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="1">
+                      <widget class="QCheckBox" name="CB_CenterPoint">
+                       <property name="text">
+                        <string>Show Center Point</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QCheckBox" name="CB_barGraph">
+                       <property name="text">
+                        <string>Disable BarGraph Marker</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QCheckBox" name="CB_Grid">
+                       <property name="text">
+                        <string>Show Scale Grid</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="0">
+                      <widget class="QCheckBox" name="CB_Needle">
+                       <property name="text">
+                        <string>Show Needle</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="4" column="1">
+                      <widget class="QCheckBox" name="CB_ScaleText">
+                       <property name="text">
+                        <string>Show Scale Text</string>
+                       </property>
+                       <property name="checked">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+                   <widget class="QLCDNumber" name="ActualValue">
+                    <property name="frameShape">
+                     <enum>QFrame::NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Sunken</enum>
+                    </property>
+                    <property name="segmentStyle">
+                     <enum>QLCDNumber::Flat</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab">
+             <attribute name="title">
+              <string>Color</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_15">
+              <item row="0" column="0">
+               <widget class="QScrollArea" name="scrollArea_2">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>226</width>
+                   <height>736</height>
+                  </rect>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <widget class="QWidget" name="widget_10" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_2">
+                     <item>
+                      <widget class="QWidget" name="widget_4" native="true">
+                       <layout class="QGridLayout" name="gridLayout_3">
+                        <item row="2" column="0">
+                         <widget class="QLabel" name="label_2">
+                          <property name="text">
+                           <string>Needle Color</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="0">
+                         <widget class="QWidget" name="widget_9" native="true">
+                          <layout class="QGridLayout" name="gridLayout_2">
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_9">
+                             <property name="text">
+                              <string>Green</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Red_Needle">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QSlider" name="GreenSlider_Needle">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="0">
+                            <widget class="QLabel" name="label_11">
+                             <property name="text">
+                              <string>Trancparency</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Green_Needle">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Blue_Needle">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="0">
+                            <widget class="QLabel" name="label_10">
+                             <property name="text">
+                              <string>Blue</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="1">
+                            <widget class="QSlider" name="BlueSlider_Needle">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="1">
+                            <widget class="QSlider" name="TrancSlider_Needle">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>255</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Trancparency_Needle">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_8">
+                             <property name="text">
+                              <string>Red</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QSlider" name="RedSlider_Needle">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_32">
+                          <property name="text">
+                           <string>Gauge Theme</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="0">
+                         <widget class="QComboBox" name="theme_comboBox">
+                          <item>
+                           <property name="text">
+                            <string>0</string>
+                           </property>
+                          </item>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_29">
+                       <property name="text">
+                        <string>Needle Color On Drag</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_6" native="true">
+                       <layout class="QGridLayout" name="gridLayout_9">
+                        <item row="0" column="0">
+                         <widget class="QWidget" name="widget_8" native="true">
+                          <layout class="QGridLayout" name="gridLayout_10">
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_16">
+                             <property name="text">
+                              <string>Green</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Red_NeedleDrag">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QSlider" name="GreenSlider_NeedleDrag">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="0">
+                            <widget class="QLabel" name="label_17">
+                             <property name="text">
+                              <string>Trancparency</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Green_NeedleDrag">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Blue_NeedleDrag">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="0">
+                            <widget class="QLabel" name="label_18">
+                             <property name="text">
+                              <string>Blue</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="1">
+                            <widget class="QSlider" name="BlueSlider_NeedleDrag">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="1">
+                            <widget class="QSlider" name="TrancSlider_NeedleDrag">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>255</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Trancparency_NeedleDrag">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_19">
+                             <property name="text">
+                              <string>Red</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QSlider" name="RedSlider_NeedleDrag">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="label_30">
+                       <property name="text">
+                        <string>Scale Text Color</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_7" native="true">
+                       <layout class="QGridLayout" name="gridLayout_11">
+                        <item row="0" column="0">
+                         <widget class="QWidget" name="widget_11" native="true">
+                          <layout class="QGridLayout" name="gridLayout_12">
+                           <item row="1" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Green_Scale">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QSlider" name="RedSlider_Scale">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_20">
+                             <property name="text">
+                              <string>Green</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="1">
+                            <widget class="QSlider" name="BlueSlider_Scale">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Blue_Scale">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="1">
+                            <widget class="QSlider" name="TrancSlider_Scale">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>255</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QSlider" name="GreenSlider_Scale">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Trancparency_Scale">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="0">
+                            <widget class="QLabel" name="label_21">
+                             <property name="text">
+                              <string>Trancparency</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_23">
+                             <property name="text">
+                              <string>Red</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="0">
+                            <widget class="QLabel" name="label_22">
+                             <property name="text">
+                              <string>Blue</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Red_Scale">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QWidget" name="widget_12" native="true">
+                       <layout class="QGridLayout" name="gridLayout_13">
+                        <item row="1" column="0">
+                         <widget class="QWidget" name="widget_13" native="true">
+                          <layout class="QGridLayout" name="gridLayout_14">
+                           <item row="1" column="0">
+                            <widget class="QLabel" name="label_24">
+                             <property name="text">
+                              <string>Green</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Red_Display">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="1">
+                            <widget class="QSlider" name="GreenSlider_Display">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="0">
+                            <widget class="QLabel" name="label_25">
+                             <property name="text">
+                              <string>Trancparency</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="1" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Green_Display">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Blue_Display">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="0">
+                            <widget class="QLabel" name="label_26">
+                             <property name="text">
+                              <string>Blue</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="2" column="1">
+                            <widget class="QSlider" name="BlueSlider_Display">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="1">
+                            <widget class="QSlider" name="TrancSlider_Display">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>255</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="3" column="2">
+                            <widget class="QLCDNumber" name="lcdNumber_Trancparency_Display">
+                             <property name="font">
+                              <font>
+                               <family>MS Shell Dlg 2</family>
+                              </font>
+                             </property>
+                             <property name="frameShape">
+                              <enum>QFrame::NoFrame</enum>
+                             </property>
+                             <property name="frameShadow">
+                              <enum>QFrame::Plain</enum>
+                             </property>
+                             <property name="lineWidth">
+                              <number>0</number>
+                             </property>
+                             <property name="segmentStyle">
+                              <enum>QLCDNumber::Flat</enum>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="0">
+                            <widget class="QLabel" name="label_27">
+                             <property name="text">
+                              <string>Red</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item row="0" column="1">
+                            <widget class="QSlider" name="RedSlider_Display">
+                             <property name="maximum">
+                              <number>255</number>
+                             </property>
+                             <property name="value">
+                              <number>50</number>
+                             </property>
+                             <property name="orientation">
+                              <enum>Qt::Horizontal</enum>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_31">
+                          <property name="text">
+                           <string>Value Text Label Color</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="tab_2">
+             <attribute name="title">
+              <string>Min, Max Ranges</string>
+             </attribute>
+             <layout class="QGridLayout" name="gridLayout_8">
+              <item row="0" column="0">
+               <widget class="QScrollArea" name="scrollArea_3">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>366</width>
+                   <height>265</height>
+                  </rect>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item alignment="Qt::AlignTop">
+                   <widget class="QWidget" name="widget_14" native="true">
+                    <layout class="QGridLayout" name="gridLayout_7">
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_12">
+                       <property name="text">
+                        <string>Max Value</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QLCDNumber" name="lcdMinVal">
+                       <property name="font">
+                        <font>
+                         <family>MS Shell Dlg 2</family>
+                        </font>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QSlider" name="MaxValueSlider">
+                       <property name="maximum">
+                        <number>1100</number>
+                       </property>
+                       <property name="singleStep">
+                        <number>10</number>
+                       </property>
+                       <property name="value">
+                        <number>1100</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <widget class="QLabel" name="label_13">
+                       <property name="text">
+                        <string>Additional</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="2">
+                      <widget class="QLCDNumber" name="lcdMaxVal">
+                       <property name="font">
+                        <font>
+                         <family>MS Shell Dlg 2</family>
+                        </font>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="2">
+                      <widget class="QLCDNumber" name="lcdScalaCount">
+                       <property name="font">
+                        <font>
+                         <family>MS Shell Dlg 2</family>
+                        </font>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                       <property name="intValue" stdset="0">
+                        <number>10</number>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="0">
+                      <widget class="QLabel" name="label_14">
+                       <property name="text">
+                        <string>Grid Divider</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="2" column="1">
+                      <widget class="QSlider" name="MainGridSlider">
+                       <property name="minimum">
+                        <number>1</number>
+                       </property>
+                       <property name="maximum">
+                        <number>20</number>
+                       </property>
+                       <property name="value">
+                        <number>10</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="1">
+                      <widget class="QSlider" name="TrancSlider_2">
+                       <property name="maximum">
+                        <number>255</number>
+                       </property>
+                       <property name="value">
+                        <number>255</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="2">
+                      <widget class="QLCDNumber" name="lcdNumber_Trancparency_2">
+                       <property name="font">
+                        <font>
+                         <family>MS Shell Dlg 2</family>
+                        </font>
+                       </property>
+                       <property name="frameShape">
+                        <enum>QFrame::NoFrame</enum>
+                       </property>
+                       <property name="frameShadow">
+                        <enum>QFrame::Plain</enum>
+                       </property>
+                       <property name="lineWidth">
+                        <number>0</number>
+                       </property>
+                       <property name="segmentStyle">
+                        <enum>QLCDNumber::Flat</enum>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QLabel" name="label_15">
+                       <property name="text">
+                        <string>Min Value</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QSlider" name="MinValueSlider">
+                       <property name="maximum">
+                        <number>100</number>
+                       </property>
+                       <property name="value">
+                        <number>0</number>
+                       </property>
+                       <property name="orientation">
+                        <enum>Qt::Horizontal</enum>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AnalogGaugeWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">Custom_Widgets.AnalogGaugeWidget</header>
+   <container>1</container>
+   <slots>
+    <signal>valueChanged(int)</signal>
+    <slot>update_angle_offset(int)</slot>
+    <slot>update_value(int)</slot>
+    <slot>update_value2(int)</slot>
+    <slot>set_start_scale_angle(int)</slot>
+    <slot>set_total_scale_angle_size(int)</slot>
+    <slot>set_MinValue(int)</slot>
+    <slot>set_MaxValue(int)</slot>
+    <slot>set_NeedleColor(int)</slot>
+    <slot>set_scala_main_count(int)</slot>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

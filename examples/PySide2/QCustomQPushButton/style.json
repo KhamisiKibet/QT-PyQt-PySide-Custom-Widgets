@@ -1,0 +1,71 @@
+{
+	"QPushButton": [
+		{
+			"name": "pushButton",
+			"customTheme": [
+				{
+				"color1": "#2596be",
+				"color2": "rgb(37, 150, 190)"
+				}
+			],
+			"iconify": [
+				{
+					"icon": "dash:admin-generic",
+					"color": "white",
+					"size": 32,
+					"animation": "breathe",
+					"animateOn": "hover"
+				}
+			]
+		},
+		{
+			"name": "pushButton_2",
+			"theme": "2",
+			"animateOn": "click",
+			"shadow":[
+				{
+					"color": "white",
+					"applyShadowOn": "click",
+					"animateShadow": true,
+					"animateShadowDuration": 500,
+					"blurRadius": 100
+				}
+			],
+			"iconify": [
+				{
+					"icon": "feather:loader",
+					"color": "white",
+					"size": 32,
+					"animation": "spin",
+					"animateOn": "hover"
+				}
+			]
+		},
+		{
+			"name": "pushButton_3",
+			"theme": "3",
+			"animation": "border",
+			"animateOn": "hover",
+			"iconify": [
+				{
+					"icon": "font-awesome:brands:amazon",
+					"color": "white",
+					"size": 32,
+					"animation": "spin",
+					"animateOn": "click"
+				}
+			],
+			"shadow":[
+				{
+					"color": "white",
+					"animateShadow": true,
+					"animateShadowDuration": 500,
+					"blurRadius": 100,
+					"xOffset": 2,
+					"yOffset": 2
+				}
+			]
+		}
+
+	]
+}
