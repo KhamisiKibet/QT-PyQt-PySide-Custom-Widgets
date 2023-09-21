@@ -69,6 +69,20 @@ Progress indicator example:
 
 - Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
 
+- Available custom widgets:
+    - `AnalogGaugeWidget` - A digital analog widget using just a single `QWidget`.
+    - `QCustomCheckBox` - Customize and animate `QCheckBox`.
+    - `QCustomProgressIndicator` - Create a beautiful modern progress indicator for multiple tasks.
+    - `QCustomQPushButton` - Customize and animate `QPushButton` with preset themes and use `iconify` to animate the icons.
+    - `QCustomQSlider` - Easily move the slider to the current clicked position of a `QSlider`
+    - `QCustomQStackedWidget` - Add beautiful transition animations and navigate through `QStackedWidget`
+    - `QCustomSlideMenu` - Expand and collapse the size of your `QWidgets` i.e side menu, popup notifications, floating widgets etc.
+
+- Other extra functions:
+    - `ProjectMaker` - Used for creating a `Qt-Python` project on an empty folder.
+    - `QCards` - Apply the same syle ie `drop-shadow effect` to a group of `QFrame`, `QWidget` etc. Best for creating dashboard cards.
+    - `QCustomQPushButtonGroup` - Create a group of `QPushButton`s with different `stylesheet`s for the current `active` or `clicked` button and other innactive buttons.
+
 # Sample Images
 Analog Gauge Widget
 
