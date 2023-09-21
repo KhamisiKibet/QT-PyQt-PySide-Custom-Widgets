@@ -14,23 +14,11 @@ Upgrade/install the latest version:
 pip install --upgrade QT-PyQt-PySide-Custom-Widgets
 ```
 
-# Installation Testing
-Run the following code to see if the installation was successful.
+# Testing
+The examples folder in this repository contains a few code examples you can use to test and learn about the custom widgets.
 
-```python
-# Run this from your terminal or create a python file, 
-# paste this code, then run
-from Custom_Widgets.ProgressIndicator import test
-test.main()
-```
-
-You should see the following interface:
+Progress indicator example:
 ![Custom Progress bar](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true)
-
-# How to use it.
-- Read the full documentation plus video guides [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
-
-[Watch the tutorial videos here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
 
 # What is new?
 ## Version 0.6.2:
@@ -73,8 +61,15 @@ You should see the following interface:
     "ShowLogs": false,
     ```
 
-# Sample Images
+## Version 0.6.8:
+- Added full support for `pyside6`
 
+# How to use it.
+- Read the full documentation [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
+
+- Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
+
+# Sample Images
 Analog Gauge Widget
 
 ![Analog Gauge Widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/analog_qt_widget.png?raw=true)
