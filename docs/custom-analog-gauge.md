@@ -1,11 +1,10 @@
 # QT-PyQt-PySide-Custom-Widgets - Analog Gauge
 
-## Install
+## Install the custom widgets
 ```
 pip install QT-PyQt-PySide-Custom-Widgets
 
 ```
-Continue reading...
 
 ![Custom Analog Gauge](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-pyqt-pyside-analog-gauge.png?raw=true)
 
@@ -20,32 +19,24 @@ Continue reading...
 
 ## Download
 
-Download the source code plus examples below
-[Download](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/AnalogGaugeMeterWidget)  
+[Download](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples) an example.
 
 
-# PyQT
-For pyqt5 users click [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/AnalogGaugeMeterWidget)  to download the "analoggaugewidget.py" file and put it in 
-the main root directory of your project folder.
-
-## PyQt5
-
-## Usage 
-
-### Creating Widget
+## Creating Widget
 Create a widget with a custom promote class inside QT Designer as shown below:
 
-Add the widget to the UI
+- Add `Qidget` to the UI
 
 ![Ading QT Designer Widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/25.png?raw=true)
 
-Right click on the widget, select promote. Inside the Promoted Widgets container, enter "AnalogGaugeWidget" as the class name and "analoggaugewidget.h" as the header file name the click on "add".
-Check the "Global include" check mark then click on promote.
-![Adding QT Designer Promote Widget class](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/26.png?raw=true)
+- Right click on the widget, select promote. 
+- Inside the Promoted Widgets container, enter "AnalogGaugeWidget" as the class name and "Custom_Widgets.AnalogGaugeWidget.h" as the header file name the click on "add".
 
-After designing your user interface file (UI), convet it to a PyQt python file
+![Adding QT Designer Promote Widget class](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/27.png?raw=true)
 
-### Customizing Widget
+After designing your user interface file (UI), convert it to a python code.
+
+## Customizing Widget
 
 Note: in these example "self.ui.widget" is the widget name from the User Interface file.
 
@@ -114,7 +105,42 @@ self.ui.widget.setGaugeTheme(8) #theme number range from 0 to 10
 
 #### Create your own custom gauge theme
 
-Method coming soon...
+Use the code examples below to customize your gauge theme:
+
+```python
+self.ui.widget.setCustomGaugeTheme(
+    color1 = "#FF2B00",
+    color2= "#821600",
+    color3 = "#260600"
+)
+
+self.ui.widget.setCustomGaugeTheme(
+	color1 = "#002523",
+	color2= "#990008",
+	color3 = "#00F6E9"
+)
+
+self.ui.widget.setCustomGaugeTheme(
+    color1 = "#fff",
+    color2= "#555",
+    color3 = "#000"
+)
+
+self.ui.widget.setScalePolygonColor(
+    color1 = "red"
+)
+
+self.ui.widget.setNeedleCenterColor(
+    color1 = "red"
+)
+
+self.ui.widget.setOuterCircleColor(
+    color1 = "red"
+)
+
+self.ui.widget.setBigScaleColor("#005275")
+self.ui.widget.setFineScaleColor("#005275")
+```
 
 #### Set offset angle
 
@@ -249,35 +275,11 @@ self.ui.widget.setDisplayValueColor(R=R, G=G, B=B, Transparency=Transparency)
 
 ```
 
-# PySide
+## Customizing the Widget from a JSON file
 
-Pyside users need to install the Custom_Widgets module from pip. Run
+You can also use a `Json stylesheet` to customize the gauge.
 
-```cmd
-pip install QT-PyQt-PySide-Custom-Widgets
-```
-
-Or upgrade it if you had installed it
-
-```cmd
-pip install --upgrade QT-PyQt-PySide-Custom-Widgets
-```
-
-### Creating Widget
-
-The process is similar to PyQt (above) the only difference is renaming the promote class name and the header file name
-
-Class name: "AnalogGaugeWidget"
-Header file name: "Custom_Widgets.AnalogGaugeWidget.h"
-
-![Adding QT Designer Promote Widget class](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/27.png?raw=true)
-
-### Customizing Widget
-
-If you want to customize the gauge widget from your python files, then the process is similar to PyQt (above).
-in PySide, you can also customize the widget using a JSon stylesheet.
-
-Create a "style.json" file inside your project folder. Below is the full JSon sample stylesheet. Also watch the video tutorial for the full guide. [Watch the tutorial videos here](https://youtu.be/5WHnlRQcUy4)
+Below is the full JSon sample stylesheet. Also watch the video tutorial for the full guide. [Watch the tutorial videos here](https://youtu.be/5WHnlRQcUy4)
 
 ## Full JSON stylesheet sample
 
