@@ -1,5 +1,10 @@
 # QT-PyQt-PySide-Custom-Widgets - Custom QMainWindow
-Am assuming that you have already installed QT-PyQt-PySide-Custom-Widgets library from PyPi, if not, then start reading from [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/).
+
+## Install the custom widgets
+```
+pip install QT-PyQt-PySide-Custom-Widgets
+
+```
 
 ![Custom Qt Progress Bar](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/19.png?raw=true)
 
@@ -8,11 +13,15 @@ Am assuming that you have already installed QT-PyQt-PySide-Custom-Widgets librar
 QT-PyQt-PySide-Custom-Widgets offers an easy way to add a custom title bar to application main window.
 This is done through "style.json" file. 
 
+## Download
+
+[Download](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples) an example.
+
 # Steps to add a custom windows title bar to your QMainWindow
 
 ## Step 1:
 
-Open QT Designer, design your app main widow. Add a custom tittle bar with custom navigation buttons. These buttons are:
+Open QT Designer, design your app main widow. Add a custom tittle bar with custom navigation buttons. These buttons are(optional):
 
 	1. Minimize button - If you want your window to be minimizable.
 	2. Close button - If you want your window to be closable.
@@ -24,7 +33,6 @@ I designed the simple window below:
 
 ![Custom Title Bar QT DESIGNER](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/16.png?raw=true)
 
-The source code to the above UI can be downloaded [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/QMainWindow).
 
 ## Step 2:
 
@@ -46,55 +54,9 @@ from ui_interface import *
 
 ########################################################################
 # IMPORT Custom widgets
-from Custom_Widgets.Widgets import *
-########################################################################
-.....########################################################################
-## SPINN DESIGN CODE
-# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
-# WEBSITE: spinndesign.com
+from Custom_Widgets import *
 ########################################################################
 
-########################################################################
-## IMPORTS
-########################################################################
-import sys
-import os
-from PySide2 import *
-
-
-########################################################################
-# IMPORT GUI FILE
-from ui_interface import *
-########################################################################
-
-########################################################################
-# IMPORT Custom widgets
-from Custom_Widgets.Widgets import *
-########################################################################
-
-
-########################################################################
-## MAIN WINDOW CLASS
-########################################################################
-class MainWindow(QMainWindow):
-    def __init__(self):
-        QMainWindow.__init__(self)
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
-
-        self.show()
-
-
-########################################################################
-## EXECUTE APP
-########################################################################
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    sys.exit(app.exec_())
-########################################################################
-## END===>
-########################################################################  
 ```
 
 If you run "main.py", you will get the window with the default title bar:
@@ -235,9 +197,9 @@ Close button
 
 Restore / Maximize button
 
-"buttonName" = name of the button,
-"maximizedIcon" = button icon when the window is in its normal size
-"normalIcon" = button icon when the window is in maximum size
+- "buttonName" = name of the button,
+- "maximizedIcon" = button icon when the window is in its normal size
+- "normalIcon" = button icon when the window is in maximum size
 
 ```json
 {
@@ -343,12 +305,6 @@ So the "main.py" file will look like this:
 
 ```python
 ########################################################################
-## SPINN DESIGN CODE
-# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
-# WEBSITE: spinndesign.com
-########################################################################
-
-########################################################################
 ## IMPORTS
 ########################################################################
 import sys
@@ -363,7 +319,7 @@ from ui_interface import *
 
 ########################################################################
 # IMPORT Custom widgets
-from Custom_Widgets.Widgets import *
+from Custom_Widgets import *
 ########################################################################
 
 
@@ -408,7 +364,15 @@ Watch this video for the full tutorial:
 [Video](https://youtu.be/li7esLMuFhE)
 
 # Navigation
-[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html) [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html) [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html) [Customize slide menu widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-slide-menu-widgets.html)
+- [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
+
+- [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html) 
+
+- [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html)
+
+- [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html) 
+ 
+- [Customize slide menu widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-slide-menu-widgets.html)
 
 
 
