@@ -1,49 +1,44 @@
 # QT-PyQt-PySide-Custom-Widgets - Custom Progress Bar / Form Progress Indicator
-Am assuming that you have already installed QT-PyQt-PySide-Custom-Widgets library from PyPi, if not, then start reading from [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/).
+
+## Install the custom widgets
+```
+pip install QT-PyQt-PySide-Custom-Widgets
+
+```
 
 ![Custom Qt Progress Bar](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/responsive-qt-gui-python-intarface.png?raw=true)
 
-# Custom Responsive PyQt/PySide/Qt Interface With Animated Transition
-
-I mainly build this custom QT class to help user interface designers easily add "Side" menus to their GUI, but after some testing I realized that this extension can actually be used to buld very beautiful responsive user interfaces using QT Designer, Pyside/PyQt and Python.
-
-So this guide will help you learn on how to use QT-PyQt-PySide-Custom-Widgets to build a responsive and animated user interface.
-
-This functionality is available in QT-PyQt-PySide-Custom-Widgets Version 0.1.8 and above: 
-[Install or Update QT-PyQt-PySide-Custom-Widgets](https://pypi.org/project/QT-PyQt-PySide-Custom-Widgets/).
+# Custom Responsive PyQt/PySide Interface With Animated Transition
 
 ## GUI Design In QT Designer.
 
-If you want your widget to be customized using the custom widgets class:
-
-==> Add the widget to your UI
+- Add the `QWidget` to your UI
 
 ![Qt Designer add widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/20.png?raw=true)
 
-==> Promote the widget class
-
-Right click on your widget, then click on promote to. 
+- Promote the widget class
+-Right-click on your widget, then click on "promote to". 
 
 ![Qt Designer add widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/21.png?raw=true)
 
-==> Enter the promote class and header file
+- Enter the promote class and header file
 
-Inside the promote classes widget,
-========> under base class name select "QWidget" 
-========> under promote class name enter "QCustomSlideMenu" 
-========> under header file name enter "Custom_Widgets.Widgets.h" 
-========> check the "Global Include" check box
-========> click on "add"
+- Inside the promote classes widget,
+	- under base class name select "QWidget" 
+	- under promote class name enter "QCustomSlideMenu" 
+	- under header file name enter "Custom_Widgets.QCustomSlideMenu.h" 
+	- check the "Global Include" check box
+	- click on "add"
+	- now click on "Promote"
 
 ![Qt Designer add widget class](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/22.png?raw=true)
 
-========> now click on "Promote"
 
-Under object inspector your widget should look like this:
+- Under object inspector your widget should look like this:
 
 ![Qt Designer add widget inspector](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/23.png?raw=true)
 
-Now save the UI(User interface) and generate the UI python code
+- Now save the UI(User interface) and generate the UI python code
 
 Now you can be able to customize and animate this widget transition directly from your python file or using a JSon file.
 
@@ -283,15 +278,15 @@ Select the relative position to place the widget, use a differnt widget which do
 
 Select the widget floating position(relative to the new parent-"relativeTo": "centralwidget"). Available options:
 
-top-right
-top-left
-top-center
-bottom-left
-bottom-right
-bottom-center
-center-center
-center-left
-center-right
+- top-right
+- top-left
+- top-center
+- bottom-left
+- bottom-right
+- bottom-center
+- center-center
+- center-left
+- center-right
 
 ![Floating pyqt pyside menu widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/floating_qt_widget_1.png?raw=true)
 ![Floating pyqt pyside menu widget](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/floating_qt_widget_2.png?raw=true)
@@ -555,13 +550,20 @@ my_widget.expandMenu()
 
 # More
 
-Watch the full video tutorial here https://youtu.be/rC6uR9gR6w4
+Watch video tutorials [here](https://www.youtube.com/channel/UCJVsWdUC3M8p-q67RXPujkg)
 
-Download the source code [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples/QCustomSlideMenu) 
+Download the source code [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/tree/main/examples) 
 
 # Navigation
 
-[HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html) [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html)  [Customize QMainWindow](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qmainwindow.html) [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html)
+- [HOME](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
+- [Customize and Animate QPushButton](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qpushbutton.html) 
+
+- [Custom Animated Progress Indicator / Progress Bar](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-progress-bar.html)  
+
+- [Customize QMainWindow](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qmainwindow.html) 
+
+- [Customize and Animate QStacked Widgets](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/customize-qstacked-widgets.html)
 
 
 
