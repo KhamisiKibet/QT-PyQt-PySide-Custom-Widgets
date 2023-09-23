@@ -1,0 +1,34 @@
+{
+	"QCard": [
+		{
+			"cards": [
+				"card1",
+				"card2",
+				"card3"
+			],
+			"shadow":[
+				{
+					"color": "#fff",
+					"blurRadius": 10,
+					"xOffset": 0,
+					"yOffset": 0
+				}
+			]
+		},
+		{
+		"cards": [
+			"card4",
+			"card5",
+			"card6"
+		],
+		"shadow":[
+			{
+				"color": "#555",
+				"blurRadius": 20,
+				"xOffset": 5,
+				"yOffset": 5
+			}
+		]
+	}
+	]
+}
