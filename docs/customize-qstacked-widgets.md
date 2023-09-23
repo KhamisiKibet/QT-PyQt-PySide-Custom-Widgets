@@ -1,11 +1,16 @@
 # QT-PyQt-PySide-Custom-Widgets - Customizing QStacked Widgets
-Am assuming that you have already installed QT-PyQt-PySide-Custom-Widgets library from PyPi, if not, then start reading from [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/).
+
+## Install the custom widgets
+```
+pip install QT-PyQt-PySide-Custom-Widgets
+
+```
 
 ![Custom QStacked Widgets](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/qstacked.png?raw=true)
 
 # Customizing QStacked Widgets
 
-The following steps will show you how to customize the look and animation of your QStacked Widgets. 
+The following steps will show you how to customize the look and animation of your `QStackedWidget`. 
 
 ## 1. Create QStacked Widgets.
 You can create a QStacked Widgets directly from your python file or use the QT Designer app. In this demo, we will be using QT Designer app.
@@ -19,7 +24,7 @@ You can create a QStacked Widgets directly from your python file or use the QT D
 
 ![Screenshot_20220722_080559.png](https://www.dropbox.com/s/h35haep9nu4n9ut/Screenshot_20220722_080559.png?dl=0&raw=1)
 
-![Screenshot_20220722_080958.png](https://www.dropbox.com/s/pazrn5kh8tiogb1/Screenshot_20220722_080958.png?dl=0&raw=1)
+![Screenshot_20220722_080958.png](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20220722_080958.png?raw=true)
 
 - Click ``add``, then click ``promote``
  
