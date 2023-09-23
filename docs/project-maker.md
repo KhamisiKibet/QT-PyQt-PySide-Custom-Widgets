@@ -1,4 +1,11 @@
 # QT-PyQt-PySide-Custom-Widgets 
+
+## Install the custom widgets
+```
+pip install QT-PyQt-PySide-Custom-Widgets
+
+```
+
 ![Custom Analog Gauge](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-pyqt-pyside-project-maker.png?raw=true)
 
 ### PyQt, PySide
@@ -17,7 +24,12 @@ This wizard will:
 ## Getting Started
 
 - Install the custom widgets module (Read more about the custom widgets module [here](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets)
-``pip install QT-PyQt-PySide-Custom-Widgets``
+
+```cmd
+
+pip install QT-PyQt-PySide-Custom-Widgets
+
+```
 - Create an empty project folder
 - Open the command line inside this folder(Make sure the folder is empty)
 - From your command line/Terminal, type ``python`` press enter
