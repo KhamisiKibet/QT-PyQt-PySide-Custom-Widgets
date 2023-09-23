@@ -24,6 +24,10 @@ You can create a QStacked Widgets directly from your python file or use the QT D
 
 ![Screenshot_20220722_080559.png](https://www.dropbox.com/s/h35haep9nu4n9ut/Screenshot_20220722_080559.png?dl=0&raw=1)
 
+> - "Base class name: `QStackedWidget`
+> - "Promoted class name": `QCustomQStackedWidget`
+> - "Header file": `Custom_Widgets.QCustomQStackedWidget.h`
+
 ![Screenshot_20220722_080958.png](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20220722_080958.png?raw=true)
 
 - Click ``add``, then click ``promote``
