@@ -29,7 +29,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         ########################################################################
-        ## LOAD QSTACKWIDGETS ANIMATION AND NAVIGATIONS FROM JSON FILE
+        ## LOAD STYLE FROM JSON FILE
         ########################################################################
         loadJsonStyle(self, self.ui, jsonFiles = {
             "JsonStyle/style.json"
