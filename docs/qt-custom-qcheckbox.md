@@ -23,3 +23,14 @@ Create a beautiful and animated modern `QCheckBox` or switch using the QT-PyQt-P
 
 ![Qt Custom checkbox](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20230924_023708.png?raw=true)
 
+- Right click on the check box, select `Promoted widgets...`
+- From the promote widgets form:
+	- Under "Base class name" select `QCheckBox`
+	- Under "Promote class name" enter `QCustomCheckBox`
+	- Under "Header file" enter `Custom_Widgets.QCustomCheckBox.h`
+
+- Then click on `promote`.
+
+![QT Designer App](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20230924_024306.png?raw=true)
+
+- Generate your UI python code.

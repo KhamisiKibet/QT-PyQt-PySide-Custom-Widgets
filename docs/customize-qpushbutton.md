@@ -32,7 +32,7 @@ The following steps will show you how to customize the look and animation of you
 
 
 ## 2. Styling QPushButton
-Using QT-PyQt-PySide-Custom-Widgets, you can style your buttons using a JSon file directly from your python file.
+Using QT-PyQt-PySide-Custom-Widgets, you can style your buttons using a JSon file or directly from your python file.
 
 ### A. Applying QPushButton Style from a python file
 ##### Theme 
