@@ -65,9 +65,8 @@ Progress indicator example:
 - Added full support for `pyside6`
 
 # How to use it.
-- Read the full documentation [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
 
-- Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
+Documentation:
 
 - Available custom widgets:
     - `AnalogGaugeWidget` - A digital analog widget using just a single `QWidget`. [Read more](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/custom-analog-gauge.html)
@@ -85,6 +84,10 @@ Progress indicator example:
     - `QCustomQPushButtonGroup` - Create a group of `QPushButton`s with different `stylesheet`s for the current `active` or `clicked` button and other innactive buttons. [Read more](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/qpushbutton-group.html)
     - `Qt Theme Engine` - Beautify your app. This feature will create multiple themes for QT for Python apps. [Read more](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/qt-theme-engine.html)
     - `QSettings` - Easily save your app configurations that will be remembered even after restarting the app ie app theme from Qt Theme Engine`. [Watch the tutorial](https://youtu.be/mkBwInKhBsA)
+
+- Read the full documentation [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
+
+- Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
 
 # Sample Images
 Analog Gauge Widget
