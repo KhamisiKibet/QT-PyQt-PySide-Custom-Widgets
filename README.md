@@ -101,3 +101,4 @@ Responsive Animated GUI
 Animated QStacked Widget
 
 ![Custom QStacked Widgets](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/main/images/qstacked.png?raw=true)
+
