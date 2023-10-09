@@ -74,7 +74,7 @@ Progress indicator example:
 Documentation:
 
 - Available custom widgets:
-    - `AnalogGaugeWidget` - A digital analog widget using just a single `QWidget`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/custom-analog-gauge)
+    - `AnalogGaugeWidget` - A digital analog widget using just a single `QWidget`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-analog-gauge)
     - `QCustomCheckBox` - Customize and animate `QCheckBox`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/qt-custom-qcheckbox)
     - `QCustomProgressIndicator` - Create a beautiful modern progress indicator for multiple tasks. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-progress-bar)
     - `QCustomQPushButton` - Customize and animate `QPushButton` with preset themes and use `iconify` to animate the icons. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/customize-qpushbutton)
