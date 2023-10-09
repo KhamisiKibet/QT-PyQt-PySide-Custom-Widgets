@@ -3,6 +3,11 @@
 # QT-PyQt-PySide-Custom-Widgets
 Awesome custom widgets made for QT Desktop Applications. Simplify your UI development process. These widgets can be used in QT Designer then imported to PySide code.
 
+## Contributors
+
+[![contributors](https://contributors-img.web.app/image?repo=KhamisiKibet/QT-PyQt-PySide-Custom-Widgets)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/graphs/contributors)
+
+
 # Installation 
 First time installer:
 ```
