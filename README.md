@@ -85,7 +85,7 @@ Documentation:
     - `Qt Theme Engine` - Beautify your app. This feature will create multiple themes for QT for Python apps. [Read more](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/docs/qt-theme-engine.html)
     - `QSettings` - Easily save your app configurations that will be remembered even after restarting the app ie app theme from Qt Theme Engine`. [Watch the tutorial](https://youtu.be/mkBwInKhBsA)
 
-- Read the full documentation [here](https://khamisikibet.github.io/QT-PyQt-PySide-Custom-Widgets/) 
+- Read the full documentation [here](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/) 
 
 - Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
 
