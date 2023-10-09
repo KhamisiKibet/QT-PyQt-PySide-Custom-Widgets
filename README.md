@@ -1,3 +1,5 @@
+[![GitHub](https://img.shields.io/github/license/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=Github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/master/LICENSE) [![GitHub top language](https://img.shields.io/github/languages/top/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets) [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets) [![GitHub issues](https://img.shields.io/github/issues/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/issues)
+
 ![Custom Widgets Art](https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/custom_widgets_art.png?raw=true)
 
 # QT-PyQt-PySide-Custom-Widgets
