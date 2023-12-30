@@ -27,13 +27,12 @@ setup(
     download_url = 'https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/archive/refs/heads/main.zip',    #
     keywords = ['PySide', 'PyQt', 'animation', 'custom', 'widgets', "QML", "C++", "QT Creator", "Moder GUI", "Desktop GUI", "Design"],   # Keywords that define your package best
     install_requires=[
-        # "PySide2",
-        # "PyQt5",
         "qtpy",
         "cairosvg",
         "qtsass",
         "matplotlib",
-        "mock"
+        "mock",
+        "termcolor"
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',      
@@ -48,6 +47,8 @@ setup(
         "Programming Language :: Python :: 3.11",
     ],
     entry_points={
-
+        'console_scripts': [
+            'Custom_Widgets=Custom_Widgets.ProjectMaker:run_command',
+        ],
     },
 )
