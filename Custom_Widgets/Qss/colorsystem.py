@@ -56,6 +56,89 @@ def rgb_to_hex(rgb):
     hex_color = '%02x%02x%02x' % rgb
     return "#" + hex_color
 
+def color_to_hex(color):
+    """
+    Convert a color to its hex representation.
+
+    Parameters:
+    - color (str or tuple): Color representation, such as color name (e.g., 'red'),
+      hex code (e.g., '#FF0000'), or RGB tuple (e.g., (255, 0, 0)).
+
+    Returns:
+    - str: Hex color code.
+    """
+    if isinstance(color, str):
+        # If the input is a color name, convert it to hex
+        if color in mc.CSS4_COLORS:
+            return mc.CSS4_COLORS[color]
+        else:
+            # Try to convert named color to hex
+            try:
+                rgba = mc.to_rgba(color)
+                return mc.to_hex(rgba)
+            except ValueError:
+                raise ValueError(f"Invalid color name: {color}")
+
+    elif isinstance(color, tuple) and len(color) == 3:
+        # If the input is an RGB tuple, convert it to hex
+        rgba = color + (1.0,)  # Add alpha channel
+        return mc.to_hex(rgba)
+
+    else:
+        raise ValueError("Invalid color representation")
+
+def lighten_color(hex_color, factor=0.35):
+    """
+    Lightens a given hex color.
+
+    Parameters:
+    - hex_color (str): The hex color code (e.g., "#RRGGBB").
+    - factor (float): Lightening factor, where 0 means no change and 1 means white.
+
+    Returns:
+    - str: The lightened hex color code.
+    """
+    hex_color = color_to_hex(hex_color)
+    # Convert hex to RGB
+    r, g, b = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
+
+    # Calculate the lightened color
+    r = int(r + (255 - r) * factor)
+    g = int(g + (255 - g) * factor)
+    b = int(b + (255 - b) * factor)
+
+    # Convert back to hex
+    lightened_color = "#{:02X}{:02X}{:02X}".format(r, g, b)
+    
+    return lightened_color
+
+
+def darken_color(hex_color, factor=0.35):
+    """
+    Darkens a given hex color.
+
+    Parameters:
+    - hex_color (str): The hex color code (e.g., "#RRGGBB").
+    - factor (float): Darkening factor, where 0 means no change and 1 means black.
+
+    Returns:
+    - str: The darkened hex color code.
+    """
+    hex_color = color_to_hex(hex_color)
+    # Convert hex to RGB
+    r, g, b = int(hex_color[1:3], 16), int(hex_color[3:5], 16), int(hex_color[5:7], 16)
+
+    # Calculate the darkened color
+    r = int(r * (1 - factor))
+    g = int(g * (1 - factor))
+    b = int(b * (1 - factor))
+
+    # Convert back to hex
+    darkened_color = "#{:02X}{:02X}{:02X}".format(r, g, b)
+
+    return darkened_color
+
+
 class Theme:
     def __init__(self, bg_color, txt_color, accent_color, icons_color=""):
         self.bg_color = bg_color

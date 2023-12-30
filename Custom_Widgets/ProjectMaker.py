@@ -16,20 +16,10 @@ import codecs
 import shutil
 import json
 from urllib.parse import urlparse
+import argparse
 
-########################################################################
-## IMPORT PYSIDE2 OR PYSIDE6
-########################################################################
-# if 'PySide2' in sys.modules:
-#     from PySide2.QtCore import QUrl
-#     from PySide2.QtGui import QColor
+from termcolor import colored  # Install termcolor using: pip install termcolor
 
-# elif 'PySide6' in sys.modules:
-#     from PySide6.QtCore import QUrl
-#     from PySide6.QtGui import QColor
-
-# else:
-#     raise Exception("PySide2 or PySide6 is required, please install it!")
 
 ########################################################################
 ## MODULE UPDATED TO USE QTPY
@@ -72,17 +62,17 @@ def query_yes_no(question, default="yes"):
         else:
             sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
 
-def generateIcons(iconsColor = "#fff"):  
+def generateIcons(iconsColor = "#ffffff"):  
     # Files folder
     dirname = os.path.dirname(__file__)
     filename = os.path.join(dirname, 'Qss/icons/original_svg')
     list_of_files = []
 
-    svg_color = "#fff"
+    svg_color = "#ffffff"
     normal_color = iconsColor
 
-    focused_color = adjust_lightness(normal_color, 1.5)
-    disabled_color = adjust_lightness(normal_color, .5)
+    focused_color = lighten_color(normal_color)
+    disabled_color = darken_color(normal_color, .5)
 
 
     iconsFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/Icons'))
@@ -177,243 +167,259 @@ def generateIcons(iconsColor = "#fff"):
 
 
 
+def create_project():
 
-
-# Current Directory
-currentDir = os.getcwd()
-print("""
-########################################################################
-## SPINN DESIGN CODE
-# THE CUSTOM WIDGETS MODULE FOR QT
-# PROJECT MAKER
-# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
-# WEBSITE: spinncode.com
-# EMAIL: info@spinncode.com
-########################################################################
-
-########################################################################
-## INITIALIZING A NEW PROJECT TO:
-########################################################################
-    """)
-print(currentDir)
-
-# Check if the folder is empty
-if any(os.scandir(currentDir)):
+    # Current Directory
+    currentDir = os.getcwd()
     print("""
-########################################################################
-## EXITING BECAUSE THE FOLDER IS NOT EMPTY
-########################################################################
-Please select an empty folder
+    ########################################################################
+    ## SPINN DESIGN CODE
+    # THE CUSTOM WIDGETS MODULE FOR QT
+    # PROJECT MAKER
+    # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+    # WEBSITE: spinncode.com
+    # EMAIL: info@spinncode.com
+    ########################################################################
+
+    ########################################################################
+    ## INITIALIZING A NEW PROJECT TO:
+    ########################################################################
         """)
+    print(currentDir)
+
+    # Check if the folder is empty
+    if any(os.scandir(currentDir)):
+        print("""
+    ########################################################################
+    ## EXITING BECAUSE THE FOLDER IS NOT EMPTY
+    ########################################################################
+    Please select an empty folder
+            """)
+        exit()
+
+    print("""
+
+    ########################################################################
+
+        """)
+    print("Creating resources folder")
+
+    qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'QSS'))
+    if not os.path.exists(qcss_folder):
+        os.makedirs(qcss_folder)
+
+    print("Resources folder created")
+
+    print("Creating (qrc) resource file")
+    # Check resource file
+    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
+    if not os.path.exists(resource_path):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'Qss/QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
+
+    print("Resource (qrc) file created")
+
+    print("Creating the main (UI) interface file")
+    # Check ui file
+    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'interface.ui'))
+    if not os.path.exists(resource_path):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/uis/interface.ui')), os.getcwd())  
+
+
+    print("Main (UI) interface file created")
+
+    print("Creating the main (py) python file")
+    # Check main file
+    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'main.py'))
+    if not os.path.exists(resource_path):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/main.py')), os.getcwd())  
+
+    print("Main (py) python file created")
+
+    print("Creating the icons (png) files")
+
+    print("""
+
+    ########################################################################
+    PLEASE ENTER YOUR ICONS COLOR BELOW:
+    ########################################################################
+    You can pass the color HEX value such as #ffffff
+    or the color string value like white
+
+        """)
+
+    while True:
+        iconsColor = input("Enter icons color: ")
+        if iconsColor.isspace() or iconsColor == "":
+            print("Icons color can not be empty")
+            print("!!!!!!")
+            continue
+        if not QColor().isValidColor(iconsColor):
+            print(iconsColor, "is not a valid color")
+            print("!!!!!!")
+            continue
+        if query_yes_no("Your icons color is " + str(iconsColor) + ". Save the color and continue?"):
+            break
+
+    generateIcons(iconsColor)
+
+    print("Icons have been created")
+
+    print("Creating UI (py) file")
+    # Check ui(py) file
+    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'ui_interface.py'))
+    if not os.path.exists(resource_path):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/ui_interface.py')), os.getcwd())  
+
+    print("UI (py) file has been created")
+
+
+    print("Creating the JSON stylesheet file")
+
+    print("""
+
+    ########################################################################
+    PLEASE FILL IN THE REQUIRED DATA BELOW:
+    ########################################################################
+
+        """)
+
+    while True:
+        appName = input("Enter your app name: ")
+        if appName.isspace() or appName == "":
+            print("App name can not be empty")
+            print("!!!!!!")
+            continue
+        if query_yes_no("Your app name is " + appName + ". Save the name and continue?"):
+            break
+
+    print("""
+
+    ########################################################################
+    THE FOLLOWING VALUES WILL BE USED TO SAVE YOUR APP CONFIGURATIONS SUCH AS
+    APP APP THEME USING THE QSETTINGS CLASS
+
+    The required value are application name, organisation name and domain name.
+    If left empty, your app name will be used, you can change this later
+    from the JSON stylesheet file inside your project
+    ########################################################################
+
+        """)
+
+    while True:
+        organizationName = input("Please enter the your organization name (Optional): ")
+        if organizationName.isspace() or organizationName == "":
+            organizationName = appName+" Company"
+            break
+        if query_yes_no("Your organization name is " + organizationName + ". Save the organization name and continue?"):
+            break
+
+    while True:
+        domainName = input("Please enter the your domain name. Please enter a URL i.e domain.org (Optional): ")
+        if domainName.isspace() or domainName == "":
+            domainName = appName+".org"
+            break
+        # if not QUrl(domainName).isValid():
+        #     print("Invalid URL: %s", domainName, " Domain name must be a URL like domain.org")
+        #     continue
+        if query_yes_no("Your domain name is " + domainName + ". Save the domain name and continue?"):
+            break
+
+
+    # Check json file
+    json_path = os.path.abspath(os.path.join(os.getcwd(), 'style.json'))
+    if not os.path.exists(json_path):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/json/style.json')), os.getcwd())  
+
+    with open(json_path, 'r+') as f:
+        data = json.load(f)
+        print(data)
+        if "QMainWindow" in data:
+            for QMainWindow in data["QMainWindow"]:
+                # Set window tittle
+                QMainWindow["tittle"] = appName
+
+        ########################################################################
+        ## QSETTINGS
+        ########################################################################
+        if "QSettings" in data:
+            for settings in data["QSettings"]:
+                if "AppSettings" in settings:
+                    appSettings = settings['AppSettings']
+
+                    appSettings["OrginizationName"] = str(appName)
+                    
+                    appSettings["ApplicationName"] = str(organizationName)
+                        
+                    appSettings["OrginizationDormain"] = str(domainName)
+
+        f.seek(0)  
+        json.dump(data, f, indent=4)
+        f.truncate()
+
+
+    print("JSON stylesheet file created")
+
+    print("""
+
+    ########################################################################
+    CONGRATULATIONS! YOUR PROJECT HAS BEEN CREATED.
+
+    WHAT NEXT??
+
+    1. Open the interface.ui file inside your project folder using QT designer.
+    This is your main inteface file.
+
+    2. Put your app customization/style inside the JSON style.json file.
+    Read more here on how to use the custom widgets module 
+    https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets
+
+    3. Run the main.py file to view your app. Get more tutorials 
+    here on how to create awsome QT Apps with python 
+    https://www.youtube.com/spinnTv
+
+    4. Your default app icons are located inside the QSS/Icons folder.
+
+    [The following is important only if you decide to use the theme maker]
+
+    5. The default QSASS and QSS stylesheet are also inside the QSS folder.
+
+    6. Put you own style (CSS or SCSS) inside the QSS/defaultStyle.scss file.
+    This style will override the default theme style. 
+
+    7. The QSS/_variables.scss contains your theme variables
+
+    ########################################################################
+
+        """)
+
+
+    while True:
+        if not query_yes_no("Run the created project or exit the project wizard? Type yes to run the app or no to exit the wizard"):
+            break
+        else:
+            print("""
+
+    ########################################################################
+    RUNNING YOUR PROJECT
+    ########################################################################
+            """)
+            call(["python", "main.py"])
+
+
     exit()
 
-print("""
+def run_command():
+    parser = argparse.ArgumentParser(description='Custom Widgets Project Maker')
+    parser.add_argument('--create-project', action='store_true', help='Create a new project')
+    parser.add_argument('--build-widgets', action='store_true', help='Build custom widgets')
 
-########################################################################
+    args = parser.parse_args()
 
-    """)
-print("Creating resources folder")
-
-qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'QSS'))
-if not os.path.exists(qcss_folder):
-    os.makedirs(qcss_folder)
-
-print("Resources folder created")
-
-print("Creating (qrc) resource file")
-# Check resource file
-resource_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
-if not os.path.exists(resource_path):   
-    shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'Qss/QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
-
-print("Resource (qrc) file created")
-
-print("Creating the main (UI) interface file")
-# Check ui file
-resource_path = os.path.abspath(os.path.join(os.getcwd(), 'interface.ui'))
-if not os.path.exists(resource_path):   
-    shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/uis/interface.ui')), os.getcwd())  
-
-
-print("Main (UI) interface file created")
-
-print("Creating the main (py) python file")
-# Check main file
-resource_path = os.path.abspath(os.path.join(os.getcwd(), 'main.py'))
-if not os.path.exists(resource_path):   
-    shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/main.py')), os.getcwd())  
-
-print("Main (py) python file created")
-
-print("Creating the icons (png) files")
-
-print("""
-
-########################################################################
-PLEASE ENTER YOUR ICONS COLOR BELOW:
-########################################################################
-You can pass the color HEX value such as #fff
-or the color string value like white
-
-    """)
-
-while True:
-    iconsColor = input("Enter icons color: ")
-    if iconsColor.isspace() or iconsColor == "":
-        print("Icons color can not be empty")
-        print("!!!!!!")
-        continue
-    if not QColor().isValidColor(iconsColor):
-        print(iconsColor, "is not a valid color")
-        print("!!!!!!")
-        continue
-    if query_yes_no("Your icons color is " + str(iconsColor) + ". Save the color and continue?"):
-        break
-
-generateIcons(iconsColor)
-
-print("Icons have been created")
-
-print("Creating UI (py) file")
-# Check ui(py) file
-resource_path = os.path.abspath(os.path.join(os.getcwd(), 'ui_interface.py'))
-if not os.path.exists(resource_path):   
-    shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/ui_interface.py')), os.getcwd())  
-
-print("UI (py) file has been created")
-
-
-print("Creating the JSON stylesheet file")
-
-print("""
-
-########################################################################
-PLEASE FILL IN THE REQUIRED DATA BELOW:
-########################################################################
-
-    """)
-
-while True:
-    appName = input("Enter your app name: ")
-    if appName.isspace() or appName == "":
-        print("App name can not be empty")
-        print("!!!!!!")
-        continue
-    if query_yes_no("Your app name is " + appName + ". Save the name and continue?"):
-        break
-
-print("""
-
-########################################################################
-THE FOLLOWING VALUES WILL BE USED TO SAVE YOUR APP CONFIGURATIONS SUCH AS
-APP APP THEME USING THE QSETTINGS CLASS
-
-The required value are application name, organisation name and domain name.
-If left empty, your app name will be used, you can change this later
-from the JSON stylesheet file inside your project
-########################################################################
-
-    """)
-
-while True:
-    organizationName = input("Please enter the your organization name (Optional): ")
-    if organizationName.isspace() or organizationName == "":
-        organizationName = appName+" Company"
-        break
-    if query_yes_no("Your organization name is " + organizationName + ". Save the organization name and continue?"):
-        break
-
-while True:
-    domainName = input("Please enter the your domain name. Please enter a URL i.e domain.org (Optional): ")
-    if domainName.isspace() or domainName == "":
-        domainName = appName+".org"
-        break
-    # if not QUrl(domainName).isValid():
-    #     print("Invalid URL: %s", domainName, " Domain name must be a URL like domain.org")
-    #     continue
-    if query_yes_no("Your domain name is " + domainName + ". Save the domain name and continue?"):
-        break
-
-
-# Check json file
-json_path = os.path.abspath(os.path.join(os.getcwd(), 'style.json'))
-if not os.path.exists(json_path):   
-    shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/json/style.json')), os.getcwd())  
-
-with open(json_path, 'r+') as f:
-    data = json.load(f)
-    print(data)
-    if "QMainWindow" in data:
-        for QMainWindow in data["QMainWindow"]:
-            # Set window tittle
-            QMainWindow["tittle"] = appName
-
-    ########################################################################
-    ## QSETTINGS
-    ########################################################################
-    if "QSettings" in data:
-        for settings in data["QSettings"]:
-            if "AppSettings" in settings:
-                appSettings = settings['AppSettings']
-
-                appSettings["OrginizationName"] = str(appName)
-                
-                appSettings["ApplicationName"] = str(organizationName)
-                    
-                appSettings["OrginizationDormain"] = str(domainName)
-
-    f.seek(0)  
-    json.dump(data, f, indent=4)
-    f.truncate()
-
-
-print("JSON stylesheet file created")
-
-print("""
-
-########################################################################
-CONGRATULATIONS! YOUR PROJECT HAS BEEN CREATED.
-
-WHAT NEXT??
-
-1. Open the interface.ui file inside your project folder using QT designer.
-This is your main inteface file.
-
-2. Put your app customization/style inside the JSON style.json file.
-Read more here on how to use the custom widgets module 
-https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets
-
-3. Run the main.py file to view your app. Get more tutorials 
-here on how to create awsome QT Apps with python 
-https://www.youtube.com/spinnTv
-
-4. Your default app icons are located inside the QSS/Icons folder.
-
-[The following is important only if you decide to use the theme maker]
-
-5. The default QSASS and QSS stylesheet are also inside the QSS folder.
-
-6. Put you own style (CSS or SCSS) inside the QSS/defaultStyle.scss file.
-This style will override the default theme style. 
-
-7. The QSS/_variables.scss contains your theme variables
-
-########################################################################
-
-    """)
-
-
-while True:
-    if not query_yes_no("Run the created project or exit the project wizard? Type yes to run the app or no to exit the wizard"):
-        break
+    if args.create_project:
+        create_project()
     else:
-        print("""
-
-########################################################################
-RUNNING YOUR PROJECT
-########################################################################
-        """)
-        call(["python", "main.py"])
+        print("No valid command provided. Use 'Custom_Widgets --create-project' or 'Custom_Widgets --build-widgets'.")
 
 
-exit()
+if __name__ == "__main__":
+    run_command()

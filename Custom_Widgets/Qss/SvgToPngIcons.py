@@ -24,7 +24,7 @@ class NewIconsGenerator():
         super(NewIconsGenerator, self).__init__()
         self.arg = arg
 
-    def generateNewIcons(self, progress_callback):
+    def generateNewIcons(self, progress_callback):  
         settings = QSettings()
 
         dirname = os.path.dirname(__file__)
@@ -32,18 +32,18 @@ class NewIconsGenerator():
         list_of_files = []
 
         color = CreateColorVariable.getCurrentThemeInfo(self)
-        svg_color = "#fff"
+        svg_color = "#ffffff"
         normal_color = str(color["icons-color"])
-
+        
         focused_color = adjust_lightness(normal_color, 1.5)
         disabled_color = adjust_lightness(normal_color, .5)
 
         iconsFolderName = normal_color.replace("#", "")
         iconsFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+iconsFolderName))
-        #
+        # 
         oldIconsFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/Icons'))
 
-        if settings.value("ICONS-COLOR") is None:
+        if settings.value("ICONS-COLOR") is None:        
             variablesFile = CreateColorVariable.getCurrentThemeInfo(self)
             oldIconsDestinationFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+variablesFile['icons-color'].replace("#", "")))
         else:
@@ -124,7 +124,7 @@ class NewIconsGenerator():
 
                     name_2 =  os.path.basename(urlparse(name).path).replace(".svg", "_disabled.png")
                     filename = os.path.abspath(os.path.join(iconsFolder, name_2))
-
+                    
                     if not os.path.exists(iconsFolder):
                         os.makedirs(iconsFolder)
 
@@ -134,7 +134,7 @@ class NewIconsGenerator():
                             cairosvg.svg2png(bytestring=newBytes, write_to=filename)
                         except Exception as e:
                             print(e)
-
+                        
 
                 # EMMIT PROGRESS VALUE
                 progress_callback.emit(int((list_of_files.index(name)/totalIcons) * 100))
@@ -142,7 +142,7 @@ class NewIconsGenerator():
 
             source_dir = iconsFolder
             target_dir = oldIconsFolder
-
+            
             if not os.path.isdir(source_dir):
                 # Delete the file if it exists
                 if os.path.exists(source_dir):
@@ -152,7 +152,7 @@ class NewIconsGenerator():
                     os.mkdir(source_dir)
                 except OSError as e:
                     print(f"Creation of the directory {source_dir} failed: {e}")
-
+                
             file_names = os.listdir(source_dir)
 
             if not os.path.exists(oldIconsFolder):
@@ -161,7 +161,7 @@ class NewIconsGenerator():
                 if not os.path.exists(oldIconsFolder):
                     os.makedirs(oldIconsFolder)
 
-            filesMoved = 0
+            filesMoved = 0   
             for file_name in file_names:
                 if os.name == 'nt':
                     shutil.copy(os.path.join(source_dir, file_name), target_dir)
@@ -170,7 +170,7 @@ class NewIconsGenerator():
                         shutil.move(os.path.join(source_dir, file_name), target_dir)
                     except Exception as e:
                         shutil.copy(os.path.join(source_dir, file_name), target_dir)
-
+                    
 
                 filesMoved += 1
                 # EMMIT PROGRESS VALUE
@@ -179,8 +179,8 @@ class NewIconsGenerator():
 
             # Check resource file
             resource_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
-            if not os.path.exists(resource_path):
-                shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
+            if not os.path.exists(resource_path):   
+                shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))  
             py_resource_path = resource_path.replace(".qrc", ".py")
             py_resource_path = py_resource_path.replace("QSS/", "") #linux
             py_resource_path = py_resource_path.replace("QSS\\", "") #windows
@@ -198,12 +198,12 @@ class NewIconsGenerator():
                     os.system('pyside6-rcc "'+resource_path+'" -o "'+py_resource_path+'"')
                 else:
                     raise Exception("Error: Uknown QT binding/API Name", qtpy.API_NAME)
-
+                
 
                 settings.setValue("ICONS-COLOR", normal_color)
             except Exception as e:
                 # raise e
-                print("error while converting resource file")
+                print("error while converting resource file")  
 
             # Reload resources:
             resource_module = "QSS_Resources_rc"  # Replace with your resource module name
@@ -211,7 +211,7 @@ class NewIconsGenerator():
 
         else:
             ## GENERATE OTHER ICONS
-            NewIconsGenerator.generateAllIcons(self, progress_callback)
+            NewIconsGenerator.generateAllIcons(self, progress_callback) 
 
     def reload_resources(self, resource_module):
         # Generate a random name for the new resource file
@@ -238,7 +238,7 @@ class NewIconsGenerator():
         filename = os.path.join(dirname, 'icons/original_svg')
         list_of_files = []
 
-        svg_color = "#fff"
+        svg_color = "#ffffff"        
 
         for theme in self.ui.themes:
             THEME = settings.value("THEME")
@@ -247,7 +247,7 @@ class NewIconsGenerator():
 
             if self.showCustomWidgetsLogs:
                 print("Checking icons for "+theme.name)
-
+                
 
             if hasattr(theme, "iconsColor"):
                 if theme.iconsColor != "":
@@ -261,7 +261,7 @@ class NewIconsGenerator():
                     normal_color = str(themeProperty.accent_color)
                 else:
                     normal_color = str(themeProperty.icons_color)
-
+                
             elif THEME == "DARK":
                 themeProperty = Dark()
                 if themeProperty.icons_color == "":
@@ -273,9 +273,9 @@ class NewIconsGenerator():
                 if self.showCustomWidgetsLogs:
                     print("No icons color specified for theme", theme.name)
                 continue
-
-            focused_color = adjust_lightness(normal_color, 1.5)
-            disabled_color = adjust_lightness(normal_color, .5)
+            
+            focused_color = adjust_lightness(normal_color, 1.1)
+            disabled_color = adjust_lightness(normal_color, .2) 
 
             iconsFolderName = normal_color.replace("#", "")
 
@@ -299,7 +299,7 @@ class NewIconsGenerator():
 
                     name_2 =  os.path.basename(urlparse(name).path).replace(".svg", ".png")
                     filename = os.path.abspath(os.path.join(iconsFolder, name_2))
-
+                    
                     if not os.path.exists(iconsFolder):
                         os.makedirs(iconsFolder)
 
@@ -323,7 +323,7 @@ class NewIconsGenerator():
 
                     name_2 =  os.path.basename(urlparse(name).path).replace(".svg", "_focus.png")
                     filename = os.path.abspath(os.path.join(iconsFolder, name_2))
-
+                    
                     if not os.path.exists(iconsFolder):
                         os.makedirs(iconsFolder)
 
@@ -354,7 +354,7 @@ class NewIconsGenerator():
 
                     name_2 =  os.path.basename(urlparse(name).path).replace(".svg", "_disabled.png")
                     filename = os.path.abspath(os.path.join(iconsFolder, name_2))
-
+                    
                     if not os.path.exists(iconsFolder):
                         os.makedirs(iconsFolder)
 
@@ -374,7 +374,7 @@ class NewIconsGenerator():
                         cairosvg.svg2png(bytestring=newBytes, write_to=filename)
                     except Exception as e:
                         print(e)
-
+                        
 
                 # EMMIT PROGRESS VALUE
                 progress_callback.emit(int((list_of_files.index(name)/totalIcons) * 100))
