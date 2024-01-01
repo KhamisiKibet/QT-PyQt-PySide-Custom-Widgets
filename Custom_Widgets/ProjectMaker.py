@@ -11,6 +11,7 @@
 import os
 import sys
 from subprocess import call
+import subprocess
 import cairosvg
 import codecs
 import shutil
@@ -19,6 +20,7 @@ from urllib.parse import urlparse
 import argparse
 
 from termcolor import colored  # Install termcolor using: pip install termcolor
+import textwrap
 
 
 ########################################################################
@@ -31,7 +33,7 @@ from . Qss.colorsystem import *
 
 
 def progress(count, total, status=''):
-    bar_len = 60
+    bar_len = 30
     filled_len = int(round(bar_len * count / float(total)))
 
     percents = round(100.0 * count / float(total), 1)
@@ -150,6 +152,7 @@ def generateIcons(iconsColor = "#ffffff"):
 
     print("\nCreating the resources (py) file")
     # Check resource file
+    global resource_path, py_resource_path
     resource_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
     if not os.path.exists(resource_path):   
         shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))  
@@ -157,171 +160,169 @@ def generateIcons(iconsColor = "#ffffff"):
     py_resource_path = py_resource_path.replace("QSS/", "")
     py_resource_path = py_resource_path.replace("QSS\\", "") #for win
     py_resource_path = py_resource_path.replace("QSS_Resources", "QSS_Resources_rc")
-    # Convert qrc to py
-    try:
-        os.system('pyrcc5 '+'"'+resource_path+'" -o "'+py_resource_path+'"')
-    except Exception as e:
-        raise e  
 
-    print("Resources (py) file created")
+def convert_ui_to_py(ui_path, output_py_path, app_module):
+    if app_module == "PySide6":
+        subprocess.run(["pyside6-uic", ui_path, "-o", output_py_path])
+    elif app_module == "PySide2":
+        subprocess.run(["pyside2-uic", ui_path, "-o", output_py_path])
+    elif app_module == "PyQt6":
+        subprocess.run(["pyuic6", ui_path, "-o", output_py_path])
+    elif app_module == "PyQt5":
+        subprocess.run(["pyuic5", ui_path, "-o", output_py_path])
+    else:
+        print(colored(textwrap.dedent(f"Unsupported Qt app module: {app_module}"), "red"))
 
+def convert_qrc_to_py(qrc_path, output_py_path, app_module):
+    if app_module == "PySide6":
+        subprocess.run(["pyside6-rcc", qrc_path, "-o", output_py_path])
+    elif app_module == "PySide2":
+        subprocess.run(["pyside2-rcc", qrc_path, "-o", output_py_path])
+    elif app_module == "PyQt6":
+        subprocess.run(["pyrcc6", qrc_path, "-o", output_py_path])
+    elif app_module == "PyQt5":
+        subprocess.run(["pyrcc5", qrc_path, "-o", output_py_path])
+    else:
+        print(colored(textwrap.dedent(f"Unsupported Qt app module: {app_module}"), "red"))
 
 
 def create_project():
 
     # Current Directory
     currentDir = os.getcwd()
-    print("""
-    ########################################################################
-    ## SPINN DESIGN CODE
-    # THE CUSTOM WIDGETS MODULE FOR QT
+    print(colored(textwrap.dedent("""
     # PROJECT MAKER
     # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
     # WEBSITE: spinncode.com
     # EMAIL: info@spinncode.com
-    ########################################################################
 
-    ########################################################################
-    ## INITIALIZING A NEW PROJECT TO:
-    ########################################################################
-        """)
-    print(currentDir)
+    # INITIALIZING A NEW PROJECT TO:"""), "green"))
+
+    print(f"Current Folder: {currentDir}")
 
     # Check if the folder is empty
     if any(os.scandir(currentDir)):
-        print("""
-    ########################################################################
-    ## EXITING BECAUSE THE FOLDER IS NOT EMPTY
-    ########################################################################
-    Please select an empty folder
-            """)
+        print(colored(textwrap.dedent("""
+        ## EXITING BECAUSE THE FOLDER IS NOT EMPTY
+        Please select an empty folder"""), "red"))
+
         exit()
 
-    print("""
-
-    ########################################################################
-
-        """)
-    print("Creating resources folder")
+    print(textwrap.dedent("Creating resources and folder..."))
 
     qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'QSS'))
     if not os.path.exists(qcss_folder):
         os.makedirs(qcss_folder)
 
-    print("Resources folder created")
-
-    print("Creating (qrc) resource file")
     # Check resource file
-    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
-    if not os.path.exists(resource_path):   
+    qrc_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
+    if not os.path.exists(qrc_path):   
         shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'Qss/QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
-
-    print("Resource (qrc) file created")
-
-    print("Creating the main (UI) interface file")
+    
+    
     # Check ui file
-    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'interface.ui'))
-    if not os.path.exists(resource_path):   
+    ui_path = os.path.abspath(os.path.join(os.getcwd(), 'interface.ui'))
+    if not os.path.exists(ui_path):   
         shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/uis/interface.ui')), os.getcwd())  
 
+    # App module
+    print(textwrap.dedent("""
+    #PLEASE ENTER YOUR QT APP MODULE:
+    (Default: PySide6) (Options: PySide6, PySide2, PyQt6, PyQt5)
+    """))
 
-    print("Main (UI) interface file created")
-
-    print("Creating the main (py) python file")
-    # Check main file
-    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'main.py'))
-    if not os.path.exists(resource_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/main.py')), os.getcwd())  
-
-    print("Main (py) python file created")
-
-    print("Creating the icons (png) files")
-
-    print("""
-
-    ########################################################################
-    PLEASE ENTER YOUR ICONS COLOR BELOW:
-    ########################################################################
-    You can pass the color HEX value such as #ffffff
-    or the color string value like white
-
-        """)
+    global appModule
 
     while True:
-        iconsColor = input("Enter icons color: ")
+        appModule = input(textwrap.dedent("Enter your app module: "))
+        if appModule.isspace() or appModule == "":
+            print(colored(textwrap.dedent("QT App module set to PySide6"), "red"))
+            appModule = "PySide6"
+            break
+        if appModule != "PySide6" and appModule != "PySide2" and appModule != "PyQt6" and appModule != "PyQt5":
+            print(colored(textwrap.dedent(appModule+ " is not a valid qt app module"), "red"))
+            continue
+        if query_yes_no(colored(textwrap.dedent("Your QT App module is " + str(appModule) + ".  Continue?"), "blue")):
+            break
+
+    # Check main file
+    main_py = os.path.abspath(os.path.join(os.getcwd(), 'main.py'))
+    if not os.path.exists(main_py):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/main.py')), os.getcwd())  
+
+    # Check ui(py) file
+    ui_output_py_path = os.path.abspath(os.path.join(os.getcwd(), 'ui_interface.py'))
+    if not os.path.exists(ui_output_py_path):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/ui_interface.py')), os.getcwd())  
+
+    print(textwrap.dedent("Creating the icons (png) files"))
+
+    print(textwrap.dedent("""
+    #PLEASE ENTER YOUR ICONS COLOR BELOW:
+    You can pass the color HEX value such as #ffffff
+    or the color string value like white
+    """))
+
+    while True:
+        iconsColor = input(textwrap.dedent("Enter icons color: "))
         if iconsColor.isspace() or iconsColor == "":
-            print("Icons color can not be empty")
-            print("!!!!!!")
+            print(colored(textwrap.dedent("Icons color can not be empty"), "red"))
             continue
         if not QColor().isValidColor(iconsColor):
-            print(iconsColor, "is not a valid color")
-            print("!!!!!!")
+            print(colored(textwrap.dedent(iconsColor+ " is not a valid color"), "red"))
             continue
-        if query_yes_no("Your icons color is " + str(iconsColor) + ". Save the color and continue?"):
+        if query_yes_no(colored(textwrap.dedent("Your icons color is " + str(iconsColor) + ". Save the color and continue?"), "blue")):
             break
 
     generateIcons(iconsColor)
 
-    print("Icons have been created")
+    # Generate py files from ui and qrc
+    convert_ui_to_py(ui_path, ui_output_py_path, appModule)
+    convert_qrc_to_py(resource_path, py_resource_path, appModule) 
 
-    print("Creating UI (py) file")
-    # Check ui(py) file
-    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'ui_interface.py'))
-    if not os.path.exists(resource_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/ui_interface.py')), os.getcwd())  
+    print(textwrap.dedent("Icons have been created"))
 
-    print("UI (py) file has been created")
+    print(textwrap.dedent("Creating the JSON stylesheet file"))
 
-
-    print("Creating the JSON stylesheet file")
-
-    print("""
-
-    ########################################################################
-    PLEASE FILL IN THE REQUIRED DATA BELOW:
-    ########################################################################
-
-        """)
+    print(textwrap.dedent(f"""
+    #PLEASE FILL IN THE REQUIRED DATA BELOW:
+    Default value will be set to {os.path.basename(os.getcwd())}
+    """))
 
     while True:
-        appName = input("Enter your app name: ")
+        appName = input(textwrap.dedent("Enter your app name: "))
         if appName.isspace() or appName == "":
-            print("App name can not be empty")
-            print("!!!!!!")
-            continue
-        if query_yes_no("Your app name is " + appName + ". Save the name and continue?"):
+            appName = os.path.basename(os.getcwd())
+            
+        if query_yes_no(colored(textwrap.dedent("Your app name is " + appName + ". Save the name and continue?"), "blue")):
             break
 
-    print("""
-
-    ########################################################################
+    print(textwrap.dedent("""
     THE FOLLOWING VALUES WILL BE USED TO SAVE YOUR APP CONFIGURATIONS SUCH AS
-    APP APP THEME USING THE QSETTINGS CLASS
+    APP THEME USING THE QSETTINGS CLASS
 
     The required value are application name, organisation name and domain name.
     If left empty, your app name will be used, you can change this later
     from the JSON stylesheet file inside your project
-    ########################################################################
-
-        """)
+    """))
 
     while True:
-        organizationName = input("Please enter the your organization name (Optional): ")
+        organizationName = input(textwrap.dedent("Please enter the your organization name (Optional): "))
         if organizationName.isspace() or organizationName == "":
             organizationName = appName+" Company"
             break
-        if query_yes_no("Your organization name is " + organizationName + ". Save the organization name and continue?"):
+        if query_yes_no(colored(textwrap.dedent("Your organization name is " + organizationName + ". Save the organization name and continue?"), "blue")):
             break
 
     while True:
-        domainName = input("Please enter the your domain name. Please enter a URL i.e domain.org (Optional): ")
+        domainName = input(textwrap.dedent("Please enter the your domain name. Please enter a URL i.e domain.org (Optional): "))
         if domainName.isspace() or domainName == "":
             domainName = appName+".org"
             break
         # if not QUrl(domainName).isValid():
         #     print("Invalid URL: %s", domainName, " Domain name must be a URL like domain.org")
         #     continue
-        if query_yes_no("Your domain name is " + domainName + ". Save the domain name and continue?"):
+        if query_yes_no(colored(textwrap.dedent("Your domain name is " + domainName + ". Save the domain name and continue?"), "blue")):
             break
 
 
@@ -332,7 +333,8 @@ def create_project():
 
     with open(json_path, 'r+') as f:
         data = json.load(f)
-        print(data)
+        # print(data)
+        data["QtModule"] = appModule
         if "QMainWindow" in data:
             for QMainWindow in data["QMainWindow"]:
                 # Set window tittle
@@ -357,11 +359,10 @@ def create_project():
         f.truncate()
 
 
-    print("JSON stylesheet file created")
+    print(textwrap.dedent("JSON stylesheet file created"))
 
-    print("""
+    print(textwrap.dedent("""
 
-    ########################################################################
     CONGRATULATIONS! YOUR PROJECT HAS BEEN CREATED.
 
     WHAT NEXT??
@@ -388,23 +389,22 @@ def create_project():
 
     7. The QSS/_variables.scss contains your theme variables
 
-    ########################################################################
+    """))
 
-        """)
+    print(colored(textwrap.dedent("You can also leave this window open as you work on your project. To preview your app just click enter. The UI and QRC file will be automatically converted for you!"), "yellow"))
 
 
     while True:
-        if not query_yes_no("Run the created project or exit the project wizard? Type yes to run the app or no to exit the wizard"):
+        if not query_yes_no(colored(textwrap.dedent("Run the created project or exit the project wizard? Type yes to run the app or no to exit the wizard"), "blue")):
             break
         else:
-            print("""
+            convert_qrc_to_py(resource_path, py_resource_path, appModule) 
+            convert_ui_to_py(ui_path, ui_output_py_path, appModule)
 
-    ########################################################################
-    RUNNING YOUR PROJECT
-    ########################################################################
-            """)
+            print(textwrap.dedent("""
+            RUNNING YOUR PROJECT
+            """))
             call(["python", "main.py"])
-
 
     exit()
 
@@ -418,7 +418,7 @@ def run_command():
     if args.create_project:
         create_project()
     else:
-        print("No valid command provided. Use 'Custom_Widgets --create-project' or 'Custom_Widgets --build-widgets'.")
+        print(textwrap.dedent("No valid command provided. Use 'Custom_Widgets --create-project' or 'Custom_Widgets --build-widgets'."))
 
 
 if __name__ == "__main__":
