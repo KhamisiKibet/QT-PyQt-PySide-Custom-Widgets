@@ -4,13 +4,13 @@ The primary objects for interfacing with iconify
 
 from typing import TYPE_CHECKING, MutableMapping, Optional, Tuple
 
-from iconify.anim import GlobalTick
-from iconify.path import findIcon
-from iconify.qt import QtCore, QtGui, QtSvg
+from Custom_Widgets.iconify.anim import GlobalTick
+from Custom_Widgets.iconify.path import findIcon
+from Custom_Widgets.iconify.qt import QtCore, QtGui, QtSvg
 
 if TYPE_CHECKING:
-    from iconify.anim import BaseAnimation
-    from iconify.qt import QtWidgets
+    from Custom_Widgets.iconify.anim import BaseAnimation
+    from Custom_Widgets.iconify.qt import QtWidgets
     PixmapCacheKey = Tuple[Optional[str], QtCore.QSize, str, int, int]
 
 

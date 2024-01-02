@@ -13,8 +13,8 @@ import tempfile
 import zipfile
 from typing import IO, Any, List, Mapping, Optional, Tuple
 
-import iconify as ico
-from iconify.qt import QtCore, QtXml
+import Custom_Widgets.iconify as ico
+from Custom_Widgets.iconify.qt import QtCore, QtXml
 
 if sys.version_info[0] == 2:
     from urllib import urlretrieve
