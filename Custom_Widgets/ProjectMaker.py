@@ -11,9 +11,6 @@
 import os
 import sys
 from subprocess import call
-import subprocess
-import cairosvg
-import codecs
 import shutil
 import json
 from urllib.parse import urlparse
@@ -21,6 +18,10 @@ import argparse
 
 from termcolor import colored  # Install termcolor using: pip install termcolor
 import textwrap
+
+from qtpy.QtCore import Signal
+
+from . Qss.SvgToPngIcons import *
 
 
 ########################################################################
@@ -31,9 +32,15 @@ from qtpy.QtGui import QColor
 
 from . Qss.colorsystem import *
 
+########################################################################
+## WORKER SIGNAL CLASS
+########################################################################
+class ProjectMakerSignals(QObject):
+    progress = Signal(int)
 
-def progress(count, total, status=''):
+def progress(count, status='Done'):
     bar_len = 30
+    total = 100
     filled_len = int(round(bar_len * count / float(total)))
 
     percents = round(100.0 * count / float(total), 1)
@@ -64,130 +71,7 @@ def query_yes_no(question, default="yes"):
         else:
             sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
 
-def generateIcons(iconsColor = "#ffffff"):  
-    # Files folder
-    dirname = os.path.dirname(__file__)
-    filename = os.path.join(dirname, 'Qss/icons/original_svg')
-    list_of_files = []
-
-    svg_color = "#ffffff"
-    normal_color = iconsColor
-
-    focused_color = lighten_color(normal_color)
-    disabled_color = darken_color(normal_color, .5)
-
-
-    iconsFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/Icons'))
-
-
-    print("Generating icons for your theme, please wait. This may take long\n")
-
-    for root, dirs, files in os.walk(filename):
-        for file in files:
-            list_of_files.append(os.path.join(root,file))
-
-    totalIcons = len(list_of_files)
-
-    for name in list_of_files:
-        # Create normal icons
-        with codecs.open(name, encoding='utf-8', errors='ignore') as f:
-            content = f.read()
-
-            newSVG = content.replace(svg_color, normal_color)
-            newBytes = str.encode(newSVG)
-
-            name_2 =  os.path.basename(urlparse(name).path).replace(".svg", ".png")
-            filename = os.path.abspath(os.path.join(iconsFolder, name_2))
-
-            if not os.path.exists(iconsFolder):
-                os.makedirs(iconsFolder)
-
-            if not os.path.exists(filename):                
-                try:
-                    cairosvg.svg2png(bytestring=newBytes, write_to=filename)
-                except Exception as e:
-                    print(e)
-                    
-
-        # Create focus icons
-        with codecs.open(name, encoding='utf-8', errors='ignore') as f:
-            content = f.read()
-
-            newSVG = content.replace(svg_color, focused_color)
-            newBytes = str.encode(newSVG)
-
-            name_2 =  os.path.basename(urlparse(name).path).replace(".svg", "_focus.png")
-            filename = os.path.abspath(os.path.join(iconsFolder, name_2))
-
-            if not os.path.exists(iconsFolder):
-                os.makedirs(iconsFolder)
-
-            if not os.path.exists(filename):
-                try:
-                    cairosvg.svg2png(bytestring=newBytes, write_to=filename)
-                except Exception as e:
-                    print(e)
-    
-
-        # Create disabled icons
-        with codecs.open(name, encoding='utf-8', errors='ignore') as f:
-            content = f.read()
-
-            newSVG = content.replace(svg_color, disabled_color)
-            newBytes = str.encode(newSVG)
-
-            name_2 =  os.path.basename(urlparse(name).path).replace(".svg", "_disabled.png")
-            filename = os.path.abspath(os.path.join(iconsFolder, name_2))
-            
-            if not os.path.exists(iconsFolder):
-                os.makedirs(iconsFolder)
-
-            if not os.path.exists(filename):
-                try:
-                    cairosvg.svg2png(bytestring=newBytes, write_to=filename)
-                except Exception as e:
-                    print(e)
-                
-        progress(int((list_of_files.index(name)/totalIcons) * 100), 100)
-
-    print("\nCreating the resources (py) file")
-    # Check resource file
-    global resource_path, py_resource_path
-    resource_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
-    if not os.path.exists(resource_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))  
-    py_resource_path = resource_path.replace(".qrc", ".py")
-    py_resource_path = py_resource_path.replace("QSS/", "")
-    py_resource_path = py_resource_path.replace("QSS\\", "") #for win
-    py_resource_path = py_resource_path.replace("QSS_Resources", "QSS_Resources_rc")
-
-def convert_ui_to_py(ui_path, output_py_path, app_module):
-    if app_module == "PySide6":
-        subprocess.run(["pyside6-uic", ui_path, "-o", output_py_path])
-    elif app_module == "PySide2":
-        subprocess.run(["pyside2-uic", ui_path, "-o", output_py_path])
-    elif app_module == "PyQt6":
-        subprocess.run(["pyuic6", ui_path, "-o", output_py_path])
-    elif app_module == "PyQt5":
-        subprocess.run(["pyuic5", ui_path, "-o", output_py_path])
-    else:
-        print(colored(textwrap.dedent(f"Unsupported Qt app module: {app_module}"), "red"))
-
-def convert_qrc_to_py(qrc_path, output_py_path, app_module):
-    if app_module == "PySide6":
-        subprocess.run(["pyside6-rcc", qrc_path, "-o", output_py_path])
-    elif app_module == "PySide2":
-        subprocess.run(["pyside2-rcc", qrc_path, "-o", output_py_path])
-    elif app_module == "PyQt6":
-        subprocess.run(["pyrcc6", qrc_path, "-o", output_py_path])
-    elif app_module == "PyQt5":
-        subprocess.run(["pyrcc5", qrc_path, "-o", output_py_path])
-    else:
-        print(colored(textwrap.dedent(f"Unsupported Qt app module: {app_module}"), "red"))
-
-
 def create_project():
-
     # Current Directory
     currentDir = os.getcwd()
     print(colored(textwrap.dedent("""
@@ -215,9 +99,9 @@ def create_project():
         os.makedirs(qcss_folder)
 
     # Check resource file
-    qrc_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
-    if not os.path.exists(qrc_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'Qss/QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
+    # qrc_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
+    # if not os.path.exists(qrc_path):   
+    #     shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'Qss/QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
     
     
     # Check ui file
@@ -225,35 +109,39 @@ def create_project():
     if not os.path.exists(ui_path):   
         shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/uis/interface.ui')), os.getcwd())  
 
-    # App module
+    # App Qt binding/API Name
     print(textwrap.dedent("""
-    #PLEASE ENTER YOUR QT APP MODULE:
+    #PLEASE ENTER YOUR Qt APP Qt binding/API Name:
     (Default: PySide6) (Options: PySide6, PySide2, PyQt6, PyQt5)
     """))
 
-    global appModule
+    global appQtBinding
 
     while True:
-        appModule = input(textwrap.dedent("Enter your app module: "))
-        if appModule.isspace() or appModule == "":
-            print(colored(textwrap.dedent("QT App module set to PySide6"), "red"))
-            appModule = "PySide6"
+        appQtBinding = input(textwrap.dedent("Enter your app Qt binding/API Name: "))
+        if appQtBinding.isspace() or appQtBinding == "":
+            print(colored(textwrap.dedent("Qt App Qt binding/API Name set to PySide6"), "red"))
+            appQtBinding = "PySide6"
             break
-        if appModule != "PySide6" and appModule != "PySide2" and appModule != "PyQt6" and appModule != "PyQt5":
-            print(colored(textwrap.dedent(appModule+ " is not a valid qt app module"), "red"))
+        if appQtBinding != "PySide6" and appQtBinding != "PySide2" and appQtBinding != "PyQt6" and appQtBinding != "PyQt5":
+            print(colored(textwrap.dedent(appQtBinding+ " is not a valid qt app Qt binding/API Name"), "red"))
             continue
-        if query_yes_no(colored(textwrap.dedent("Your QT App module is " + str(appModule) + ".  Continue?"), "blue")):
+        if query_yes_no(colored(textwrap.dedent("Your Qt App Qt binding/API Name is " + str(appQtBinding) + ".  Continue?"), "blue")):
             break
+
+    # Update Qt Binding
+    qtpy.API_NAME = appQtBinding
+    os.environ['QT_API'] = appQtBinding.lower()
 
     # Check main file
     main_py = os.path.abspath(os.path.join(os.getcwd(), 'main.py'))
     if not os.path.exists(main_py):   
         shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/main.py')), os.getcwd())  
 
-    # Check ui(py) file
+    # # Check ui(py) file
     ui_output_py_path = os.path.abspath(os.path.join(os.getcwd(), 'ui_interface.py'))
-    if not os.path.exists(ui_output_py_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/ui_interface.py')), os.getcwd())  
+    # if not os.path.exists(ui_output_py_path):   
+    #     shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/ui_interface.py')), os.getcwd())  
 
     print(textwrap.dedent("Creating the icons (png) files"))
 
@@ -274,15 +162,42 @@ def create_project():
         if query_yes_no(colored(textwrap.dedent("Your icons color is " + str(iconsColor) + ". Save the color and continue?"), "blue")):
             break
 
-    generateIcons(iconsColor)
+    signals = ProjectMakerSignals()
+    progress_callback = signals.progress
+    signals.progress.connect(progress)
 
-    # Generate py files from ui and qrc
-    convert_ui_to_py(ui_path, ui_output_py_path, appModule)
-    convert_qrc_to_py(resource_path, py_resource_path, appModule) 
+    # Create colors
+    normal_color = color_to_hex(iconsColor)
+    focused_color = lighten_color(normal_color)
+    disabled_color = darken_color(normal_color, .5)
+
+    iconsFolderName = normal_color.replace("#", "")
+
+    print(textwrap.dedent(f"\nGenerating normal icons for color: {iconsColor}"))
+    NewIconsGenerator.generateIcons(progress_callback, normal_color, "", "Icons", createQrc = True)
+    # print(textwrap.dedent(f"\nGenerating fucused icons for color: {iconsColor}"))
+    # NewIconsGenerator.generateIcons(progress_callback, focused_color, "_focus", iconsFolderName)
+    # print(textwrap.dedent(f"\nGenerating disabled icons for color: {iconsColor}"))
+    # NewIconsGenerator.generateIcons(progress_callback, disabled_color, "_disabled", iconsFolderName)
+
+    # Move icons
+    # print(textwrap.dedent("\nMoving icons to Icons folder") )
+    # destinationFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/Icons'))
+    # sourceFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+iconsFolderName))
+    # NewIconsGenerator.moveIcons(sourceFolder, destinationFolder)
 
     print(textwrap.dedent("Icons have been created"))
 
-    print(textwrap.dedent("Creating the JSON stylesheet file"))
+    # print(textwrap.dedent("\nCreating the resources (py) file"))
+    # # Check resource file
+    # qrcFile, pyDest = NewIconsGenerator.checkQrc()
+    # # Convert qrc to py 
+    # NewIconsGenerator.qrcToPy(qrcFile, pyDest)
+
+    # Generate py from ui
+    NewIconsGenerator.uiToPy(ui_path, ui_output_py_path)
+
+    print(textwrap.dedent("\nCreating the JSON stylesheet file"))
 
     print(textwrap.dedent(f"""
     #PLEASE FILL IN THE REQUIRED DATA BELOW:
@@ -334,7 +249,7 @@ def create_project():
     with open(json_path, 'r+') as f:
         data = json.load(f)
         # print(data)
-        data["QtModule"] = appModule
+        data["QtBinding"] = appQtBinding
         if "QMainWindow" in data:
             for QMainWindow in data["QMainWindow"]:
                 # Set window tittle
@@ -367,15 +282,15 @@ def create_project():
 
     WHAT NEXT??
 
-    1. Open the interface.ui file inside your project folder using QT designer.
+    1. Open the interface.ui file inside your project folder using Qt designer.
     This is your main inteface file.
 
     2. Put your app customization/style inside the JSON style.json file.
     Read more here on how to use the custom widgets module 
-    https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets
+    https://github.com/KhamisiKibet/Qt-PyQt-PySide-Custom-Widgets
 
     3. Run the main.py file to view your app. Get more tutorials 
-    here on how to create awsome QT Apps with python 
+    here on how to create awsome Qt Apps with python 
     https://www.youtube.com/spinnTv
 
     4. Your default app icons are located inside the QSS/Icons folder.
@@ -398,8 +313,9 @@ def create_project():
         if not query_yes_no(colored(textwrap.dedent("Run the created project or exit the project wizard? Type yes to run the app or no to exit the wizard"), "blue")):
             break
         else:
-            convert_qrc_to_py(resource_path, py_resource_path, appModule) 
-            convert_ui_to_py(ui_path, ui_output_py_path, appModule)
+            # Convert qrc to py 
+            # NewIconsGenerator.qrcToPy(qrcFile, pyDest)
+            NewIconsGenerator.uiToPy(ui_path, ui_output_py_path)
 
             print(textwrap.dedent("""
             RUNNING YOUR PROJECT
@@ -418,7 +334,7 @@ def run_command():
     if args.create_project:
         create_project()
     else:
-        print(textwrap.dedent("No valid command provided. Use 'Custom_Widgets --create-project' or 'Custom_Widgets --build-widgets'."))
+        print(textwrap.dedent("No valid command provided. Use 'Custom_Widgets --create-project'."))
 
 
 if __name__ == "__main__":

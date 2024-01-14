@@ -76,8 +76,8 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="QSS/QSS_Resources.qrc">
-         <normaloff>:/icons/Icons/airplay.png</normaloff>:/icons/Icons/airplay.png</iconset>
+        <iconset resource="QSS/_icons.qrc">
+         <normaloff>:/feather/Icons/feather/airplay.png</normaloff>:/feather/Icons/feather/airplay.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -92,7 +92,7 @@
   </widget>
  </widget>
  <resources>
-  <include location="QSS/QSS_Resources.qrc"/>
+  <include location="QSS/_icons.qrc"/>
  </resources>
  <connections/>
 </ui>

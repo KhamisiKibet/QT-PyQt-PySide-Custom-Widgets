@@ -1,20 +1,8 @@
 ########################################################################
-## 
-########################################################################
-
-########################################################################
 ## IMPORTS
 ########################################################################
 import os
 import sys
-
-########################################################################
-# IMPORT PYSIDE
-########################################################################
-# if 'PySide2' in sys.modules:
-#     from PySide2.QtCore import *
-# elif 'PySide6' in sys.modules:
-#     from PySide6.QtCore import *
 
 ########################################################################
 ## MODULE UPDATED TO USE QTPY
@@ -138,6 +126,19 @@ def darken_color(hex_color, factor=0.35):
 
     return darkened_color
 
+def is_color_dark_or_light(color):
+    # Convert color to RGB
+    rgb = mc.to_rgba(color)[:3]
+
+    # Calculate relative luminance
+    luminance = 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]
+
+    # Adjust threshold based on your preference
+    threshold = 0.5
+
+    # Check if the color is relatively dark or light
+    return "dark" if luminance < threshold else "light"
+
 
 class Theme:
     def __init__(self, bg_color, txt_color, accent_color, icons_color=""):
@@ -145,7 +146,7 @@ class Theme:
         self.txt_color = txt_color
         self.accent_color = accent_color
         self.icons_color = icons_color
-
+        
         self.BG_1 = adjust_lightness(bg_color, 1)
         self.BG_2 = adjust_lightness(bg_color, 0.95)
         self.BG_3 = adjust_lightness(bg_color, 0.8)
@@ -163,7 +164,7 @@ class Theme:
         self.CA_3 = adjust_lightness(accent_color, 0.8)
         self.CA_4 = adjust_lightness(accent_color, 0.7)
 
-        self.ICONS = ":/icons/Icons/"
+        self.ICONS = ":/feather/Icons/feather/"
 
 class Dark(Theme):
     def __init__(self):
@@ -269,13 +270,35 @@ class CreateColorVariable():
             if not themeFound:
                 theme = Light()
 
+            if is_color_dark_or_light(theme.bg_color) == "light":
+                # theme.BG_6 = adjust_lightness(theme.bg_color, 1)
+                # theme.BG_5 = adjust_lightness(theme.bg_color, 0.90)
+                # theme.BG_4 = adjust_lightness(theme.bg_color, 0.80)
+                # theme.BG_3 = adjust_lightness(theme.bg_color, 0.70)
+                # theme.BG_2 = adjust_lightness(theme.bg_color, 0.60)
+                # theme.BG_1 = adjust_lightness(theme.bg_color, 0.50)
 
-            theme.BG_1 = adjust_lightness(theme.bg_color, 1)
-            theme.BG_2 = adjust_lightness(theme.bg_color, 0.90)
-            theme.BG_3 = adjust_lightness(theme.bg_color, 0.80)
-            theme.BG_4 = adjust_lightness(theme.bg_color, 0.70)
-            theme.BG_5 = adjust_lightness(theme.bg_color, 0.60)
-            theme.BG_6 = adjust_lightness(theme.bg_color, 0.50)
+                theme.BG_1 = theme.bg_color
+                theme.BG_2 = darken_color(theme.bg_color, 0.05)
+                theme.BG_3 = darken_color(theme.bg_color, 0.1)
+                theme.BG_4 = darken_color(theme.bg_color, 0.15)
+                theme.BG_5 = darken_color(theme.bg_color, 0.2)
+                theme.BG_6 = darken_color(theme.bg_color, 0.25)
+
+            else:
+                theme.BG_1 = theme.bg_color
+                theme.BG_2 = adjust_lightness(theme.bg_color, 0.90)
+                theme.BG_3 = adjust_lightness(theme.bg_color, 0.80)
+                theme.BG_4 = adjust_lightness(theme.bg_color, 0.70)
+                theme.BG_5 = adjust_lightness(theme.bg_color, 0.60)
+                theme.BG_6 = adjust_lightness(theme.bg_color, 0.50)
+
+                # theme.BG_1 = theme.bg_color
+                # theme.BG_2 = lighten_color(theme.bg_color, 0.05)
+                # theme.BG_3 = lighten_color(theme.bg_color, 0.1)
+                # theme.BG_4 = lighten_color(theme.bg_color, 0.15)
+                # theme.BG_5 = lighten_color(theme.bg_color, 0.2)
+                # theme.BG_6 = lighten_color(theme.bg_color, 0.25)
 
             theme.CT_1 = adjust_lightness(theme.txt_color, 1)
             theme.CT_2 = adjust_lightness(theme.txt_color, 0.9)
@@ -287,7 +310,9 @@ class CreateColorVariable():
             theme.CA_3 = adjust_lightness(theme.accent_color, .8)
             theme.CA_4 = adjust_lightness(theme.accent_color, .7)
 
-            theme.ICONS = ":/icons/Icons/"
+            theme.ICONS = ":/feather/Icons/feather/"
+
+        # print("Color is ", is_color_dark_or_light(theme.bg_color))
 
         # Create global color variables
         self.theme = Object()

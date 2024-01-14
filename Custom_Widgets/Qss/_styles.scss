@@ -186,11 +186,11 @@ QCheckBox {
             &:focus,
             &:pressed {
                 border: none;
-                image: url($PATH_RESOURCES+'checkbox_unchecked_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_unchecked.png');
             }
 
             &:disabled {
-                image: url($PATH_RESOURCES+'checkbox_unchecked_disabled.png');
+                image: url($PATH_RESOURCES+'checkbox_unchecked.png');
             }
         }
 
@@ -201,11 +201,11 @@ QCheckBox {
             &:focus,
             &:pressed {
                 border: none;
-                image: url($PATH_RESOURCES+'checkbox_checked_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_checked.png');
             }
 
             &:disabled {
-                image: url($PATH_RESOURCES+'checkbox_checked_disabled.png');
+                image: url($PATH_RESOURCES+'checkbox_checked.png');
             }
         }
 
@@ -213,13 +213,13 @@ QCheckBox {
             image: url($PATH_RESOURCES+'checkbox_indeterminate.png');
 
             &:disabled {
-                image: url($PATH_RESOURCES+'checkbox_indeterminate_disabled.png');
+                image: url($PATH_RESOURCES+'checkbox_indeterminate.png');
             }
 
             &:focus,
             &:hover,
             &:pressed {
-                image: url($PATH_RESOURCES+'checkbox_indeterminate_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_indeterminate.png');
             }
         }
     }
@@ -262,11 +262,11 @@ QGroupBox {
             &:focus,
             &:pressed {
                 border: none;
-                image: url($PATH_RESOURCES+'checkbox_unchecked_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_unchecked.png');
             }
 
             &:disabled {
-                image: url($PATH_RESOURCES+'checkbox_unchecked_disabled.png');
+                image: url($PATH_RESOURCES+'checkbox_unchecked.png');
             }
         }
 
@@ -279,11 +279,11 @@ QGroupBox {
             &:focus,
             &:pressed {
                 border: none;
-                image: url($PATH_RESOURCES+'checkbox_checked_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_checked.png');
             }
 
             &:disabled {
-                image: url($PATH_RESOURCES+'checkbox_checked_disabled.png');
+                image: url($PATH_RESOURCES+'checkbox_checked.png');
             }
         }
     }
@@ -338,11 +338,11 @@ QRadioButton {
             &:pressed {
                 border: none;
                 outline: none;
-                image: url($PATH_RESOURCES+'radio_unchecked_focus.png');
+                image: url($PATH_RESOURCES+'radio_unchecked.png');
             }
 
             &:disabled {
-                image: url($PATH_RESOURCES+'radio_unchecked_disabled.png');
+                image: url($PATH_RESOURCES+'radio_unchecked.png');
             }
         }
 
@@ -356,12 +356,12 @@ QRadioButton {
             &:pressed {
                 border: none;
                 outline: none;
-                image: url($PATH_RESOURCES+'radio_checked_focus.png');
+                image: url($PATH_RESOURCES+'radio_checked.png');
             }
 
             &:disabled {
                 outline: none;
-                image: url($PATH_RESOURCES+'radio_checked_disabled.png');
+                image: url($PATH_RESOURCES+'radio_checked.png');
             }
         }
     }
@@ -458,11 +458,11 @@ QMenu {
                 &:focus,
                 &:pressed {
                     border: none;
-                    image: url($PATH_RESOURCES+'checkbox_unchecked_focus.png');
+                    image: url($PATH_RESOURCES+'checkbox_unchecked.png');
                 }
 
                 &:disabled {
-                    image: url($PATH_RESOURCES+'checkbox_unchecked_disabled.png');
+                    image: url($PATH_RESOURCES+'checkbox_unchecked.png');
                 }
             }
 
@@ -473,11 +473,11 @@ QMenu {
                 &:focus,
                 &:pressed {
                     border: none;
-                    image: url($PATH_RESOURCES+'checkbox_checked_focus.png');
+                    image: url($PATH_RESOURCES+'checkbox_checked.png');
                 }
 
                 &:disabled {
-                    image: url($PATH_RESOURCES+'checkbox_checked_disabled.png');
+                    image: url($PATH_RESOURCES+'checkbox_checked.png');
                 }
             }
 
@@ -485,13 +485,13 @@ QMenu {
                 image: url($PATH_RESOURCES+'checkbox_indeterminate.png');
 
                 &:disabled {
-                    image: url($PATH_RESOURCES+'checkbox_indeterminate_disabled.png');
+                    image: url($PATH_RESOURCES+'checkbox_indeterminate.png');
                 }
 
                 &:focus,
                 &:hover,
                 &:pressed {
-                    image: url($PATH_RESOURCES+'checkbox_indeterminate_focus.png');
+                    image: url($PATH_RESOURCES+'checkbox_indeterminate.png');
                 }
             }
         }
@@ -507,11 +507,11 @@ QMenu {
                 &:pressed {
                     border: none;
                     outline: none;
-                    image: url($PATH_RESOURCES+'radio_unchecked_focus.png');
+                    image: url($PATH_RESOURCES+'radio_unchecked.png');
                 }
 
                 &:disabled {
-                    image: url($PATH_RESOURCES+'radio_unchecked_disabled.png');
+                    image: url($PATH_RESOURCES+'radio_unchecked.png');
                 }
             }
 
@@ -525,12 +525,12 @@ QMenu {
                 &:pressed {
                     border: none;
                     outline: none;
-                    image: url($PATH_RESOURCES+'radio_checked_focus.png');
+                    image: url($PATH_RESOURCES+'radio_checked.png');
                 }
 
                 &:disabled {
                     outline: none;
-                    image: url($PATH_RESOURCES+'radio_checked_disabled.png');
+                    image: url($PATH_RESOURCES+'radio_checked.png');
                 }
             }
         }
@@ -653,7 +653,7 @@ QScrollBar {
 
         &:horizontal {
             margin: 0px 0px 0px 0px;
-            border-image: url($PATH_RESOURCES+'arrow_right_disabled.png');
+            border-image: url($PATH_RESOURCES+'arrow_right.png');
             height: 12px;
             width: 12px;
             subcontrol-position: right;
@@ -671,7 +671,7 @@ QScrollBar {
 
         &:vertical {
             margin: 3px 0px 3px 0px;
-            border-image: url($PATH_RESOURCES+'arrow_down_disabled.png');
+            border-image: url($PATH_RESOURCES+'arrow_down.png');
             height: 12px;
             width: 12px;
             subcontrol-position: bottom;
@@ -691,7 +691,7 @@ QScrollBar {
     &::sub-line {
         &:horizontal {
             margin: 0px 3px 0px 3px;
-            border-image: url($PATH_RESOURCES+'arrow_left_disabled.png');
+            border-image: url($PATH_RESOURCES+'arrow_left.png');
             height: 12px;
             width: 12px;
             subcontrol-position: left;
@@ -709,7 +709,7 @@ QScrollBar {
 
         &:vertical {
             margin: 3px 0px 3px 0px;
-            border-image: url($PATH_RESOURCES+'arrow_up_disabled.png');
+            border-image: url($PATH_RESOURCES+'arrow_up.png');
             height: 12px;
             width: 12px;
             subcontrol-position: top;
@@ -893,7 +893,7 @@ QAbstractSpinBox {
     &::up-arrow,
     &::up-arrow:disabled,
     &::up-arrow:off {
-        image: url($PATH_RESOURCES+'arrow_up_disabled.png');
+        image: url($PATH_RESOURCES+'arrow_up.png');
         height: 8px;
         width: 8px;
     }
@@ -918,7 +918,7 @@ QAbstractSpinBox {
     &::down-arrow,
     &::down-arrow:disabled,
     &::down-arrow:off {
-        image: url($PATH_RESOURCES+'arrow_down_disabled.png');
+        image: url($PATH_RESOURCES+'arrow_down.png');
         height: 8px;
         width: 8px;
     }
@@ -1271,7 +1271,7 @@ QToolButton {
         width: 8px;
 
         &:hover {
-            image: url($PATH_RESOURCES+'arrow_down_focus.png');
+            image: url($PATH_RESOURCES+'arrow_down.png');
         }
     }
 }
@@ -1396,7 +1396,7 @@ QComboBox {
     }
 
     &::down-arrow {
-        image: url($PATH_RESOURCES+'arrow_down_disabled.png');
+        image: url($PATH_RESOURCES+'arrow_down.png');
         height: 8px;
         width: 8px;
 
@@ -1598,7 +1598,7 @@ QTabBar, QDockWidget QTabBar {
         image: url($PATH_RESOURCES+'window_close.png');
 
         &:hover {
-            image: url($PATH_RESOURCES+'window_close_focus.png');
+            image: url($PATH_RESOURCES+'window_close.png');
         }
 
         &:pressed {
@@ -1807,7 +1807,7 @@ QTabBar, QDockWidget QTabBar {
             }
 
             &:disabled {
-                image: url($PATH_RESOURCES+'arrow_left_disabled.png');
+                image: url($PATH_RESOURCES+'arrow_left.png');
             }
         }
 
@@ -1817,7 +1817,7 @@ QTabBar, QDockWidget QTabBar {
             }
 
             &:disabled {
-                image: url($PATH_RESOURCES+'arrow_right_disabled.png');
+                image: url($PATH_RESOURCES+'arrow_right.png');
             }
         }
     }
@@ -1855,7 +1855,7 @@ QDockWidget {
         image: url($PATH_RESOURCES+'window_close.png');
 
         &:hover {
-            image: url($PATH_RESOURCES+'window_close_focus.png');
+            image: url($PATH_RESOURCES+'window_close.png');
         }
 
         &:pressed {
@@ -1878,7 +1878,7 @@ QDockWidget {
         image: url($PATH_RESOURCES+'window_undock.png');
 
         &:hover {
-            image: url($PATH_RESOURCES+'window_undock_focus.png');
+            image: url($PATH_RESOURCES+'window_undock.png');
         }
 
         &:pressed {
@@ -1929,12 +1929,12 @@ QTreeView {
 
         &:has-children:!has-siblings:closed:hover,
         &:closed:has-children:has-siblings:hover {
-            image: url($PATH_RESOURCES+'branch_closed_focus.png');
+            image: url($PATH_RESOURCES+'branch_closed.png');
         }
 
         &:open:has-children:!has-siblings:hover,
         &:open:has-children:has-siblings:hover {
-            image: url($PATH_RESOURCES+'branch_open_focus.png');
+            image: url($PATH_RESOURCES+'branch_open.png');
         }
     }
 }
@@ -1952,7 +1952,7 @@ QColumnView {
             &:hover,
             &:focus,
             &:pressed {
-                image: url($PATH_RESOURCES+'checkbox_checked_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_checked.png');
             }
         }
 
@@ -1962,7 +1962,7 @@ QColumnView {
             &:hover,
             &:focus,
             &:pressed {
-                image: url($PATH_RESOURCES+'checkbox_unchecked_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_unchecked.png');
             }
         }
 
@@ -1972,7 +1972,7 @@ QColumnView {
             &:hover,
             &:focus,
             &:pressed {
-                image: url($PATH_RESOURCES+'checkbox_indeterminate_focus.png');
+                image: url($PATH_RESOURCES+'checkbox_indeterminate.png');
             }
         }
     }
@@ -2281,7 +2281,7 @@ QDateEdit, QDateTimeEdit {
     }
 
     &::down-arrow {
-        image: url($PATH_RESOURCES+'arrow_down_disabled.png');
+        image: url($PATH_RESOURCES+'arrow_down.png');
         height: 8px;
         width: 8px;
 

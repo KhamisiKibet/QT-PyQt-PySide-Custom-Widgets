@@ -19,24 +19,6 @@ from .Qss.SvgToPngIcons import NewIconsGenerator
 
 from .QCustomQPushButtonGroup import QCustomQPushButtonGroup
 
-
-########################################################################
-## IMPORT PYSIDE2 OR PYSIDE6
-########################################################################
-# if 'PySide2' in sys.modules:
-#     from PySide2 import QtWidgets, QtGui, QtCore
-#     from PySide2.QtCore import *
-#     from PySide2.QtGui import *
-#     from PySide2.QtWidgets import *
-#     from PySide2.QtCore import Signal
-
-# elif 'PySide6' in sys.modules:
-#     from PySide6 import QtWidgets, QtGui, QtCore
-#     from PySide6.QtCore import *
-#     from PySide6.QtGui import *
-#     from PySide6.QtWidgets import *
-#     from PySide6.QtCore import Signal
-
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
@@ -50,7 +32,7 @@ from qtpy.QtCore import Signal
 # JSON FOR READING THE JSON STYLESHEET
 import json
 
-from . QCustomQPushButton import applyAnimationThemeStyle, applyButtonShadow, iconify, applyCustomAnimationThemeStyle, applyStylesFromColor
+from Custom_Widgets.QCustomQPushButton import applyAnimationThemeStyle, applyButtonShadow, iconify, applyCustomAnimationThemeStyle, applyStylesFromColor
 
 class QMainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
@@ -121,14 +103,15 @@ class QMainWindow(QtWidgets.QMainWindow):
                     self.move(self.pos() + e.globalPos() - self.clickPosition)
                     self.clickPosition = e.globalPos()
                     e.accept()
-        else:
-            self.showNormal()
+        # else:
+        #     self.showNormal()
 
     def toggleWindowSize(self, e):
         if self.isMaximized():
             self.showNormal()
         else:
             self.showMaximized()
+        self.updateRestoreButtonIcon()
 
     ########################################################################
     ## Check Button Groups
