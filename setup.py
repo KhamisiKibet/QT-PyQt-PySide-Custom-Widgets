@@ -32,7 +32,8 @@ setup(
         "qtsass",
         "matplotlib",
         "mock",
-        "termcolor"
+        "termcolor",
+        "watchdog"
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',      
@@ -48,7 +49,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'Custom_Widgets=Custom_Widgets.ProjectMaker:run_command',
+            'Custom_Widgets=Custom_Widgets.CMD:run_command',
         ],
     },
 )

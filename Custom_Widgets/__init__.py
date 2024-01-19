@@ -39,6 +39,7 @@ class QMainWindow(QtWidgets.QMainWindow):
         super().__init__(parent)
 
         self.clickPosition = None  # Initialize clickPosition attribute
+        self.normalGeometry = self.geometry()
 
 
     #######################################################################
@@ -78,14 +79,22 @@ class QMainWindow(QtWidgets.QMainWindow):
 
 
     def restore_or_maximize_window(self):
-        # If window is maxmized
+        # If window is maximized
         if self.isMaximized():
             self.showNormal()
-
         else:
+            # Save the current window geometry before maximizing
+            self.normalGeometry = self.geometry()
+
             self.showMaximized()
 
-        self.updateRestoreButtonIcon()
+    def showNormal(self):
+        super().showNormal()
+
+        # Restore the window to its previous position and size
+        if hasattr(self, 'normalGeometry'):
+            self.setGeometry(self.normalGeometry)
+            del self.normalGeometry
 
      # ###############################################
     # Function to Move window on mouse drag event on the tittle bar
@@ -103,6 +112,8 @@ class QMainWindow(QtWidgets.QMainWindow):
                     self.move(self.pos() + e.globalPos() - self.clickPosition)
                     self.clickPosition = e.globalPos()
                     e.accept()
+
+            self.normalGeometry = self.geometry()
         # else:
         #     self.showNormal()
 
@@ -163,6 +174,26 @@ class QMainWindow(QtWidgets.QMainWindow):
 
         except Exception as e:
             raise Exception("Failed to restart the app, please close and open the app again.")
+        
+    def readJsonFile(self, file_path):
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        return data
+
+    def apply_icons_to_buttons(self):
+        jsonFile = os.path.abspath(os.path.join(os.getcwd(), "QSS/Theme/resources.json"))
+        if os.path.isfile(jsonFile):
+            button_data = self.readJsonFile(jsonFile)
+            for button_info in button_data:
+                btn_name = button_info["name"]
+                icon_url = button_info["icon"]
+
+                if icon_url != "default_icon_url":
+                    if hasattr(self.ui, str(btn_name)):
+                        button = getattr(self.ui, str(btn_name))
+                        # Apply the icon to the button
+                        icon = QIcon(icon_url)
+                        button.setIcon(icon)
 
     #######################################################################
 

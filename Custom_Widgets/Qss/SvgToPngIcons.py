@@ -7,6 +7,7 @@ import shutil
 from urllib.parse import urlparse
 import __main__
 
+
 from . colorsystem import *
 import qtpy
 from qtpy.QtCore import *

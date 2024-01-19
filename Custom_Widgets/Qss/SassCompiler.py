@@ -144,7 +144,8 @@ class CompileStyleSheet():
         # CURRENT THEME ICONS
         iconsWorker = Worker(self.compileSassTheme)
         iconsWorker.signals.result.connect(WorkerResponse.print_output)
-        iconsWorker.signals.finished.connect(self.restart)
+        # iconsWorker.signals.finished.connect(self.restart)
+        iconsWorker.signals.finished.connect(self.apply_icons_to_buttons)
         iconsWorker.signals.progress.connect(self.sassCompilationProgress)
 
         # ALL THEME ICONS

@@ -323,19 +323,3 @@ def create_project():
             call(["python", "main.py"])
 
     exit()
-
-def run_command():
-    parser = argparse.ArgumentParser(description='Custom Widgets Project Maker')
-    parser.add_argument('--create-project', action='store_true', help='Create a new project')
-    parser.add_argument('--build-widgets', action='store_true', help='Build custom widgets')
-
-    args = parser.parse_args()
-
-    if args.create_project:
-        create_project()
-    else:
-        print(textwrap.dedent("No valid command provided. Use 'Custom_Widgets --create-project'."))
-
-
-if __name__ == "__main__":
-    run_command()
