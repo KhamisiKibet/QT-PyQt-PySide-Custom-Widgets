@@ -2,7 +2,6 @@ import cairosvg
 import codecs
 import os
 import subprocess
-import time
 import shutil
 from urllib.parse import urlparse
 import __main__
@@ -96,7 +95,7 @@ class NewIconsGenerator(QObject):
             qrc_output_path = qrc_file_path.replace(".qrc", "_rc.py")
             qrc_output_path = qrc_output_path.replace("QSS/", "") #linux
             qrc_output_path = qrc_output_path.replace("QSS\\", "") #windows
-            NewIconsGenerator.qrcToPy(qrc_file_path, qrc_output_path)
+            # NewIconsGenerator.qrcToPy(qrc_file_path, qrc_output_path)
 
     def generateNewIcons(self, progress_callback):  
         # Icons color
@@ -125,33 +124,24 @@ class NewIconsGenerator(QObject):
             # move icons
             # NewIconsGenerator.moveIcons(oldIconsFolder, oldIconsDestinationFolder)
             # To speed up the app, just rename folder
-            NewIconsGenerator.renameFolder(oldIconsFolder, oldIconsDestinationFolder)
+            # NewIconsGenerator.renameFolder(oldIconsFolder, oldIconsDestinationFolder)
             
             iconsFolderName = normal_color.replace("#", "")
             sourceFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+iconsFolderName))
             # NewIconsGenerator.moveIcons(sourceFolder, oldIconsFolder)
             # To speed up the app, just rename folder
-            NewIconsGenerator.renameFolder(sourceFolder, oldIconsFolder)
+            # NewIconsGenerator.renameFolder(sourceFolder, oldIconsFolder)
+
+            self.applyIconsToButtons(iconsFolderName)
 
             # Create normal icons
-            NewIconsGenerator.generateIcons(progress_callback, normal_color, "", "Icons", createQrc = True)
+            NewIconsGenerator.generateIcons(progress_callback, normal_color, "", iconsFolderName, createQrc = False)
+
+            print("DONE: Current icons color ", settings.value("ICONS-COLOR"))
                 
-            # Create focus icons
-            # NewIconsGenerator.generateIcons(progress_callback, focused_color, "_focus", iconsFolderName, createQrc = True)
-
-            # Create disabled icons
-            # NewIconsGenerator.generateIcons(progress_callback, disabled_color, "_disabled", iconsFolderName, createQrc = True)
-
-
-            # Reload resources:
-
-        else:
-            ## GENERATE OTHER ICONS
-            NewIconsGenerator.generateAllIcons(self, progress_callback) 
 
     def generateAllIcons(self, progress_callback):
         themes = self.ui.themes
-
         def get_theme_color(theme):
             if hasattr(theme, "iconsColor") and theme.iconsColor != "":
                 return theme.iconsColor
@@ -175,24 +165,6 @@ class NewIconsGenerator(QObject):
             NewIconsGenerator.generateIcons(progress_callback, color, "", iconsFolderName)
             # NewIconsGenerator.generateIcons(progress_callback, focused_color, "_focus", iconsFolderName)
             # NewIconsGenerator.generateIcons(progress_callback, disabled_color, "_disabled", iconsFolderName)
-
-
-    def moveIcons(sourceFolder, destinationFolder):
-        if not os.path.exists(destinationFolder):
-            os.makedirs(destinationFolder)
-        
-        if not os.path.exists(sourceFolder):
-            os.makedirs(sourceFolder)
-
-        # Get a list of all files in folder 1
-        list_of_files = [f for f in os.listdir(sourceFolder) if os.path.isfile(os.path.join(sourceFolder, f))]
-
-        # move old icons to their folder
-        for file_name in list_of_files:
-            source_path = os.path.join(sourceFolder, file_name)
-            destination_path = os.path.join(destinationFolder, file_name)
-
-            shutil.move(source_path, destination_path)
     
     def createQrcFile(contents, filePath):
         # Save QRC content to a file

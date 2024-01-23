@@ -410,11 +410,11 @@ https://doc.qt.io/qt-5/stylesheet-examples.html#customizing-qmenu
 
 --------------------------------------------------------------------------- */
 QMenu {
-    border: 0px solid $COLOR_BACKGROUND_4;
+    border: 3px solid $COLOR_BACKGROUND_4;
     color: $COLOR_TEXT_1;
     margin: 0px;
-    background-color: $COLOR_BACKGROUND_3;
-    selection-background-color: $COLOR_ACCENT_3;
+    background-color: $COLOR_BACKGROUND_1;
+    selection-background-color: $COLOR_ACCENT_1;
 
     &::separator {
         height: 1px;

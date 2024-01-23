@@ -12,6 +12,8 @@ from qtpy.QtGui import *
 from qtpy.QtWidgets import *
 from qtpy import QtWidgets, QtGui, QtCore
 
+import re
+
 class QCustomSlideMenu(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -285,15 +287,26 @@ class QCustomSlideMenu(QWidget):
 
     def applyButtonStyle(self):
         if hasattr(self, "targetBtn"):
+            settings = QSettings()
+            if settings.value("ICONS-COLOR") is not None:
+                normal_color = settings.value("ICONS-COLOR")
+                icons_folder = normal_color.replace("#", "")
+
+                prefix_to_remove = re.compile(r'^QSS/[^/]+/')
+                self.targetBtn.menuCollapsedIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.targetBtn.menuCollapsedIcon)
+                self.targetBtn.menuExpandedIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.targetBtn.menuExpandedIcon)
+
             if self.collapsed:
                 if len(self.targetBtn.menuCollapsedIcon) > 0:
-                        self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
+                        # self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
+                        self.targetBtn.setNewIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
 
                 if len(str(self.targetBtn.menuCollapsedStyle)) > 0:
                     self.targetBtn.setStyleSheet(str(self.targetBtn.menuCollapsedStyle))
             else:
                 if len(str(self.targetBtn.menuExpandedIcon)) > 0:
-                        self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuExpandedIcon))
+                        # self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuExpandedIcon))
+                        self.targetBtn.setNewIcon(self.targetBtn.menuExpandedIcon)
 
                 if len(str(self.targetBtn.menuExpandedStyle)) > 0:
                     self.targetBtn.setStyleSheet(str(self.targetBtn.menuExpandedStyle))

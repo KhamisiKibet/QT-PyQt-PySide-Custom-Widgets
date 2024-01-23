@@ -58,7 +58,7 @@ class Worker(QRunnable):
     '''
     Worker thread
 
-    Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
+    Inherits from QRunnable to handle worker thread setup, signals, and wrap-up.
 
     :param callback: The function callback to run on this worker thread. Supplied args and
                      kwargs will be passed through to the runner.
@@ -80,25 +80,32 @@ class Worker(QRunnable):
         # Add the callback to our kwargs
         self.kwargs['progress_callback'] = self.signals.progress
 
+        # Flag to indicate whether the worker should be stopped
+        self.is_interrupted = False
+
+    def stop(self):
+        self.is_interrupted = True
+
     @Slot()
     def run(self):
         '''
-        Initialise the runner function with passed args, kwargs.
+        Initialize the runner function with passed args, kwargs.
         '''
 
         # Retrieve args/kwargs here; and fire processing using them
         try:
-            result = self.fn(*self.args, **self.kwargs)
+            while not self.is_interrupted:
+                result = self.fn(*self.args, **self.kwargs)
+                self.signals.result.emit(result)  # Return the result of the processing
+                break  # Break the loop since we only want to run once
         except Exception as e:
             print(e)
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]
             self.signals.error.emit((exctype, value, traceback.format_exc()))
-        else:
-            self.signals.result.emit(result)  # Return the result of the processing
         finally:
             self.signals.finished.emit()  # Done
-    
+   
 
 ########################################################################
 ## WORKER  CLASS

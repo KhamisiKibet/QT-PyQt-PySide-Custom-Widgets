@@ -46,7 +46,7 @@ class QAppSettings():
             for theme in self.ui.themes:
                 if theme.defaultTheme:
                     # update app theme
-                    settings.setValue("THEME", theme.name);
+                    settings.setValue("THEME", theme.name)
 
 
         #######################################################################

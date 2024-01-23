@@ -164,7 +164,7 @@ class Theme:
         self.CA_3 = adjust_lightness(accent_color, 0.8)
         self.CA_4 = adjust_lightness(accent_color, 0.7)
 
-        self.ICONS = ":/feather/Icons/feather/"
+        self.ICONS = "QSS/Icons/feather/"
 
 class Dark(Theme):
     def __init__(self):
@@ -310,9 +310,14 @@ class CreateColorVariable():
             theme.CA_3 = adjust_lightness(theme.accent_color, .8)
             theme.CA_4 = adjust_lightness(theme.accent_color, .7)
 
-            theme.ICONS = ":/feather/Icons/feather/"
-
-        # print("Color is ", is_color_dark_or_light(theme.bg_color))
+            # Add icons folder to search path
+            QDir.addSearchPath('theme-icons', os.path.join(os.getcwd(), 'QSS'))
+            if theme.icons_color is not None and theme.icons_color != "":
+                folder = theme.icons_color.replace("#", "")
+            else:
+                folder = theme.accent_color.replace("#", "")
+            theme.ICONS = "theme-icons:"+folder+"/feather/"
+            
 
         # Create global color variables
         self.theme = Object()

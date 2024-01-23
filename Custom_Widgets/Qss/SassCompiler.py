@@ -99,7 +99,12 @@ class CompileStyleSheet():
         qtsass.compile_filename(main_sass_path, css_path)
         
         with open(css_path,"r") as css:
-            self.setStyleSheet(css.read())
+            stylesheet = css.read()
+            self.setStyleSheet(stylesheet)
+            # newly created menus may need re-styling
+            for obj in QApplication.instance().allWidgets():
+                if isinstance(obj, QMenu):
+                    obj.setStyleSheet(stylesheet)
         
         # QPalette
         palette = QPalette()
@@ -135,33 +140,36 @@ class CompileStyleSheet():
         # Apply the palette to the main window
         self.setPalette(palette)
 
+        self.update()
         
-
-
         ########################################################################
         ## GENERATE NEW ICONS
         # START WORKER
         # CURRENT THEME ICONS
-        iconsWorker = Worker(self.compileSassTheme)
-        iconsWorker.signals.result.connect(WorkerResponse.print_output)
-        # iconsWorker.signals.finished.connect(self.restart)
-        iconsWorker.signals.finished.connect(self.apply_icons_to_buttons)
-        iconsWorker.signals.progress.connect(self.sassCompilationProgress)
-
-        # ALL THEME ICONS
-        allIconsWorker = Worker(self.makeAllIcons)
-        allIconsWorker.signals.result.connect(WorkerResponse.print_output)
-        if self.showCustomWidgetsLogs:
-            allIconsWorker.signals.finished.connect(lambda: print("all icons have been checked and missing icons generated!"))
-        allIconsWorker.signals.progress.connect(self.sassCompilationProgress)
-
         color = CreateColorVariable.getCurrentThemeInfo(self)
         normal_color = str(color["icons-color"])
+        icons_folder = normal_color.replace("#", "")
+        self.applyIconsToButtons(icons_folder)
+
+        self.iconsWorker = Worker(self.compileSassTheme)
+        self.iconsWorker.signals.result.connect(WorkerResponse.print_output)
+        # self.iconsWorker.signals.finished.connect(self.restart)
+        self.iconsWorker.signals.finished.connect(lambda: self.applyIconsToButtons(icons_folder))
+        self.iconsWorker.signals.progress.connect(self.sassCompilationProgress)
+
+        # ALL THEME ICONS
+        self.allIconsWorker = Worker(self.makeAllIcons)
+        self.allIconsWorker.signals.result.connect(WorkerResponse.print_output)
+        if self.showCustomWidgetsLogs:
+            self.allIconsWorker.signals.finished.connect(lambda: print("all icons have been checked and missing icons generated!"))
+        self.allIconsWorker.signals.progress.connect(self.sassCompilationProgress)
+
+        
         if not settings.value("ICONS-COLOR") == normal_color and color["icons-color"] is not None:     
             # Execute
-            self.customWidgetsThreadpool.start(iconsWorker)
+            self.customWidgetsThreadpool.start(self.iconsWorker)
         else:
-            self.customWidgetsThreadpool.start(allIconsWorker)
+            self.customWidgetsThreadpool.start(self.allIconsWorker)
         
 
 ########################################################################

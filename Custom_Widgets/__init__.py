@@ -18,6 +18,7 @@ CompileStyleSheet = SassCompiler.CompileStyleSheet
 from .Qss.SvgToPngIcons import NewIconsGenerator
 
 from .QCustomQPushButtonGroup import QCustomQPushButtonGroup
+from .Theme import *
 
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
@@ -28,11 +29,13 @@ from qtpy.QtGui import *
 from qtpy.QtWidgets import *
 from qtpy.QtCore import Signal
 
+import re
 
 # JSON FOR READING THE JSON STYLESHEET
 import json
 
 from Custom_Widgets.QCustomQPushButton import applyAnimationThemeStyle, applyButtonShadow, iconify, applyCustomAnimationThemeStyle, applyStylesFromColor
+
 
 class QMainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
@@ -40,6 +43,8 @@ class QMainWindow(QtWidgets.QMainWindow):
 
         self.clickPosition = None  # Initialize clickPosition attribute
         self.normalGeometry = self.geometry()
+
+        QCoreApplication.instance().aboutToQuit.connect(self.stopWorkers)
 
 
     #######################################################################
@@ -67,15 +72,26 @@ class QMainWindow(QtWidgets.QMainWindow):
     # Update restore button icon on maximizing or minimizing window
     #######################################################################
     def updateRestoreButtonIcon(self):
+        settings = QSettings()
+        if settings.value("ICONS-COLOR") is not None:
+            normal_color = settings.value("ICONS-COLOR")
+            icons_folder = normal_color.replace("#", "")
+
+            prefix_to_remove = re.compile(r'^QSS/[^/]+/')
+            self.maximizedIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.maximizedIcon)
+            self.normalIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.normalIcon)
+
         # If window is maxmized
         if self.isMaximized():
             # Change Iconload
             if len(str(self.maximizedIcon)) > 0:
-                self.restoreBtn.setIcon(QtGui.QIcon(str(self.maximizedIcon)))
+                # self.restoreBtn.setIcon(QtGui.QIcon(str(self.maximizedIcon)))
+                self.restoreBtn.setNewIcon(str(self.maximizedIcon))
         else:
             # Change Icon
             if len(str(self.normalIcon)) > 0:
-                self.restoreBtn.setIcon(QtGui.QIcon(str(self.normalIcon)))
+                # self.restoreBtn.setIcon(QtGui.QIcon(str(self.normalIcon)))
+                self.restoreBtn.setNewIcon(str(self.normalIcon))
 
 
     def restore_or_maximize_window(self):
@@ -87,6 +103,8 @@ class QMainWindow(QtWidgets.QMainWindow):
             self.normalGeometry = self.geometry()
 
             self.showMaximized()
+
+        self.updateRestoreButtonIcon()
 
     def showNormal(self):
         super().showNormal()
@@ -150,50 +168,70 @@ class QMainWindow(QtWidgets.QMainWindow):
     def makeAllIcons(self, progress_callback):
         ########################################################################
         ## GENERATE ALL ICONS FOR ALL THEMES
-        NewIconsGenerator.generateNewIcons(self, progress_callback)
+        NewIconsGenerator.generateAllIcons(self, progress_callback)
 
     def sassCompilationProgress(self, n):
         pass
         # self.ui.activityProgress.setValue(n)
-
-    def restart(self):
-        try:
-            # Restart
-            # os.execl(sys.executable, str(os.path.abspath(__main__.__file__)), *sys.argv)
-
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Information)
-
-            msg.setText("Your app theme has been successfuly generated. Please restart your app to fully apply your new theme")
-            msg.setInformativeText("Show more details...")
-            msg.setWindowTitle("Finished generating app theme!")
-            msg.setDetailedText("The app needs to be restarted in order to apply the new Icons")
-            msg.setStandardButtons(QMessageBox.Ok)
-
-            retval = msg.exec_()
-
-        except Exception as e:
-            raise Exception("Failed to restart the app, please close and open the app again.")
         
     def readJsonFile(self, file_path):
         with open(file_path, 'r') as file:
             data = json.load(file)
         return data
 
-    def apply_icons_to_buttons(self):
+    def applyIconsToButtons(self, folder):    
         jsonFile = os.path.abspath(os.path.join(os.getcwd(), "QSS/Theme/resources.json"))
+        prefix_to_remove = re.compile(r'^QSS/[^/]+/')
+        
         if os.path.isfile(jsonFile):
-            button_data = self.readJsonFile(jsonFile)
-            for button_info in button_data:
-                btn_name = button_info["name"]
-                icon_url = button_info["icon"]
+            widget_data = self.readJsonFile(jsonFile)
 
-                if icon_url != "default_icon_url":
-                    if hasattr(self.ui, str(btn_name)):
-                        button = getattr(self.ui, str(btn_name))
+            for widget_info in widget_data.get("buttons", []):
+                widget_name = widget_info.get("name", "")
+                icon_url = widget_info.get("icon", "").replace("Icons", folder)
+
+                if icon_url != "default_icon_url" and hasattr(self.ui, str(widget_name)):
+                    widget = getattr(self.ui, str(widget_name))
+
+                    if isinstance(widget, QPushButtonThemed):
                         # Apply the icon to the button
-                        icon = QIcon(icon_url)
-                        button.setIcon(icon)
+                        if widget.iconUrl is not None:
+                            if re.sub(prefix_to_remove, '', widget.iconUrl) == re.sub(prefix_to_remove, '', icon_url):
+                                widget.setNewIcon(icon_url)
+                            else:
+                                # Button icon was updated, reapply the same button from the theme folder
+                                new_url = re.sub(prefix_to_remove, 'QSS/'+folder+'/', widget.iconUrl)
+                                widget.setNewIcon(new_url)
+                        else:
+                            widget.setNewIcon(icon_url)
+
+            for widget_info in widget_data.get("labels", []):
+                widget_name = widget_info.get("name", "")
+                pixmap_url = widget_info.get("pixmap", "").replace("Icons", folder)
+
+                if pixmap_url != "default_pixmap_url" and hasattr(self.ui, str(widget_name)):
+                    widget = getattr(self.ui, str(widget_name))
+
+                    if isinstance(widget, QLabelThemed):
+                        # Apply the pixmap to the label
+                        if widget.piximapUrl is not None:
+                            if re.sub(prefix_to_remove, '', widget.piximapUrl) == re.sub(prefix_to_remove, '', icon_url):
+                                widget.setNewPixmap(pixmap_url)
+                            else:
+                                # Button icon was updated, reapply the same button from the theme folder
+                                new_url = re.sub(prefix_to_remove, 'QSS/'+folder+'/', widget.piximapUrl)
+                                widget.setNewPixmap(new_url)
+                        else:
+                            widget.setNewPixmap(pixmap_url)
+
+
+
+    def stopWorkers(self):
+        if self.iconsWorker is not None:
+            self.iconsWorker.stop()
+
+        if self.allIconsWorker is not None:
+            self.allIconsWorker.stop()
 
     #######################################################################
 
@@ -201,7 +239,9 @@ def mouseReleaseEvent(self, QMouseEvent):
     cursor = QtGui.QCursor()
     # self.ui.frame.setGeometry(QRect(cursor.pos().x(), cursor.pos().y(), 151, 111))
 
-
+def replace_url_prefix(url, new_prefix):
+    pattern = re.compile(r':/[^/]+/')
+    return pattern.sub( new_prefix + '/', url, 1)
 
 ########################################################################
 ## Read JSon stylesheet
@@ -861,11 +901,11 @@ def applyJsonStyle(self, ui, data):
                                     if "icons" in toggleButton:
                                         for icons in toggleButton["icons"]:
                                             if "whenMenuIsCollapsed" in icons and len(str(icons["whenMenuIsCollapsed"])) > 0:
-                                                menuCollapsedIcon = str(icons["whenMenuIsCollapsed"])
+                                                menuCollapsedIcon = replace_url_prefix(str(icons["whenMenuIsCollapsed"]), "QSS")
 
 
                                             if "whenMenuIsExpanded" in icons and len(str(icons["whenMenuIsExpanded"])) > 0:
-                                                menuExpandedIcon = str(icons["whenMenuIsExpanded"])
+                                                menuExpandedIcon = replace_url_prefix(str(icons["whenMenuIsExpanded"]), "QSS")
 
 
 
@@ -998,12 +1038,12 @@ def applyJsonStyle(self, ui, data):
                                     getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: self.restore_or_maximize_window())
                                     self.restoreBtn = getattr(self.ui, str(restore["buttonName"]))
                             if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0:
-                                self.normalIcon = str(restore["normalIcon"])
+                                self.normalIcon = replace_url_prefix(str(restore["normalIcon"]), "QSS")
                             else:
                                 self.normalIcon = ""
 
                             if "maximizedIcon" in restore and len(str(restore["maximizedIcon"])) > 0:
-                                self.maximizedIcon = str(restore["maximizedIcon"])
+                                self.maximizedIcon = replace_url_prefix(str(restore["maximizedIcon"]), "QSS")
                             else:
                                 self.maximizedIcon = ""
 

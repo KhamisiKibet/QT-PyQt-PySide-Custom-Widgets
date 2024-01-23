@@ -22,25 +22,35 @@ class FileMonitor(QObject):
         self.fileSystemWatcher.fileChanged.connect(self.on_file_change)
 
         self.button_info = []
+        self.label_info = []
 
     def on_file_change(self, path):
         print(f"File {path} has been changed!")
-        tag = "widget"  # Replace with the actual tag name in your UI file
-        attribute = "class"
-        old_value = "QPushButton"
-        new_value = "QPushButtonThemed"
+        
+        replacements_list = [
+            ("widget", "class", "QPushButton", "QPushButtonThemed"),
+            ("widget", "class", "QLabel", "QLabelThemed"),
+            
+        ]
 
-        root = replace_attribute_value(path, tag, attribute, old_value, new_value)
+        root = replace_attributes_values(path, replacements_list)
 
         self.update_json(root)
 
     def update_json(self, root):
-        tag = "widget"
-        attribute = "class"
-        value = "QPushButtonThemed"
+        button_tag = "widget"
+        button_attribute = "class"
+        button_value = "QPushButtonThemed"
 
-        # Find all elements with the specified tag and class
-        buttons = root.findall(".//{}[@class='{}']".format(tag, value))
+        label_tag = "widget"
+        label_attribute = "class"
+        label_value = "QLabelThemed"
+
+        # Find all QPushButton elements with the specified tag and class
+        buttons = root.findall(".//{}[@class='{}']".format(button_tag, button_value))
+
+        # Find all QLabel elements with the specified tag and class
+        labels = root.findall(".//{}[@class='{}']".format(label_tag, label_value))
 
         # Extract button names and icon URLs
         button_data = []
@@ -63,16 +73,41 @@ class FileMonitor(QObject):
 
             button_data.append({"name": button_name, "icon": icon_url})
 
-        # Remove entries for buttons that no longer exist
-        existing_button_names = {entry["name"] for entry in self.button_info}
-        # updated_button_info = [entry for entry in self.button_info if entry["name"] in existing_button_names]
+        # Extract label names and pixmap URLs
+        label_data = []
 
-        # Update the JSON data
+        for label in labels:
+            label_name = label.get("name")
+            pixmap_element = label.find(".//pixmap")
+
+            if pixmap_element is not None and 'resource' in pixmap_element.attrib:
+                # Extract the QRC file path from the 'resource' attribute
+                qrc_file_path = pixmap_element.attrib['resource']
+                # Extract the folder name containing the QRC file
+                qrc_folder = os.path.dirname(qrc_file_path)
+                # Combine with the relative path within the <pixmap> tag
+                relative_path = pixmap_element.text
+                pixmap_url = self.replace_url_prefix(relative_path, qrc_folder)
+            else:
+                # Handle the case where pixmap_element is None
+                pixmap_url = "default_pixmap_url"  # Set a default value or handle it as needed
+
+            label_data.append({"name": label_name, "pixmap": pixmap_url})
+
+        # Remove entries for buttons and labels that no longer exist
+        existing_button_names = {entry["name"] for entry in self.button_info}
+        existing_label_names = {entry["name"] for entry in self.label_info}
+        
+        # Update the JSON data for buttons
         self.button_info = button_data
+
+        # Update the JSON data for labels
+        self.label_info = label_data
 
         # Save the JSON data back to the file
         with open(self.json_file, "w") as json_file:
-            json.dump(self.button_info, json_file, indent=2)
+            json.dump({"buttons": self.button_info, "labels": self.label_info}, json_file, indent=2)
+
 
     def replace_url_prefix(self, url, new_prefix):
         pattern = re.compile(r':/[^/]+/')
@@ -101,18 +136,25 @@ def start_file_listener(file_to_monitor, qt_binding = "PySide6"):
     file_monitor = FileMonitor(file_to_monitor)
     sys.exit(app.exec_())  # Start the application event loop
 
-def replace_attribute_value(ui_file_path, tag, attribute, old_value, new_value):
+def replace_attributes_values(ui_file_path, replacements):
     # Parse the XML file
     tree = ET.parse(ui_file_path)
     root = tree.getroot()
 
-    # Find all elements with the specified tag
-    elements = root.findall(".//{}".format(tag))
+    # Find and remove the <resources> element
+    resources_elements = root.findall(".//resources")
+    for resources_element in resources_elements:
+        root.remove(resources_element)
 
-    # Replace the attribute value for each matching element
-    for element in elements:
-        if attribute in element.attrib and element.attrib[attribute] == old_value:
-            element.attrib[attribute] = new_value
+    # Iterate over the replacement specifications
+    for tag, attribute, old_value, new_value in replacements:
+        # Find all elements with the specified tag
+        elements = root.findall(".//{}".format(tag))
+
+        # Replace the attribute value for each matching element
+        for element in elements:
+            if attribute in element.attrib and element.attrib[attribute] == old_value:
+                element.attrib[attribute] = new_value
 
     # Create a new file name
     base_name, extension = os.path.splitext(os.path.basename(ui_file_path))
@@ -122,14 +164,20 @@ def replace_attribute_value(ui_file_path, tag, attribute, old_value, new_value):
     # Save the modified XML to the new file
     tree.write(new_file_path, encoding="utf-8", xml_declaration=True)
 
-    # Append a custom widget
-    append_custom_widget(new_file_path, "QPushButtonThemed", "QPushButton", "Custom_Widgets.Theme.h", 1)
+    # Append custom widgets
+    widget_list = [
+        ("QPushButtonThemed", "QPushButton", "Custom_Widgets.Theme.h", 1),
+        ("QLabelThemed", "QLabel", "Custom_Widgets.Theme.h", 1)
+    ]
+    append_custom_widgets(new_file_path, widget_list)
+
     ui_output_py_path = os.path.join(os.getcwd(), "ui_"+base_name.replace(".ui", "")+".py")
     NewIconsGenerator.uiToPy(new_file_path, ui_output_py_path)
 
     return root  # Return the root element after modification
 
-def append_custom_widget(ui_file_path, widget_class, widget_extends, widget_header, widget_container):
+
+def append_custom_widgets(ui_file_path, widget_list):
     # Parse the existing XML file
     tree = ET.parse(ui_file_path)
     root = tree.getroot()
@@ -140,33 +188,59 @@ def append_custom_widget(ui_file_path, widget_class, widget_extends, widget_head
         customwidgets_section = ET.Element("customwidgets")
         root.append(customwidgets_section)
 
-    # Check if a customwidget with the specified class already exists
-    existing_customwidgets = customwidgets_section.findall(".//customwidget[class='{}']".format(widget_class))
-    if existing_customwidgets:
-        # Custom widget with the specified class already exists, skip
-        return
+    for widget_spec in widget_list:
+        widget_class, widget_extends, widget_header, widget_container = widget_spec
 
-    # Create a new customwidget element
-    customwidget = ET.Element("customwidget")
+        # Check if a customwidget with the specified class already exists
+        existing_customwidgets = customwidgets_section.findall(".//customwidget[class='{}']".format(widget_class))
+        if existing_customwidgets:
+            # Custom widget with the specified class already exists, skip
+            continue
 
-    # Add class, extends, header, and container elements to the customwidget
-    class_element = ET.SubElement(customwidget, "class")
-    class_element.text = widget_class
+        # Create a new customwidget element
+        customwidget = ET.Element("customwidget")
 
-    extends_element = ET.SubElement(customwidget, "extends")
-    extends_element.text = widget_extends
+        # Add class, extends, header, and container elements to the customwidget
+        class_element = ET.SubElement(customwidget, "class")
+        class_element.text = widget_class
 
-    header_element = ET.SubElement(customwidget, "header", location="global")
-    header_element.text = widget_header
+        extends_element = ET.SubElement(customwidget, "extends")
+        extends_element.text = widget_extends
 
-    container_element = ET.SubElement(customwidget, "container")
-    container_element.text = str(widget_container)
+        header_element = ET.SubElement(customwidget, "header", location="global")
+        header_element.text = widget_header
 
-    # Append the new customwidget to the customwidgets section
-    customwidgets_section.append(customwidget)
+        container_element = ET.SubElement(customwidget, "container")
+        container_element.text = str(widget_container)
+
+        # Append the new customwidget to the customwidgets section
+        customwidgets_section.append(customwidget)
 
     # Save the modified XML back to the file
     tree.write(ui_file_path, encoding="utf-8", xml_declaration=True)
+
+
+def remove_resources_tag(ui_file_path):
+    # Parse the XML file
+    tree = ET.parse(ui_file_path)
+    root = tree.getroot()
+
+    # Find and remove the <resources> element
+    resources_elements = root.findall(".//resources")
+    for resources_element in resources_elements:
+        parent = resources_element.getparent()
+        parent.remove(resources_element)
+
+    # Create a new file name
+    base_name, extension = os.path.splitext(os.path.basename(ui_file_path))
+    new_file_name = "QSS/Theme/new_{}{}".format(base_name, extension)
+    new_file_path = os.path.join(os.path.dirname(ui_file_path), new_file_name)
+
+    # Save the modified XML to the new file
+    tree.write(new_file_path, encoding="utf-8", xml_declaration=True)
+
+    return root  # Return the root element after modification
+
 
 
 
