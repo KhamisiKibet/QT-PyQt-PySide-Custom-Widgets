@@ -23,6 +23,29 @@ Progress indicator example:
 ![Custom Progress bar](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true)
 
 # What is new?
+## Version 0.6.9:
+Quick `CMD/Terminal` commands:
+- To launch `ProjectMaker / project wizard`, run
+```cmd
+Custom_Widgets --create-project
+```
+This will create a `Qt-python` project inside your empty folder, ready to run.
+- Easy to convert UI files to py. The cutom widgets `Theme Engine` eliminated the need for `QRC` to `python` file conversion, therefore to generate `UI-Python` files without any errors, use
+```cmd
+Custom_Widgets --monitor-ui ui-path --qt-library your-lib
+```
+Where: `ui-path` is the UI file pathe or folder containing UI files.
+`your-lib` is `PySide6`, `PySide2`, `PyQt5` or `PyQt6`
+- Monitor changes made to UI file and generate new .py file and other necessary files for the custom widgets
+```cmd
+Custom_Widgets --monitor-ui ui-path --qt-library your-lib
+```
+
+Also now you can change the app theme and apply new icons without restarting the app. The custom widgets modulecomes with itw own icon sets:
+- Feather
+- FontAwesome
+- and Google material design icons.
+
 ## Version 0.6.2:
 - Added support for loading multiple ``JSON Stylesheets``
     By default, the json file named ``style.json`` will be loaded, so no need to specify. The file must me inside the root directory of your project, ``json`` directory, or ``jsonstyles`` directory inside your project folder for it to be automatically loaded.
