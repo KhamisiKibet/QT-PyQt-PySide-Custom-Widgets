@@ -331,7 +331,7 @@ def start_ui_conversion(file_or_folder, qt_binding="PySide6"):
         print("Invalid path. Please provide a valid .ui file or folder.")
         return
     
-    file_folder = os.path.join(os.getcwd(), "generated-files")
+    file_folder = os.path.join(os.getcwd(), "src")
     if not os.path.exists(file_folder):
         os.makedirs(file_folder)
     file_folder = os.path.join(os.getcwd(), "generated-files/ui")

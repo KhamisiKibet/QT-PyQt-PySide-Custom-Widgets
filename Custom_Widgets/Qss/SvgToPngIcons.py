@@ -147,7 +147,7 @@ class NewIconsGenerator(QObject):
         with open(filePath, 'w', encoding='utf-8') as qrc_file:
             qrc_file.write(contents)
 
-        print(f'QRC file generated: {filePath}')
+        # print(f'QRC file generated: {filePath}')
     
     def qrcToPy(qrcFile, pyFile):
         """

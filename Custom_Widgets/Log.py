@@ -2,7 +2,7 @@ import logging
 import os
 
 def setupLogger():
-    logFilePath = os.path.join(os.getcwd(), "custom_widgets.log")
+    logFilePath = os.path.join(os.getcwd(), "logs/custom_widgets.log")
     # Ensure the log directory exists
     logDirectory = os.path.dirname(logFilePath)
     if logDirectory != "" and not os.path.exists(logDirectory):

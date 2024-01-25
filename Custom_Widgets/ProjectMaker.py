@@ -84,30 +84,21 @@ def create_project():
 
     print(f"Current Folder: {currentDir}")
 
-    # Check if the folder is empty
-    if any(os.scandir(currentDir)):
+    # Check if any file or folder other than the logs folder exists
+    if any(entry.is_file() or (entry.is_dir() and entry.name != "logs") for entry in os.scandir()):
+        print(os.scandir(currentDir))
         print(colored(textwrap.dedent("""
         ## EXITING BECAUSE THE FOLDER IS NOT EMPTY
         Please select an empty folder"""), "red"))
 
         exit()
-
-    print(textwrap.dedent("Creating resources and folder..."))
-
-    qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'QSS'))
-    if not os.path.exists(qcss_folder):
-        os.makedirs(qcss_folder)
-
-    # Check resource file
-    # qrc_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/QSS_Resources.qrc'))
-    # if not os.path.exists(qrc_path):   
-    #     shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'Qss/QSS_Resources.qrc')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))
-    
     
     # Check ui file
-    ui_path = os.path.abspath(os.path.join(os.getcwd(), 'interface.ui'))
+    ui_path = os.path.abspath(os.path.join(os.getcwd(), 'ui/interface.ui'))
+    if not os.path.exists(os.path.abspath(os.path.join(os.getcwd(), 'ui'))):
+        os.mkdir(os.path.abspath(os.path.join(os.getcwd(), 'ui')))
     if not os.path.exists(ui_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/uis/interface.ui')), os.getcwd())  
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/uis/interface.ui')), os.path.join(os.getcwd(),"ui"))  
 
     # App Qt binding/API Name
     print(textwrap.dedent("""
@@ -138,17 +129,12 @@ def create_project():
     if not os.path.exists(main_py):   
         shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/main.py')), os.getcwd())  
 
-    # # Check ui(py) file
-    ui_output_py_path = os.path.abspath(os.path.join(os.getcwd(), 'ui_interface.py'))
-    # if not os.path.exists(ui_output_py_path):   
-    #     shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/python/ui_interface.py')), os.getcwd())  
-
-    print(textwrap.dedent("Creating the icons (png) files"))
+    
 
     print(textwrap.dedent("""
-    #PLEASE ENTER YOUR ICONS COLOR BELOW:
-    You can pass the color HEX value such as #ffffff
-    or the color string value like white
+    # PLEASE ENTER YOUR ICONS COLOR BELOW:
+    You can input the color HEX value (e.g., #ffffff)
+    or the color string value (e.g., white).
     """))
 
     while True:
@@ -168,34 +154,77 @@ def create_project():
 
     # Create colors
     normal_color = color_to_hex(iconsColor)
-    focused_color = lighten_color(normal_color)
-    disabled_color = darken_color(normal_color, .5)
 
-    iconsFolderName = normal_color.replace("#", "")
+    
 
-    print(textwrap.dedent(f"\nGenerating normal icons for color: {iconsColor}"))
-    NewIconsGenerator.generateIcons(progress_callback, normal_color, "", "Icons", createQrc = True)
-    # print(textwrap.dedent(f"\nGenerating fucused icons for color: {iconsColor}"))
-    # NewIconsGenerator.generateIcons(progress_callback, focused_color, "_focus", iconsFolderName)
-    # print(textwrap.dedent(f"\nGenerating disabled icons for color: {iconsColor}"))
-    # NewIconsGenerator.generateIcons(progress_callback, disabled_color, "_disabled", iconsFolderName)
+    print(textwrap.dedent(f"""
+    # NOW ENTER ICONS COLOR FOR QT DESIGNER APP:
+    NOTE: This is for design purposes only. If your Qt Designer app 
+    has a dark theme, enter a light icons color (e.g., "white").
+    If Qt Designer has a light theme, enter a dark icons color (e.g., "black").
+    Default value will be set to {iconsColor}.
+    """))
 
-    # Move icons
-    # print(textwrap.dedent("\nMoving icons to Icons folder") )
-    # destinationFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/Icons'))
-    # sourceFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+iconsFolderName))
-    # NewIconsGenerator.moveIcons(sourceFolder, destinationFolder)
+    while True:
+        qtIconsColor = input(textwrap.dedent("Enter icons color: "))
+        if qtIconsColor.isspace() or qtIconsColor == "":
+            qtIconsColor = iconsColor
+            break
+        if not QColor().isValidColor(qtIconsColor):
+            print(colored(textwrap.dedent(qtIconsColor+ " is not a valid color"), "red"))
+            continue
+        if query_yes_no(colored(textwrap.dedent("Your icons color is " + str(qtIconsColor) + ". Save the color and continue?"), "blue")):
+            break
+    
+    qt_normal_color = color_to_hex(qtIconsColor)
+    
 
-    print(textwrap.dedent("Icons have been created"))
+    print(textwrap.dedent(f"""
+    # THIS IS FOR YOUR APP THEME:
+    NOTE: Background color, text color, and accent color will be used to create your app stylesheet.
+    """))
 
-    # print(textwrap.dedent("\nCreating the resources (py) file"))
-    # # Check resource file
-    # qrcFile, pyDest = NewIconsGenerator.checkQrc()
-    # # Convert qrc to py 
-    # NewIconsGenerator.qrcToPy(qrcFile, pyDest)
+    while True:
+        bgColor = input(textwrap.dedent("Enter app background color: "))
+        if bgColor.isspace() or bgColor == "":
+            print(colored(textwrap.dedent("Background color can not be empty"), "red"))
+            continue
+        if not QColor().isValidColor(bgColor):
+            print(colored(textwrap.dedent(bgColor+ " is not a valid color"), "red"))
+            continue
+        if query_yes_no(colored(textwrap.dedent("Your app background color is " + str(bgColor) + ". Save the color and continue?"), "blue")):
+            break
+
+    bgColor = color_to_hex(bgColor)
+
+    while True:
+        txtColor = input(textwrap.dedent("Enter app text color: "))
+        if txtColor.isspace() or txtColor == "":
+            print(colored(textwrap.dedent("Text color can not be empty"), "red"))
+            continue
+        if not QColor().isValidColor(txtColor):
+            print(colored(textwrap.dedent(txtColor+ " is not a valid color"), "red"))
+            continue
+        if query_yes_no(colored(textwrap.dedent("Your app text color is " + str(txtColor) + ". Save the color and continue?"), "blue")):
+            break
+
+    txtColor = color_to_hex(txtColor)
+
+    while True:
+        accColor = input(textwrap.dedent("Enter app accent color: "))
+        if accColor.isspace() or accColor == "":
+            print(colored(textwrap.dedent("Accent color can not be empty"), "red"))
+            continue
+        if not QColor().isValidColor(accColor):
+            print(colored(textwrap.dedent(accColor+ " is not a valid color"), "red"))
+            continue
+        if query_yes_no(colored(textwrap.dedent("Your app accent color is " + str(accColor) + ". Save the color and continue?"), "blue")):
+            break
+
+    accColor = color_to_hex(accColor)
 
     # Generate py from ui
-    NewIconsGenerator.uiToPy(ui_path, ui_output_py_path)
+    call(["Custom_Widgets", "--convert-ui", "ui", "--qt-library", appQtBinding])
 
     print(textwrap.dedent("\nCreating the JSON stylesheet file"))
 
@@ -214,11 +243,11 @@ def create_project():
 
     print(textwrap.dedent("""
     THE FOLLOWING VALUES WILL BE USED TO SAVE YOUR APP CONFIGURATIONS SUCH AS
-    APP THEME USING THE QSETTINGS CLASS
+    APP THEME USING THE QSETTINGS CLASS:
 
-    The required value are application name, organisation name and domain name.
-    If left empty, your app name will be used, you can change this later
-    from the JSON stylesheet file inside your project
+    The required values are application name, organization name, and domain name.
+    If left empty, your app name will be used. You can change this later
+    from the JSON stylesheet file inside your project.
     """))
 
     while True:
@@ -241,11 +270,13 @@ def create_project():
             break
 
 
-    # Check json file
-    json_path = os.path.abspath(os.path.join(os.getcwd(), 'style.json'))
+    # Check json file 
+    json_path = os.path.abspath(os.path.join(os.getcwd(), 'json-styles/style.json'))
+    if not os.path.exists(os.path.abspath(os.path.join(os.getcwd(), 'json-styles'))):
+        os.mkdir(os.path.abspath(os.path.join(os.getcwd(), 'json-styles')))
     if not os.path.exists(json_path):   
-        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/json/style.json')), os.getcwd())  
-
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/json/style.json')), os.path.join(os.getcwd(), 'json-styles')) 
+      
     with open(json_path, 'r+') as f:
         data = json.load(f)
         # print(data)
@@ -260,21 +291,34 @@ def create_project():
         ########################################################################
         if "QSettings" in data:
             for settings in data["QSettings"]:
-                if "AppSettings" in settings:
-                    appSettings = settings['AppSettings']
+                appSettings = settings['AppSettings']
+                appSettings["OrginizationName"] = str(appName)
+                appSettings["ApplicationName"] = str(organizationName)
+                appSettings["OrginizationDormain"] = str(domainName)
+                
+                themeSettings = settings['ThemeSettings']
+                for theme_setting in themeSettings:
+                    customThemes = theme_setting['CustomTheme']
+                    for customTheme in customThemes:
+                        customTheme["Background-color"] = str(bgColor)
+                        customTheme["Text-color"] = str(txtColor)
+                        customTheme["Accent-color"] = str(accColor)
+                        customTheme["Icons-color"] = str(normal_color)
 
-                    appSettings["OrginizationName"] = str(appName)
-                    
-                    appSettings["ApplicationName"] = str(organizationName)
-                        
-                    appSettings["OrginizationDormain"] = str(domainName)
 
         f.seek(0)  
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=2)
         f.truncate()
 
 
     print(textwrap.dedent("JSON stylesheet file created"))
+
+    print(textwrap.dedent("Creating the icons (png) files"))
+    print(textwrap.dedent(f"\nGenerating icons for your app. Icons color: {iconsColor}"))
+    NewIconsGenerator.generateIcons(progress_callback, normal_color, "", normal_color.replace("#", ""))
+    print(textwrap.dedent(f"\nGenerating icons for Qt Designer app. Icons color: {qtIconsColor}"))
+    NewIconsGenerator.generateIcons(progress_callback, qt_normal_color, "", "Icons", createQrc = True)
+    print(textwrap.dedent("Icons have been created"))
 
     print(textwrap.dedent("""
 
@@ -293,16 +337,16 @@ def create_project():
     here on how to create awsome Qt Apps with python 
     https://www.youtube.com/spinnTv
 
-    4. Your default app icons are located inside the QSS/Icons folder.
+    4. Your default app icons are located inside the qss/Icons folder.
 
     [The following is important only if you decide to use the theme maker]
 
-    5. The default QSASS and QSS stylesheet are also inside the QSS folder.
+    5. The default QSASS and qss stylesheet are also inside the qss folder.
 
-    6. Put you own style (CSS or SCSS) inside the QSS/defaultStyle.scss file.
+    6. Put you own style (CSS or SCSS) inside the qss/defaultStyle.scss file.
     This style will override the default theme style. 
 
-    7. The QSS/_variables.scss contains your theme variables
+    7. The qss/_variables.scss contains your theme variables
 
     """))
 
@@ -313,9 +357,8 @@ def create_project():
         if not query_yes_no(colored(textwrap.dedent("Run the created project or exit the project wizard? Type yes to run the app or no to exit the wizard"), "blue")):
             break
         else:
-            # Convert qrc to py 
-            # NewIconsGenerator.qrcToPy(qrcFile, pyDest)
-            NewIconsGenerator.uiToPy(ui_path, ui_output_py_path)
+            # Generate py from ui
+            call(["Custom_Widgets", "--convert-ui", "ui", "--qt-library", appQtBinding])
 
             print(textwrap.dedent("""
             RUNNING YOUR PROJECT
