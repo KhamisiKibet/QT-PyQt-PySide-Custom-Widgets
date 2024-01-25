@@ -8,6 +8,8 @@
 ## IMPORTS
 ########################################################################
 import os
+import platform
+import chardet
 import __main__
 
 ########################################################################
@@ -202,17 +204,26 @@ def loadJsonStyle(self, ui, **jsonFiles):
     self.ui = ui
     if not jsonFiles:
         if os.path.isfile("style.json"):
-            file = open('style.json',)
+            with open("style.json", 'rb') as f:
+                result = chardet.detect(f.read())
+                file_encoding = result['encoding']
+            file = open('style.json', encoding=file_encoding)
             data = json.load(file)
             applyJsonStyle(self, self.ui, data)
 
         elif os.path.isfile("json/style.json"):
-            file = open('json/style.json',)
+            with open("json/style.json", 'rb') as f:
+                result = chardet.detect(f.read())
+                file_encoding = result['encoding']
+            file = open('json/style.json', encoding=file_encoding)
             data = json.load(file)
             applyJsonStyle(self, self.ui, data)
 
         elif os.path.isfile("jsonstyles/style.json"):
-            file = open('jsonstyles/style.json',)
+            with open("jsonstyles/style.json", 'rb') as f:
+                result = chardet.detect(f.read())
+                file_encoding = result['encoding']
+            file = open('jsonstyles/style.json', encoding=file_encoding)
             data = json.load(file)
             applyJsonStyle(self, self.ui, data)
 
@@ -220,7 +231,10 @@ def loadJsonStyle(self, ui, **jsonFiles):
         for file in jsonFiles['jsonFiles']:
             if os.path.isfile(file):
                 jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
-                jsonFile = open(jsonFile,)
+                with open(jsonFile, 'rb') as f:
+                    result = chardet.detect(f.read())
+                    file_encoding = result['encoding']
+                jsonFile = open(jsonFile,encoding=file_encoding)
                 # Read file
                 data = json.load(jsonFile)
                 ########################################################################
