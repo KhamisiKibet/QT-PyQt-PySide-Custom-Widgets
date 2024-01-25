@@ -9,17 +9,14 @@ import os
 import sys
 ########################################################################
 # IMPORT GUI FILE
-from ui_interface import *
+from src.ui_interface import *
 ########################################################################
 
 ########################################################################
 # IMPORT Custom widgets
 from Custom_Widgets import *
-# INITIALIZE APP SETTINGS
-settings = QSettings()
+from Custom_Widgets.QAppSettings import QAppSettings
 ########################################################################
-
-
 
 ########################################################################
 ## MAIN WINDOW CLASS
@@ -36,12 +33,12 @@ class MainWindow(QMainWindow):
         # self = QMainWindow class
         # self.ui = Ui_MainWindow / user interface class
         #Use this if you only have one json file named "style.json" inside the root directory, "json" directory or "jsonstyles" folder.
-        loadJsonStyle(self, self.ui) 
+        # loadJsonStyle(self, self.ui) 
 
         # Use this to specify your json file(s) path/name
-        # loadJsonStyle(self, self.ui, jsonFiles = {
-        #     "mystyle.json", "style.json"
-        #     }) 
+        loadJsonStyle(self, self.ui, jsonFiles = {
+            "json-styles/style.json"
+            }) 
 
         ########################################################################
 
@@ -50,10 +47,14 @@ class MainWindow(QMainWindow):
         #######################################################################
         self.show() 
 
-
-
-
-
+        ########################################################################
+        # UPDATE APP SETTINGS LOADED FROM JSON STYLESHEET 
+        # ITS IMPORTANT TO RUN THIS AFTER SHOWING THE WINDOW
+        # THIS PROCESS WILL RUN ON A SEPARATE THREAD WHEN GENERATING NEW ICONS
+        # TO PREVENT THE WINDOW FROM BEING UNRESPONSIVE
+        ########################################################################
+        # self = QMainWindow class
+        QAppSettings.updateAppSettings(self)
 
 ########################################################################
 ## EXECUTE APP

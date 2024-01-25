@@ -1,7 +1,7 @@
 import sys
 import os
 import json
-from qtpy.QtCore import *
+from qtpy.QtCore import QObject, QFileSystemWatcher
 from qtpy.QtWidgets import QApplication
 from termcolor import colored
 import xml.etree.ElementTree as ET
@@ -10,131 +10,180 @@ import re
 from . Qss.SvgToPngIcons import *
 
 class FileMonitor(QObject):
-    def __init__(self, file_to_monitor):
+    def __init__(self, files_to_monitor):
         super().__init__()
-        theme_folder = os.path.join(os.getcwd(), "QSS/Theme")
-        if not os.path.exists(theme_folder):
-            os.makedirs(theme_folder)
+        file_folder = os.path.join(os.getcwd(), "generated-files")
+        if not os.path.exists(file_folder):
+            os.makedirs(file_folder)
+        file_folder = os.path.join(os.getcwd(), "generated-files/ui")
+        if not os.path.exists(file_folder):
+            os.makedirs(file_folder)
+        file_folder = os.path.join(os.getcwd(), "generated-files/json")
+        if not os.path.exists(file_folder):
+            os.makedirs(file_folder)
 
-        self.file_to_monitor = file_to_monitor
-        self.json_file = "QSS/Theme/resources.json"
-        self.fileSystemWatcher = QFileSystemWatcher([self.file_to_monitor])
-        self.fileSystemWatcher.fileChanged.connect(self.on_file_change)
+        self.files_to_monitor = files_to_monitor
+
+        # Create a QFileSystemWatcher for each file
+        self.fileSystemWatchers = [QFileSystemWatcher([file]) for file in self.files_to_monitor]
+
+        # Connect the fileChanged signal for each watcher
+        for watcher in self.fileSystemWatchers:
+            watcher.fileChanged.connect(self.on_file_change)
 
         self.button_info = []
         self.label_info = []
 
     def on_file_change(self, path):
         print(f"File {path} has been changed!")
-        
-        replacements_list = [
-            ("widget", "class", "QPushButton", "QPushButtonThemed"),
-            ("widget", "class", "QLabel", "QLabelThemed"),
-            
-        ]
+        # Find the index of the changed file
+        index = -1
+        for i, watcher in enumerate(self.fileSystemWatchers):
+            if path in watcher.files():
+                index = i
+                break
 
-        root = replace_attributes_values(path, replacements_list)
+        if index != -1:
+            convert_file(path)
+    
+def convert_file(path):
+    # Get the root element for the updated file
+    replacements_list = [
+        ("widget", "class", "QPushButton", "QPushButtonThemed"),
+        ("widget", "class", "QLabel", "QLabelThemed"),
+    ]
+    root = replace_attributes_values(path, replacements_list)
 
-        self.update_json(root)
+    # Generate JSON file name from UI name
+    base_name, _ = os.path.splitext(os.path.basename(path))
+    json_file_name = f"{base_name}.json"
 
-    def update_json(self, root):
-        button_tag = "widget"
-        button_attribute = "class"
-        button_value = "QPushButtonThemed"
+    # Update JSON data for the specific file
+    update_json(root, json_file_name)
 
-        label_tag = "widget"
-        label_attribute = "class"
-        label_value = "QLabelThemed"
+def update_json(root, json_file_name):
+    button_tag = "widget"
+    button_value = "QPushButtonThemed"
 
-        # Find all QPushButton elements with the specified tag and class
-        buttons = root.findall(".//{}[@class='{}']".format(button_tag, button_value))
+    label_tag = "widget"
+    label_value = "QLabelThemed"
 
-        # Find all QLabel elements with the specified tag and class
-        labels = root.findall(".//{}[@class='{}']".format(label_tag, label_value))
+    # Find all QPushButton elements with the specified tag and class
+    buttons = root.findall(".//{}[@class='{}']".format(button_tag, button_value))
 
-        # Extract button names and icon URLs
-        button_data = []
+    # Find all QLabel elements with the specified tag and class
+    labels = root.findall(".//{}[@class='{}']".format(label_tag, label_value))
 
-        for button in buttons:
-            button_name = button.get("name")
-            iconset_element = button.find(".//iconset")
+    # Extract button names and icon URLs
+    button_data = []
 
-            if iconset_element is not None and 'resource' in iconset_element.attrib:
-                # Extract the QRC file path from the 'resource' attribute
-                qrc_file_path = iconset_element.attrib['resource']
-                # Extract the folder name containing the QRC file
-                qrc_folder = os.path.dirname(qrc_file_path)
-                # Combine with the relative path within the <iconset> tag
-                relative_path = iconset_element.find("normaloff").text
-                icon_url = self.replace_url_prefix(relative_path, qrc_folder)
-            else:
-                # Handle the case where icon_element is None
-                icon_url = "default_icon_url"  # Set a default value or handle it as needed
+    for button in buttons:
+        button_name = button.get("name")
+        iconset_element = button.find(".//iconset")
 
-            button_data.append({"name": button_name, "icon": icon_url})
+        if iconset_element is not None and 'resource' in iconset_element.attrib:
+            # Extract the QRC file path from the 'resource' attribute
+            qrc_file_path = iconset_element.attrib['resource']
+            # Extract the folder name containing the QRC file
+            qrc_folder = os.path.dirname(qrc_file_path)
+            # Combine with the relative path within the <iconset> tag
+            relative_path = iconset_element.find("normaloff").text
+            icon_url = replace_url_prefix(relative_path, qrc_folder)
+        else:
+            # Handle the case where icon_element is None
+            icon_url = "default_icon_url"  # Set a default value or handle it as needed
 
-        # Extract label names and pixmap URLs
-        label_data = []
+        button_data.append({"name": button_name, "icon": icon_url})
 
-        for label in labels:
-            label_name = label.get("name")
-            pixmap_element = label.find(".//pixmap")
+    # Extract label names and pixmap URLs
+    label_data = []
 
-            if pixmap_element is not None and 'resource' in pixmap_element.attrib:
-                # Extract the QRC file path from the 'resource' attribute
-                qrc_file_path = pixmap_element.attrib['resource']
-                # Extract the folder name containing the QRC file
-                qrc_folder = os.path.dirname(qrc_file_path)
-                # Combine with the relative path within the <pixmap> tag
-                relative_path = pixmap_element.text
-                pixmap_url = self.replace_url_prefix(relative_path, qrc_folder)
-            else:
-                # Handle the case where pixmap_element is None
-                pixmap_url = "default_pixmap_url"  # Set a default value or handle it as needed
+    for label in labels:
+        label_name = label.get("name")
+        pixmap_element = label.find(".//pixmap")
 
-            label_data.append({"name": label_name, "pixmap": pixmap_url})
+        if pixmap_element is not None and 'resource' in pixmap_element.attrib:
+            # Extract the QRC file path from the 'resource' attribute
+            qrc_file_path = pixmap_element.attrib['resource']
+            # Extract the folder name containing the QRC file
+            qrc_folder = os.path.dirname(qrc_file_path)
+            # Combine with the relative path within the <pixmap> tag
+            relative_path = pixmap_element.text
+            pixmap_url = replace_url_prefix(relative_path, qrc_folder)
+        else:
+            # Handle the case where pixmap_element is None
+            pixmap_url = "default_pixmap_url"  # Set a default value or handle it as needed
 
-        # Remove entries for buttons and labels that no longer exist
-        existing_button_names = {entry["name"] for entry in self.button_info}
-        existing_label_names = {entry["name"] for entry in self.label_info}
-        
-        # Update the JSON data for buttons
-        self.button_info = button_data
+        label_data.append({"name": label_name, "pixmap": pixmap_url})
+    
+    # Update the JSON data for buttons
+    button_info = button_data
 
-        # Update the JSON data for labels
-        self.label_info = label_data
+    # Update the JSON data for labels
+    label_info = label_data
 
-        # Save the JSON data back to the file
-        with open(self.json_file, "w") as json_file:
-            json.dump({"buttons": self.button_info, "labels": self.label_info}, json_file, indent=2)
-
-
-    def replace_url_prefix(self, url, new_prefix):
-        pattern = re.compile(r':/[^/]+/')
-        return pattern.sub( new_prefix + '/', url, 1)
+    # Save the JSON data back to the file
+    json_path = os.path.join(os.getcwd(), "generated-files/json/"+json_file_name)
+    with open(json_path, "w") as json_file:
+        json.dump({"buttons": button_info, "labels": label_info}, json_file, indent=2)
 
 
-def start_file_listener(file_to_monitor, qt_binding = "PySide6"):
+def replace_url_prefix(url, new_prefix):
+    pattern = re.compile(r':/[^/]+/')
+    url = pattern.sub( new_prefix + '/', url, 1)
+    return re.sub(r'^\.\./', '', url)
+    
 
+
+def start_file_listener(file_or_folder, qt_binding="PySide6"):
     if qt_binding is None:
         qt_binding = "PySide6"
     if qt_binding not in ["PySide6", "PySide2", "PyQt6", "PyQt5"]:
         print(colored((str(qt_binding) + " is not a valid Qt binding/API Name"), "red"))
         return
-    
+
     qtpy.API_NAME = qt_binding
     os.environ['QT_API'] = qt_binding.lower()
-    
-    if not file_to_monitor.lower().endswith(".ui"):
-        raise ValueError("The file to monitor must be a .ui file.")
 
-    if not os.path.exists(file_to_monitor):
-        raise FileNotFoundError(f"The file {file_to_monitor} does not exist.")
+    files_to_monitor = []
 
-    app = QApplication(sys.argv)  # Create a QApplication instance
-    print(f"Monitoring file: {file_to_monitor}")
-    file_monitor = FileMonitor(file_to_monitor)
+    if os.path.isfile(file_or_folder):
+        # If the provided path is a file, check if it's a .ui file
+        if not file_or_folder.lower().endswith(".ui"):
+            raise ValueError("The file to monitor must be a .ui file.")
+        if not os.path.exists(file_or_folder):
+            raise FileNotFoundError(f"The file {file_or_folder} does not exist.")
+
+        files_to_monitor.append(file_or_folder)
+        print(f"Monitoring file: {file_or_folder}")
+
+    elif os.path.isdir(file_or_folder):
+        # If the provided path is a directory, get all .ui files in the folder
+        ui_files = [f for f in os.listdir(file_or_folder) if f.lower().endswith(".ui")]
+
+        if not ui_files:
+            print("No .ui files found in the specified folder.")
+            return
+
+        print(f"Monitoring files in folder: {file_or_folder}")
+        print(f".ui files found: {', '.join(ui_files)}")
+        for ui_file in ui_files:
+            file_path = os.path.join(file_or_folder, ui_file)
+            files_to_monitor.append(file_path)
+
+    else:
+        print("Invalid path. Please provide a valid .ui file or folder.")
+        return
+
+    # Create a QApplication instance
+    app = QApplication(sys.argv)
+
+    # Create a FileMonitor instance with the list of files to monitor
+    file_monitor = FileMonitor(files_to_monitor)
+
     sys.exit(app.exec_())  # Start the application event loop
+
+
 
 def replace_attributes_values(ui_file_path, replacements):
     # Parse the XML file
@@ -158,8 +207,8 @@ def replace_attributes_values(ui_file_path, replacements):
 
     # Create a new file name
     base_name, extension = os.path.splitext(os.path.basename(ui_file_path))
-    new_file_name = "QSS/Theme/new_{}{}".format(base_name, extension)
-    new_file_path = os.path.join(os.path.dirname(ui_file_path), new_file_name)
+    new_file_name = "new_{}{}".format(base_name, extension)
+    new_file_path = os.path.join(os.getcwd(), "generated-files/ui/"+new_file_name)
 
     # Save the modified XML to the new file
     tree.write(new_file_path, encoding="utf-8", xml_declaration=True)
@@ -171,7 +220,7 @@ def replace_attributes_values(ui_file_path, replacements):
     ]
     append_custom_widgets(new_file_path, widget_list)
 
-    ui_output_py_path = os.path.join(os.getcwd(), "ui_"+base_name.replace(".ui", "")+".py")
+    ui_output_py_path = os.path.join(os.getcwd(), "src/ui_"+base_name.replace(".ui", "")+".py")
     NewIconsGenerator.uiToPy(new_file_path, ui_output_py_path)
 
     return root  # Return the root element after modification
@@ -233,7 +282,7 @@ def remove_resources_tag(ui_file_path):
 
     # Create a new file name
     base_name, extension = os.path.splitext(os.path.basename(ui_file_path))
-    new_file_name = "QSS/Theme/new_{}{}".format(base_name, extension)
+    new_file_name = "generated-files/ui/new_{}{}".format(base_name, extension)
     new_file_path = os.path.join(os.path.dirname(ui_file_path), new_file_name)
 
     # Save the modified XML to the new file
@@ -242,18 +291,59 @@ def remove_resources_tag(ui_file_path):
     return root  # Return the root element after modification
 
 
+def start_ui_conversion(file_or_folder, qt_binding="PySide6"):
+    if qt_binding is None:
+        qt_binding = "PySide6"
+    if qt_binding not in ["PySide6", "PySide2", "PyQt6", "PyQt5"]:
+        print(colored((str(qt_binding) + " is not a valid Qt binding/API Name"), "red"))
+        return
+
+    qtpy.API_NAME = qt_binding
+    os.environ['QT_API'] = qt_binding.lower()
+
+    files_to_convert = []
+
+    if os.path.isfile(file_or_folder):
+        # If the provided path is a file, check if it's a .ui file
+        if not file_or_folder.lower().endswith(".ui"):
+            raise ValueError("The file to monitor must be a .ui file.")
+        if not os.path.exists(file_or_folder):
+            raise FileNotFoundError(f"The file {file_or_folder} does not exist.")
+
+        files_to_convert.append(file_or_folder)
+        print(f"Converting file: {file_or_folder}")
+
+    elif os.path.isdir(file_or_folder):
+        # If the provided path is a directory, get all .ui files in the folder
+        ui_files = [f for f in os.listdir(file_or_folder) if f.lower().endswith(".ui")]
+
+        if not ui_files:
+            print("No .ui files found in the specified folder.")
+            return
+
+        print(f"Converting files in folder: {file_or_folder}")
+        print(f".ui files found: {', '.join(ui_files)}")
+        for ui_file in ui_files:
+            file_path = os.path.join(file_or_folder, ui_file)
+            files_to_convert.append(file_path)
+
+    else:
+        print("Invalid path. Please provide a valid .ui file or folder.")
+        return
+    
+    file_folder = os.path.join(os.getcwd(), "generated-files")
+    if not os.path.exists(file_folder):
+        os.makedirs(file_folder)
+    file_folder = os.path.join(os.getcwd(), "generated-files/ui")
+    if not os.path.exists(file_folder):
+        os.makedirs(file_folder)
+    file_folder = os.path.join(os.getcwd(), "generated-files/json")
+    if not os.path.exists(file_folder):
+        os.makedirs(file_folder)
+    
+    [convert_file(file) for file in files_to_convert]
+
+    print("Done converting!")
 
 
-if __name__ == "__main__":
-    if len(sys.argv) != 3 or sys.argv[1] != "--monitor-ui":
-        print("Usage: Custom_Widgets --monitor-ui <file_to_monitor>")
-        sys.exit(1)
-
-    try:
-        start_file_listener(sys.argv[2])
-    except ValueError as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+    

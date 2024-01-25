@@ -1,24 +1,8 @@
 ########################################################################
-## 
-########################################################################
-
-########################################################################
 ## IMPORTS
 ########################################################################
 import sys
 ########################################################################
-
-########################################################################
-## IMPORT PYSIDE2 OR PYSIDE6
-########################################################################
-# if 'PySide2' in sys.modules:
-#     from PySide2.QtCore import *
-#     from PySide2.QtGui import *
-#     from PySide2.QtWidgets import *
-# if 'PySide6' in sys.modules:
-#     from PySide6.QtCore import *
-#     from PySide6.QtGui import *
-#     from PySide6.QtWidgets import *
 
 ########################################################################
 ## MODULE UPDATED TO USE QTPY
@@ -35,16 +19,13 @@ import qtsass
 import os
 import shutil
 
-from . colorsystem import CreateColorVariable,Dark,Light
-from . SvgToPngIcons import NewIconsGenerator
+from . colorsystem import CreateColorVariable
 ########################################################################
 ## IMPORT WORKER
 ########################################################################
 from .. WidgetsWorker import Worker, WorkerResponse
 
-settings = QSettings()
-
-
+from .. Log import *
 
 ########################################################################
 ## COMPILE STYLESHEET CLASS
@@ -53,34 +34,33 @@ class CompileStyleSheet():
     def __init__(self, parent=None):
         super(CompileStyleSheet, self).__init__(parent)      
 
-        # sass_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'main.scss'))
-        # css_path = os.path.abspath(os.path.join(os.path.dirname(__file__), 'main.css'))
-
-        
-
     ########################################################################
     ## APPLY COMPILED STYLESHEET
     ########################################################################
     def applyCompiledSass(self):
         settings = QSettings()
         
-        qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'QSS'))
+        qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss'))
         if not os.path.exists(qcss_folder):
             os.makedirs(qcss_folder)
+        
+        css_folder = os.path.abspath(os.path.join(os.getcwd(), 'generated-files/css/'))
+        if not os.path.exists(css_folder):
+            os.makedirs(css_folder)
 
-        main_sass_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/main.scss'))
-        styles_sass_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/_styles.scss'))
-        css_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/main.css'))
+        main_sass_path = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss/main.scss'))
+        styles_sass_path = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss/_styles.scss'))
+        css_path = os.path.abspath(os.path.join(os.getcwd(), 'generated-files/css/main.css'))
 
         variablesFile = CreateColorVariable.CreateVariables(self)
 
         if not os.path.exists(main_sass_path):   
-            shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'main.scss')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))  
+            shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'scss/main.scss')), qcss_folder)  
 
         if not os.path.exists(styles_sass_path):   
-            shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), '_styles.scss')), os.path.abspath(os.path.join(os.getcwd(), 'QSS')))  
+            shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'scss/_styles.scss')), qcss_folder)  
 
-        default_scss_path = os.path.abspath(os.path.join(os.getcwd(), 'QSS/defaultStyle.scss'))
+        default_scss_path = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss/defaultStyle.scss'))
         if not os.path.exists(default_scss_path):   
             f = open(default_scss_path, 'w')
             print(f"""
@@ -149,19 +129,17 @@ class CompileStyleSheet():
         color = CreateColorVariable.getCurrentThemeInfo(self)
         normal_color = str(color["icons-color"])
         icons_folder = normal_color.replace("#", "")
-        self.applyIconsToButtons(icons_folder)
+        self.applyIcons(icons_folder)
 
         self.iconsWorker = Worker(self.compileSassTheme)
         self.iconsWorker.signals.result.connect(WorkerResponse.print_output)
-        # self.iconsWorker.signals.finished.connect(self.restart)
-        self.iconsWorker.signals.finished.connect(lambda: self.applyIconsToButtons(icons_folder))
+        self.iconsWorker.signals.finished.connect(lambda: self.applyIcons(icons_folder))
         self.iconsWorker.signals.progress.connect(self.sassCompilationProgress)
 
         # ALL THEME ICONS
         self.allIconsWorker = Worker(self.makeAllIcons)
         self.allIconsWorker.signals.result.connect(WorkerResponse.print_output)
-        if self.showCustomWidgetsLogs:
-            self.allIconsWorker.signals.finished.connect(lambda: print("all icons have been checked and missing icons generated!"))
+        self.allIconsWorker.signals.finished.connect(lambda: logInfo(self, "all icons have been checked and missing icons generated!"))
         self.allIconsWorker.signals.progress.connect(self.sassCompilationProgress)
 
         

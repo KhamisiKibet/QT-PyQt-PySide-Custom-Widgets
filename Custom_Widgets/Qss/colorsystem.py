@@ -21,7 +21,6 @@ def adjust_lightness(color, amount=0.5):
     except KeyError:
         c = color
     c = colorsys.rgb_to_hls(*mc.to_rgb(c))
-    # print(c)
 
     if c[1] > 0:
         # adjusted_lightness = c[1] * amount
@@ -164,7 +163,7 @@ class Theme:
         self.CA_3 = adjust_lightness(accent_color, 0.8)
         self.CA_4 = adjust_lightness(accent_color, 0.7)
 
-        self.ICONS = "QSS/Icons/feather/"
+        self.ICONS = "Qss/Icons/feather/"
 
 class Dark(Theme):
     def __init__(self):
@@ -310,12 +309,13 @@ class CreateColorVariable():
             theme.CA_3 = adjust_lightness(theme.accent_color, .8)
             theme.CA_4 = adjust_lightness(theme.accent_color, .7)
 
-            # Add icons folder to search path
-            QDir.addSearchPath('theme-icons', os.path.join(os.getcwd(), 'QSS'))
             if theme.icons_color is not None and theme.icons_color != "":
                 folder = theme.icons_color.replace("#", "")
             else:
                 folder = theme.accent_color.replace("#", "")
+            
+            # Add icons folder to search path
+            QDir.addSearchPath('theme-icons', os.path.join(os.getcwd(), 'Qss/icons/'))
             theme.ICONS = "theme-icons:"+folder+"/feather/"
             
 
@@ -341,7 +341,7 @@ class CreateColorVariable():
         self.theme.PATH_RESOURCES = theme.ICONS
 
         # scss_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '_variables.scss'))
-        scss_folder = os.path.abspath(os.path.join(os.getcwd(), 'QSS'))
+        scss_folder = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss'))
         if not os.path.exists(scss_folder):
             os.makedirs(scss_folder)
 

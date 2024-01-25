@@ -21,39 +21,17 @@
 import os
 import math
 
-try:
-    ########################################################################
-    ## IMPORT PYSIDE2 OR PYSIDE6
-    ########################################################################
-    # if 'PySide2' in sys.modules:
-    #     from PySide2.QtWidgets import QMainWindow, QWidget, QApplication
+########################################################################
+## MODULE UPDATED TO USE QTPY
+########################################################################
+from qtpy.QtWidgets import QWidget
+from qtpy.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
+from qtpy.QtCore import Qt, QTimer, QPoint, QPointF, QRect, QSize, QObject, Signal
+from qtpy.QtCore import Signal
 
-    #     from PySide2.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
-
-    #     from PySide2.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject
-
-    #     from PySide2.QtCore import Signal
-    # elif 'PySide6' in sys.modules:
-    #     from PySide6.QtWidgets import QMainWindow, QWidget, QApplication
-
-    #     from PySide6.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
-
-    #     from PySide6.QtCore import Qt ,QTime, QTimer, QPoint, QPointF, QRect, QSize, QObject
-
-    #     from PySide6.QtCore import Signal
-
-    ########################################################################
-    ## MODULE UPDATED TO USE QTPY
-    ########################################################################
-    from qtpy.QtWidgets import QWidget
-    from qtpy.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, QRadialGradient, QFontDatabase
-    from qtpy.QtCore import Qt, QTimer, QPoint, QPointF, QRect, QSize, QObject, Signal
-    from qtpy.QtCore import Signal
+from Log import *
 
 
-except:
-    print("Error while importing PyQt6/6, PySide2 or PySide6")
-    exit()
 
 ################################################################################################
 # AnalogGaugeWidget CLASS
@@ -655,8 +633,7 @@ class AnalogGaugeWidget(QWidget):
 
         else:
             self.setGaugeTheme(0)
-            if self.showCustomWidgetsLogs:
-                print("Custom Gauge Theme: color1 is not defined")
+            logInfo(self, "Custom Gauge Theme: color1 is not defined")
 
     ################################################################################################
     # SET SCALE POLYGON COLOR
@@ -680,8 +657,7 @@ class AnalogGaugeWidget(QWidget):
                 self.set_scale_polygon_colors([[1, QColor(str(colors['color1']))]])
 
         else:
-            if self.showCustomWidgetsLogs:
-                print("Custom Gauge Theme: color1 is not defined")
+            logInfo(self, "Custom Gauge Theme: color1 is not defined")
 
     ################################################################################################
     # SET NEEDLE CENTER COLOR
@@ -711,8 +687,7 @@ class AnalogGaugeWidget(QWidget):
                                         [1, QColor(str(colors['color1']))]
                                         ]
         else:
-            if self.showCustomWidgetsLogs:
-                print("Custom Gauge Theme: color1 is not defined")
+            logInfo(self, "Custom Gauge Theme: color1 is not defined")
 
     ################################################################################################
     # SET OUTER CIRCLE COLOR
@@ -742,9 +717,7 @@ class AnalogGaugeWidget(QWidget):
                                         ]
 
         else:
-            if self.showCustomWidgetsLogs:
-                print("Custom Gauge Theme: color1 is not defined")
-
+            logInfo(self, "Custom Gauge Theme: color1 is not defined")
 
 
     ################################################################################################

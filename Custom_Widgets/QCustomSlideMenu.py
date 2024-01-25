@@ -292,10 +292,10 @@ class QCustomSlideMenu(QWidget):
                 normal_color = settings.value("ICONS-COLOR")
                 icons_folder = normal_color.replace("#", "")
 
-                prefix_to_remove = re.compile(r'^QSS/[^/]+/')
-                self.targetBtn.menuCollapsedIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.targetBtn.menuCollapsedIcon)
-                self.targetBtn.menuExpandedIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.targetBtn.menuExpandedIcon)
-
+                prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
+                self.targetBtn.menuCollapsedIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.targetBtn.menuCollapsedIcon)
+                self.targetBtn.menuExpandedIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.targetBtn.menuExpandedIcon)
+            
             if self.collapsed:
                 if len(self.targetBtn.menuCollapsedIcon) > 0:
                         # self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))

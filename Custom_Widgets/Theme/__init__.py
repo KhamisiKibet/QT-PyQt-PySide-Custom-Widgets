@@ -1,8 +1,6 @@
 from qtpy.QtGui import *
 from qtpy.QtWidgets import *
 
-import os
-
 class QPushButtonThemed(QPushButton):
     def __init__(self, parent=None):
         super().__init__(parent)

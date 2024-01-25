@@ -6,12 +6,11 @@ import shutil
 from urllib.parse import urlparse
 import __main__
 
-
 from . colorsystem import *
 import qtpy
 from qtpy.QtCore import *
 
-settings = QSettings()
+from .. Log import *
 
 class NewIconsGenerator(QObject):
     def __init__(self, arg):
@@ -34,7 +33,6 @@ class NewIconsGenerator(QObject):
                 svg_files.append(file_path)
         return svg_files
     
-
     def generateIcons(progress_callback, iconsColor, suffix, iconsFolder="", createQrc=False):
         # Base folder
         base_folder = os.path.dirname(__file__)
@@ -44,15 +42,15 @@ class NewIconsGenerator(QObject):
 
         # Get a list of all folders inside 'icons'
         folders = NewIconsGenerator.getAllFolders(icons_folder_base)
-        
+        new_icon_made = False
         qrc_content = f'<RCC>\n'
 
         for folder in folders:
             qrc_prefix = (folder+suffix).replace("/", "_")
             qrc_prefix = (folder+suffix).replace("\\", "_")
             qrc_content += f'  <qresource prefix="{qrc_prefix}">\n'
-            qrc_folder_path = os.path.abspath(os.path.join(os.getcwd(), f'QSS'))
-            icons_folder_path = os.path.abspath(os.path.join(os.getcwd(), f'QSS/{iconsFolder}/{folder}'))
+            qrc_folder_path = os.path.abspath(os.path.join(os.getcwd(), f'Qss/icons'))
+            icons_folder_path = os.path.abspath(os.path.join(os.getcwd(), f'Qss/icons/{iconsFolder}/{folder}'))
 
             if not os.path.exists(icons_folder_path):
                 os.makedirs(icons_folder_path)
@@ -62,7 +60,6 @@ class NewIconsGenerator(QObject):
             total_icons = len(list_of_files)
 
             for index, file_path in enumerate(list_of_files):
-                # print(file_path)
                 file_name = os.path.basename(urlparse(file_path).path).replace(".svg", f"{suffix}.png")
                 output_path = os.path.abspath(os.path.join(icons_folder_path, file_name))
 
@@ -81,6 +78,8 @@ class NewIconsGenerator(QObject):
 
                         cairosvg.svg2png(bytestring=new_bytes, write_to=output_path)
 
+                        new_icon_made = True
+
                 except Exception as e:
                     print(f"Error processing {file_path}: {e}")
 
@@ -89,55 +88,32 @@ class NewIconsGenerator(QObject):
         qrc_content += f'</RCC>\n'
         qrc_file_path = os.path.abspath(os.path.join(qrc_folder_path, f'{suffix}_icons.qrc'))
 
-        if createQrc:
+        if (createQrc and new_icon_made) or not os.path.exists(qrc_file_path):
             NewIconsGenerator.createQrcFile(qrc_content, qrc_file_path)
             # Convert qrc to py 
-            qrc_output_path = qrc_file_path.replace(".qrc", "_rc.py")
-            qrc_output_path = qrc_output_path.replace("QSS/", "") #linux
-            qrc_output_path = qrc_output_path.replace("QSS\\", "") #windows
+            # qrc_output_path = qrc_file_path.replace(".qrc", "_rc.py")
+            # qrc_output_path = qrc_output_path.replace("Qss/", "") #linux
+            # qrc_output_path = qrc_output_path.replace("Qss\\", "") #windows
             # NewIconsGenerator.qrcToPy(qrc_file_path, qrc_output_path)
 
     def generateNewIcons(self, progress_callback):  
         # Icons color
         color = CreateColorVariable.getCurrentThemeInfo(self)
         normal_color = str(color["icons-color"])
-
-        focused_color = lighten_color(normal_color)
-        disabled_color = darken_color(normal_color, .5)
         
-        oldIconsFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/Icons'))
-
         settings = QSettings()
-        if settings.value("ICONS-COLOR") is None:        
-            oldIconsDestinationFolder = oldIconsFolder
-        else:
-            oldIconsDestinationFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+settings.value("ICONS-COLOR").replace("#", "")))
-
         if not settings.value("ICONS-COLOR") == normal_color and color["icons-color"] is not None:
-
-            if self.showCustomWidgetsLogs:
-                print("Current icons color ", settings.value("ICONS-COLOR"), "New icons color", normal_color)
-                print("Generating icons for your theme, please wait. This may take long")
+            logInfo(self, ("Current icons color ", settings.value("ICONS-COLOR"), "New icons color", normal_color))
+            logInfo(self, "Generating icons for your theme, please wait. This may take long")
             
             settings.setValue("ICONS-COLOR", normal_color)
-
-            # move icons
-            # NewIconsGenerator.moveIcons(oldIconsFolder, oldIconsDestinationFolder)
-            # To speed up the app, just rename folder
-            # NewIconsGenerator.renameFolder(oldIconsFolder, oldIconsDestinationFolder)
-            
             iconsFolderName = normal_color.replace("#", "")
-            sourceFolder = os.path.abspath(os.path.join(os.getcwd(), 'QSS/'+iconsFolderName))
-            # NewIconsGenerator.moveIcons(sourceFolder, oldIconsFolder)
-            # To speed up the app, just rename folder
-            # NewIconsGenerator.renameFolder(sourceFolder, oldIconsFolder)
-
-            self.applyIconsToButtons(iconsFolderName)
+            self.applyIcons(iconsFolderName)
 
             # Create normal icons
             NewIconsGenerator.generateIcons(progress_callback, normal_color, "", iconsFolderName, createQrc = False)
 
-            print("DONE: Current icons color ", settings.value("ICONS-COLOR"))
+            logInfo(self, ("DONE: Current icons color ", settings.value("ICONS-COLOR")))
                 
 
     def generateAllIcons(self, progress_callback):
@@ -154,18 +130,18 @@ class NewIconsGenerator(QObject):
             if color == "" or color == settings.value("ICONS-COLOR"):
                 continue
 
-            focused_color = lighten_color(color)
-            disabled_color = darken_color(color, .5)
-
-            if self.showCustomWidgetsLogs:
-                print(f"Checking icons for {theme.name} theme. Icons color: {color}")
+            logInfo(self, f"Checking icons for {theme.name} theme. Icons color: {color}")
 
             iconsFolderName = color.replace("#", "")
-
             NewIconsGenerator.generateIcons(progress_callback, color, "", iconsFolderName)
-            # NewIconsGenerator.generateIcons(progress_callback, focused_color, "_focus", iconsFolderName)
-            # NewIconsGenerator.generateIcons(progress_callback, disabled_color, "_disabled", iconsFolderName)
-    
+        
+        # then make icons for qt designer
+        print(f"Checking icons for qt designer app.")
+        if settings.value("DESIGNER-ICONS-COLOR") is not None:
+            NewIconsGenerator.generateIcons(progress_callback, settings.value("DESIGNER-ICONS-COLOR"), "", "icons", createQrc=True)
+        else:
+            NewIconsGenerator.generateIcons(progress_callback, "#000", "", "icons", createQrc=True)
+
     def createQrcFile(contents, filePath):
         # Save QRC content to a file
         with open(filePath, 'w', encoding='utf-8') as qrc_file:

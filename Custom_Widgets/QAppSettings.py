@@ -24,8 +24,6 @@ from . Qss.SassCompiler import CompileStyleSheet
 class QAppSettings():
     def __init__(self, parent=None):
         super(QAppSettings, self).__init__(parent)
-
-        print("init")
         ########################################################################
         ## CREATE APP SETTINGS
         ########################################################################

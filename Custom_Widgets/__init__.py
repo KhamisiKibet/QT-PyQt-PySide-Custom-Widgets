@@ -77,9 +77,9 @@ class QMainWindow(QtWidgets.QMainWindow):
             normal_color = settings.value("ICONS-COLOR")
             icons_folder = normal_color.replace("#", "")
 
-            prefix_to_remove = re.compile(r'^QSS/[^/]+/')
-            self.maximizedIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.maximizedIcon)
-            self.normalIcon = re.sub(prefix_to_remove, 'QSS/'+icons_folder+'/', self.normalIcon)
+            prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
+            self.maximizedIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.maximizedIcon)
+            self.normalIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.normalIcon)
 
         # If window is maxmized
         if self.isMaximized():
@@ -179,50 +179,56 @@ class QMainWindow(QtWidgets.QMainWindow):
             data = json.load(file)
         return data
 
-    def applyIconsToButtons(self, folder):    
-        jsonFile = os.path.abspath(os.path.join(os.getcwd(), "QSS/Theme/resources.json"))
-        prefix_to_remove = re.compile(r'^QSS/[^/]+/')
-        
-        if os.path.isfile(jsonFile):
-            widget_data = self.readJsonFile(jsonFile)
+    def applyIcons(self, folder):
+        jsonFilesFolder = os.path.abspath(os.path.join(os.getcwd(), "generated-files/json"))
+        prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
 
-            for widget_info in widget_data.get("buttons", []):
-                widget_name = widget_info.get("name", "")
-                icon_url = widget_info.get("icon", "").replace("Icons", folder)
+        # Loop through JSON files in the folder
+        for jsonFile in os.listdir(jsonFilesFolder):
+            if jsonFile.endswith(".json"):
+                jsonFilePath = os.path.join(jsonFilesFolder, jsonFile)
 
-                if icon_url != "default_icon_url" and hasattr(self.ui, str(widget_name)):
-                    widget = getattr(self.ui, str(widget_name))
+                # Read the JSON file
+                widget_data = self.readJsonFile(jsonFilePath)
 
-                    if isinstance(widget, QPushButtonThemed):
-                        # Apply the icon to the button
-                        if widget.iconUrl is not None:
-                            if re.sub(prefix_to_remove, '', widget.iconUrl) == re.sub(prefix_to_remove, '', icon_url):
+                for widget_info in widget_data.get("buttons", []):
+                    widget_name = widget_info.get("name", "")
+                    icon_url = widget_info.get("icon", "").replace("Icons", folder)
+                    
+
+                    if icon_url != "default_icon_url" and hasattr(self.ui, str(widget_name)):
+                        widget = getattr(self.ui, str(widget_name))
+
+                        if isinstance(widget, QPushButtonThemed):
+                            # Apply the icon to the button
+                            if widget.iconUrl is not None:
+                                if re.sub(prefix_to_remove, '', widget.iconUrl) == re.sub(prefix_to_remove, '', icon_url):
+                                    widget.setNewIcon(icon_url)
+                                else:
+                                    # Button icon was updated, reapply the same button from the theme folder
+                                    new_url = re.sub(prefix_to_remove, 'qss/icons/'+folder+'/', widget.iconUrl)
+                                    widget.setNewIcon(new_url)
+                            else:
                                 widget.setNewIcon(icon_url)
+
+                for widget_info in widget_data.get("labels", []):
+                    widget_name = widget_info.get("name", "")
+                    pixmap_url = widget_info.get("pixmap", "").replace("Icons", folder)
+
+                    if pixmap_url != "default_pixmap_url" and hasattr(self.ui, str(widget_name)):
+                        widget = getattr(self.ui, str(widget_name))
+
+                        if isinstance(widget, QLabelThemed):
+                            # Apply the pixmap to the label
+                            if widget.piximapUrl is not None:
+                                if re.sub(prefix_to_remove, '', widget.piximapUrl) == re.sub(prefix_to_remove, '', icon_url):
+                                    widget.setNewPixmap(pixmap_url)
+                                else:
+                                    # Button icon was updated, reapply the same button from the theme folder
+                                    new_url = re.sub(prefix_to_remove, 'qss/icons/'+folder+'/', widget.piximapUrl)
+                                    widget.setNewPixmap(new_url)
                             else:
-                                # Button icon was updated, reapply the same button from the theme folder
-                                new_url = re.sub(prefix_to_remove, 'QSS/'+folder+'/', widget.iconUrl)
-                                widget.setNewIcon(new_url)
-                        else:
-                            widget.setNewIcon(icon_url)
-
-            for widget_info in widget_data.get("labels", []):
-                widget_name = widget_info.get("name", "")
-                pixmap_url = widget_info.get("pixmap", "").replace("Icons", folder)
-
-                if pixmap_url != "default_pixmap_url" and hasattr(self.ui, str(widget_name)):
-                    widget = getattr(self.ui, str(widget_name))
-
-                    if isinstance(widget, QLabelThemed):
-                        # Apply the pixmap to the label
-                        if widget.piximapUrl is not None:
-                            if re.sub(prefix_to_remove, '', widget.piximapUrl) == re.sub(prefix_to_remove, '', icon_url):
                                 widget.setNewPixmap(pixmap_url)
-                            else:
-                                # Button icon was updated, reapply the same button from the theme folder
-                                new_url = re.sub(prefix_to_remove, 'QSS/'+folder+'/', widget.piximapUrl)
-                                widget.setNewPixmap(new_url)
-                        else:
-                            widget.setNewPixmap(pixmap_url)
 
 
 
@@ -901,11 +907,11 @@ def applyJsonStyle(self, ui, data):
                                     if "icons" in toggleButton:
                                         for icons in toggleButton["icons"]:
                                             if "whenMenuIsCollapsed" in icons and len(str(icons["whenMenuIsCollapsed"])) > 0:
-                                                menuCollapsedIcon = replace_url_prefix(str(icons["whenMenuIsCollapsed"]), "QSS")
+                                                menuCollapsedIcon = replace_url_prefix(str(icons["whenMenuIsCollapsed"]), "qss/icons")
 
 
                                             if "whenMenuIsExpanded" in icons and len(str(icons["whenMenuIsExpanded"])) > 0:
-                                                menuExpandedIcon = replace_url_prefix(str(icons["whenMenuIsExpanded"]), "QSS")
+                                                menuExpandedIcon = replace_url_prefix(str(icons["whenMenuIsExpanded"]), "qss/icons")
 
 
 
@@ -1038,12 +1044,12 @@ def applyJsonStyle(self, ui, data):
                                     getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: self.restore_or_maximize_window())
                                     self.restoreBtn = getattr(self.ui, str(restore["buttonName"]))
                             if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0:
-                                self.normalIcon = replace_url_prefix(str(restore["normalIcon"]), "QSS")
+                                self.normalIcon = replace_url_prefix(str(restore["normalIcon"]), "qss/icons")
                             else:
                                 self.normalIcon = ""
 
                             if "maximizedIcon" in restore and len(str(restore["maximizedIcon"])) > 0:
-                                self.maximizedIcon = replace_url_prefix(str(restore["maximizedIcon"]), "QSS")
+                                self.maximizedIcon = replace_url_prefix(str(restore["maximizedIcon"]), "qss/icons")
                             else:
                                 self.maximizedIcon = ""
 
