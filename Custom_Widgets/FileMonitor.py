@@ -59,9 +59,9 @@ def convert_file(path):
     json_file_name = f"{base_name}.json"
 
     # Update JSON data for the specific file
-    update_json(root, json_file_name)
+    update_json(root, json_file_name, path)
 
-def update_json(root, json_file_name):
+def update_json(root, json_file_name, ui_path):
     button_tag = "widget"
     button_value = "QPushButtonThemed"
 
@@ -89,6 +89,8 @@ def update_json(root, json_file_name):
             # Combine with the relative path within the <iconset> tag
             relative_path = iconset_element.find("normaloff").text
             icon_url = replace_url_prefix(relative_path, qrc_folder)
+        elif iconset_element is not None:
+            icon_url = generate_relative_path(ui_path, iconset_element.find("normaloff").text)
         else:
             # Handle the case where icon_element is None
             icon_url = "default_icon_url"  # Set a default value or handle it as needed
@@ -101,7 +103,7 @@ def update_json(root, json_file_name):
     for label in labels:
         label_name = label.get("name")
         pixmap_element = label.find(".//pixmap")
-
+        
         if pixmap_element is not None and 'resource' in pixmap_element.attrib:
             # Extract the QRC file path from the 'resource' attribute
             qrc_file_path = pixmap_element.attrib['resource']
@@ -110,6 +112,8 @@ def update_json(root, json_file_name):
             # Combine with the relative path within the <pixmap> tag
             relative_path = pixmap_element.text
             pixmap_url = replace_url_prefix(relative_path, qrc_folder)
+        elif pixmap_element is not None:
+            pixmap_url = generate_relative_path(ui_path, pixmap_element.text)
         else:
             # Handle the case where pixmap_element is None
             pixmap_url = "default_pixmap_url"  # Set a default value or handle it as needed
@@ -127,6 +131,14 @@ def update_json(root, json_file_name):
     with open(json_path, "w") as json_file:
         json.dump({"buttons": button_info, "labels": label_info}, json_file, indent=2)
 
+def generate_relative_path(ui_path, relative_url):
+    # Determine the directory of the UI file
+    ui_dir = os.path.dirname(ui_path)
+    
+    # Combine UI directory with the relative URL
+    abs_path = os.path.abspath(os.path.join(ui_dir, relative_url))
+    
+    return abs_path
 
 def replace_url_prefix(url, new_prefix):
     pattern = re.compile(r':/[^/]+/')
