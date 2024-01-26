@@ -29,7 +29,7 @@ from qtpy.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFont
 from qtpy.QtCore import Qt, QTimer, QPoint, QPointF, QRect, QSize, QObject, Signal
 from qtpy.QtCore import Signal
 
-from Log import *
+from . Log import *
 
 
 

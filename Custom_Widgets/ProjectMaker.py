@@ -71,6 +71,20 @@ def query_yes_no(question, default="yes"):
         else:
             sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
 
+def create_requirements_file(required_packages, file_path="requirements.txt"):
+    """
+    Create a requirements.txt file with the specified package names and versions.
+
+    Args:
+        required_packages (list): List of required packages with optional versions.
+        file_path (str, optional): Path to the requirements.txt file. Defaults to "requirements.txt".
+    """
+    # Write the package names to the requirements.txt file
+    with open(file_path, "w") as file:
+        for package in required_packages:
+            file.write(package + "\n")
+
+
 def create_project():
     # Current Directory
     currentDir = os.getcwd()
@@ -312,6 +326,22 @@ def create_project():
 
 
     print(textwrap.dedent("JSON stylesheet file created"))
+
+    # Requirements
+    required_packages = [
+        appQtBinding,
+        "QT-PyQt-PySide-Custom-Widgets"
+    ]
+    create_requirements_file(required_packages)
+
+    print(textwrap.dedent("Successfully created requirements.txt"))
+
+    # Check README file 
+    readme_path = os.path.abspath(os.path.join(os.getcwd(), 'README.md'))
+    if not os.path.exists(readme_path):   
+        shutil.copy(os.path.abspath(os.path.join(os.path.dirname(__file__), 'components/md/README.md')), os.getcwd()) 
+
+    print(textwrap.dedent("Successfully created README.md"))
 
     print(textwrap.dedent("Creating the icons (png) files"))
     print(textwrap.dedent(f"\nGenerating icons for your app. Icons color: {iconsColor}"))

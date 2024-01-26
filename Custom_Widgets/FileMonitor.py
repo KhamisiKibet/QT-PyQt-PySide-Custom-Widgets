@@ -145,8 +145,6 @@ def replace_url_prefix(url, new_prefix):
     url = pattern.sub( new_prefix + '/', url, 1)
     return re.sub(r'^\.\./', '', url)
     
-
-
 def start_file_listener(file_or_folder, qt_binding="PySide6"):
     if qt_binding is None:
         qt_binding = "PySide6"
