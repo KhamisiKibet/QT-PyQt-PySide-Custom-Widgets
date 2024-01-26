@@ -38,7 +38,7 @@ Custom_Widgets --create-project
 This will create a `Qt-python` project inside your empty folder, ready to run.
 - Easy to convert UI files to py. The cutom widgets `Theme Engine` eliminated the need for `QRC` to `python` file conversion, therefore to generate `UI-Python` files without any errors, use
 ```cmd
-Custom_Widgets --monitor-ui ui-path --qt-library your-lib
+Custom_Widgets --convert-ui ui-path --qt-library your-lib
 ```
 Where: `ui-path` is the UI file pathe or folder containing UI files.
 `your-lib` is `PySide6`, `PySide2`, `PyQt5` or `PyQt6`
