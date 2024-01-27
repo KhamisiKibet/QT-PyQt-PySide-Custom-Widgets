@@ -27,7 +27,7 @@ Progress indicator example:
 1. **New project structure:**
 
 To use version 0.6.9 or later, it's best to stick to the project structure outlined below. Alternatively, you can use the ``ProjectMake or project wizard`` tool, which will set up your project with the same structure automatically.
-```
+```cmd
 project_name/
 │
 ├── README.md
