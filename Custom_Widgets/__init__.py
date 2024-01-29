@@ -181,7 +181,9 @@ class QMainWindow(QtWidgets.QMainWindow):
 
     def applyIcons(self, folder):
         jsonFilesFolder = os.path.abspath(os.path.join(os.getcwd(), "generated-files/json"))
-        prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
+        # prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
+        # prefix_to_remove = re.compile(r'^qss/icons/[^/]+/Icons/')
+        prefix_to_remove = re.compile(r'icons(.*?)Icons')
 
         # Loop through JSON files in the folder
         for jsonFile in os.listdir(jsonFilesFolder):
@@ -193,12 +195,12 @@ class QMainWindow(QtWidgets.QMainWindow):
 
                 for widget_info in widget_data.get("buttons", []):
                     widget_name = widget_info.get("name", "")
-                    icon_url = widget_info.get("icon", "").replace("Icons", folder)
+                    icon_url = widget_info.get("icon", "")
+                    icon_url = re.sub(prefix_to_remove, 'icons/'+folder, icon_url)
                     
 
                     if icon_url != "default_icon_url" and hasattr(self.ui, str(widget_name)):
                         widget = getattr(self.ui, str(widget_name))
-
                         if isinstance(widget, QPushButtonThemed):
                             # Apply the icon to the button
                             if widget.iconUrl is not None:
@@ -213,7 +215,8 @@ class QMainWindow(QtWidgets.QMainWindow):
 
                 for widget_info in widget_data.get("labels", []):
                     widget_name = widget_info.get("name", "")
-                    pixmap_url = widget_info.get("pixmap", "").replace("Icons", folder)
+                    pixmap_url = widget_info.get("pixmap", "")
+                    pixmap_url = re.sub(prefix_to_remove, 'icons/'+folder, pixmap_url)
 
                     if pixmap_url != "default_pixmap_url" and hasattr(self.ui, str(widget_name)):
                         widget = getattr(self.ui, str(widget_name))
