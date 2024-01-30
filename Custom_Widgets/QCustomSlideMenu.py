@@ -214,7 +214,6 @@ class QCustomSlideMenu(QWidget):
     def toggleButton(self, **values):
         if not hasattr(self, "targetBtn") and not "buttonName" in values:
             raise Exception("No button specified for this widget, please specify the QPushButton object")
-            return
 
         if "buttonName" in values:
             toggleButton = values["buttonName"]
@@ -256,26 +255,28 @@ class QCustomSlideMenu(QWidget):
             self.collapseMenu()
 
     def expandMenu(self):
-        self.collapsed = True
-        self.expanded = False
+        if not self.expanded:
+            self.collapsed = True
+            self.expanded = False
 
-        self.animateMenu()
+            self.animateMenu()
 
-        self.collapsed = False
-        self.expanded = True
+            self.collapsed = False
+            self.expanded = True
 
-        self.applyButtonStyle()
+            self.applyButtonStyle()
 
     def collapseMenu(self):
-        self.collapsed = False
-        self.expanded = True
+        if not self.collapsed:
+            self.collapsed = False
+            self.expanded = True
 
-        self.animateMenu()
+            self.animateMenu()
 
-        self.collapsed = True
-        self.expanded = False
+            self.collapsed = True
+            self.expanded = False
 
-        self.applyButtonStyle()
+            self.applyButtonStyle()
 
     def applyWidgetStyle(self):
         if self.expanded and len(str(self.expandedStyle)) > 0:
@@ -292,27 +293,28 @@ class QCustomSlideMenu(QWidget):
                 normal_color = settings.value("ICONS-COLOR")
                 icons_folder = normal_color.replace("#", "")
 
-                prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
-                self.targetBtn.menuCollapsedIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.targetBtn.menuCollapsedIcon)
-                self.targetBtn.menuExpandedIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.targetBtn.menuExpandedIcon)
+                prefix_to_remove = re.compile(r'^Qss/icons/[^/]+/')
+                self.targetBtn.menuCollapsedIcon = re.sub(prefix_to_remove, 'Qss/icons/'+icons_folder+'/', self.targetBtn.menuCollapsedIcon)
+                self.targetBtn.menuExpandedIcon = re.sub(prefix_to_remove, 'Qss/icons/'+icons_folder+'/', self.targetBtn.menuExpandedIcon)
             
             if self.collapsed:
                 if len(self.targetBtn.menuCollapsedIcon) > 0:
                         # self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
-                        self.targetBtn.setNewIcon(QtGui.QIcon(self.targetBtn.menuCollapsedIcon))
+                        self.targetBtn.setNewIcon(self.targetBtn.menuCollapsedIcon)
 
                 if len(str(self.targetBtn.menuCollapsedStyle)) > 0:
-                    self.targetBtn.setStyleSheet(str(self.targetBtn.menuCollapsedStyle))
+                    self.targetBtn.setStyleSheet(self.targetBtn.menuCollapsedStyle)
             else:
                 if len(str(self.targetBtn.menuExpandedIcon)) > 0:
                         # self.targetBtn.setIcon(QtGui.QIcon(self.targetBtn.menuExpandedIcon))
                         self.targetBtn.setNewIcon(self.targetBtn.menuExpandedIcon)
 
                 if len(str(self.targetBtn.menuExpandedStyle)) > 0:
-                    self.targetBtn.setStyleSheet(str(self.targetBtn.menuExpandedStyle))
+                    self.targetBtn.setStyleSheet(self.targetBtn.menuExpandedStyle)
 
     def animateMenu(self):
         self.setMinimumSize(QSize(0, 0))
+
         if self.collapsed:
             if self.expandedWidth != "auto" and self.expandedWidth != 16777215 and self.expandedWidth != "parent":
                 startWidth = self.width()
@@ -360,6 +362,7 @@ class QCustomSlideMenu(QWidget):
             self._widthAnimation.setEasingCurve(self.collapsingAnimationEasingCurve)
 
 
+
             if self.collapsedHeight != "auto" and self.collapsedHeight != "parent":
                 startHeight = self.height()
                 endHeight = self.collapsedHeight
@@ -373,9 +376,11 @@ class QCustomSlideMenu(QWidget):
             self._heightAnimation = QPropertyAnimation(self, b"maximumHeight")
             self._heightAnimation.setDuration(self.collapsingAnimationDuration)
             self._heightAnimation.setEasingCurve(self.collapsingAnimationEasingCurve)
-
+        
         self.animateWidth(startWidth, endWidth)
         self.animateHeight(startHeight, endHeight)
+
+        self.setMinimumSize(QSize(0, 0))
 
 
     def animateWidth(self, startWidth, endWidth):
@@ -487,11 +492,11 @@ class QCustomSlideMenu(QWidget):
                 if self._widthAnimation.finished:
                     if self.collapsed:
                         if self.collapsedWidth == "parent":
-                            self.setMinimumWidth(self.parent().width())
+                            # self.setMinimumWidth(self.parent().width())
                             self.setMaximumWidth(self.parent().width())
                     if self.expanded:
                         if self.expandedWidth == "parent":
-                            self.setMinimumWidth(self.parent().width())
+                            # self.setMinimumWidth(self.parent().width())
                             self.setMaximumWidth(self.parent().width())
 
 
@@ -499,19 +504,20 @@ class QCustomSlideMenu(QWidget):
                 if self._heightAnimation.finished:
                     if self.collapsed:
                         if self.collapsedHeight == "parent":
-                            self.setMinimumHeight(self.parent().height())
+                            # self.setMinimumHeight(self.parent().height())
                             self.setMaximumHeight(self.parent().height())
                     if self.expanded:
                         if self.expandedHeight == "parent":
-                            self.setMinimumHeight(self.parent().height())
+                            # self.setMinimumHeight(self.parent().height())
                             self.setMaximumHeight(self.parent().height())
 
             if not hasattr(self, "_widthAnimation") and not hasattr(self, "_heightAnimation"):
                 if self.defaultWidth == "parent":
-                    self.setMinimumWidth(self.parent().width())
+                    # self.setMinimumWidth(self.parent().width())
                     self.setMaximumWidth(self.parent().width())
+
                 if self.defaultHeight == "parent":
-                    self.setMinimumHeight(self.parent().height())
+                    # self.setMinimumHeight(self.parent().height())
                     self.setMaximumHeight(self.parent().height())
 
         except Exception as e:

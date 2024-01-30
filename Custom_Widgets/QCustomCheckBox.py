@@ -23,18 +23,13 @@ class QCustomCheckBox(QCheckBox):
     def __init__(self, parent=None):
         super().__init__(parent)
         
-        # Get geometry
-        # print(self.geometry())
-
-        # self.setFixedSize(50, 28)
-        # self.setMinimumSize(QSize(50, 28))
         self.setCursor(Qt.PointingHandCursor)
 
         # Check if a QApplication instance already exists
         if QApplication.instance():
             app = QApplication.instance()
         else:
-            app = QApplication([])  # Create a new QApplication instance if it doesn't exist
+            app = QApplication([])
 
 
         # Get the default palette

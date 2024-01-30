@@ -8,8 +8,5 @@ from .__init__ import *
 import warnings
 
 warnings.warn(
-    "Deprecated imports. Please update your import statements.\n"
-    "For more information, refer to the documentation at: "
-    "https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets "
-    "or contact support."
+    "Deprecated imports. For more information, refer to the documentation at: https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets"
 )

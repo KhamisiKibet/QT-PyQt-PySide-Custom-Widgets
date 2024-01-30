@@ -77,9 +77,9 @@ class QMainWindow(QtWidgets.QMainWindow):
             normal_color = settings.value("ICONS-COLOR")
             icons_folder = normal_color.replace("#", "")
 
-            prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
-            self.maximizedIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.maximizedIcon)
-            self.normalIcon = re.sub(prefix_to_remove, 'qss/icons/'+icons_folder+'/', self.normalIcon)
+            prefix_to_remove = re.compile(r'^Qss/icons/[^/]+/')
+            self.maximizedIcon = re.sub(prefix_to_remove, 'Qss/icons/'+icons_folder+'/', self.maximizedIcon)
+            self.normalIcon = re.sub(prefix_to_remove, 'Qss/icons/'+icons_folder+'/', self.normalIcon)
 
         # If window is maxmized
         if self.isMaximized():
@@ -208,8 +208,8 @@ class QMainWindow(QtWidgets.QMainWindow):
                                     widget.setNewIcon(icon_url)
                                 else:
                                     # Button icon was updated, reapply the same button from the theme folder
-                                    new_url = re.sub(prefix_to_remove, 'qss/icons/'+folder+'/', widget.iconUrl)
-                                    widget.setNewIcon(new_url)
+                                    # new_url = re.sub(prefix_to_remove, 'Qss/icons/'+folder+'/', widget.iconUrl)
+                                    widget.setNewIcon(icon_url)
                             else:
                                 widget.setNewIcon(icon_url)
 
@@ -228,11 +228,10 @@ class QMainWindow(QtWidgets.QMainWindow):
                                     widget.setNewPixmap(pixmap_url)
                                 else:
                                     # Button icon was updated, reapply the same button from the theme folder
-                                    new_url = re.sub(prefix_to_remove, 'qss/icons/'+folder+'/', widget.piximapUrl)
-                                    widget.setNewPixmap(new_url)
+                                    # new_url = re.sub(prefix_to_remove, 'Qss/icons/'+folder+'/', widget.piximapUrl)
+                                    widget.setNewPixmap(pixmap_url)
                             else:
                                 widget.setNewPixmap(pixmap_url)
-
 
 
     def stopWorkers(self):
@@ -365,9 +364,8 @@ def applyJsonStyle(self, ui, data):
                         btn.groupParent = self
                         btn.active = False
 
-                        if not btn.metaObject().className() == "QPushButton":
+                        if not btn.metaObject().className() == "QPushButton" and not btn.metaObject().className() == "QPushButtonThemed":
                             raise Exception("Error: "+str(button)+" is not a QPushButton object.")
-                            return
                         setattr(btn, "group", grp_count)
 
                         if not hasattr(self, "group_btns_"+str(grp_count)):
@@ -377,8 +375,8 @@ def applyJsonStyle(self, ui, data):
 
                         btn.clicked.connect(self.checkButtonGroup)
                     else:
-                        raise Exception("Error: Button named"+str(button)+" was not found.")
-                        return
+                        raise Exception("Error: Button named "+str(button)+" was not found.")
+                        
 
 
             activeStyle = ""
@@ -910,11 +908,11 @@ def applyJsonStyle(self, ui, data):
                                     if "icons" in toggleButton:
                                         for icons in toggleButton["icons"]:
                                             if "whenMenuIsCollapsed" in icons and len(str(icons["whenMenuIsCollapsed"])) > 0:
-                                                menuCollapsedIcon = replace_url_prefix(str(icons["whenMenuIsCollapsed"]), "qss/icons")
+                                                menuCollapsedIcon = replace_url_prefix(str(icons["whenMenuIsCollapsed"]), "Qss/icons")
 
 
                                             if "whenMenuIsExpanded" in icons and len(str(icons["whenMenuIsExpanded"])) > 0:
-                                                menuExpandedIcon = replace_url_prefix(str(icons["whenMenuIsExpanded"]), "qss/icons")
+                                                menuExpandedIcon = replace_url_prefix(str(icons["whenMenuIsExpanded"]), "Qss/icons")
 
 
 
@@ -1047,12 +1045,12 @@ def applyJsonStyle(self, ui, data):
                                     getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: self.restore_or_maximize_window())
                                     self.restoreBtn = getattr(self.ui, str(restore["buttonName"]))
                             if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0:
-                                self.normalIcon = replace_url_prefix(str(restore["normalIcon"]), "qss/icons")
+                                self.normalIcon = replace_url_prefix(str(restore["normalIcon"]), "Qss/icons")
                             else:
                                 self.normalIcon = ""
 
                             if "maximizedIcon" in restore and len(str(restore["maximizedIcon"])) > 0:
-                                self.maximizedIcon = replace_url_prefix(str(restore["maximizedIcon"]), "qss/icons")
+                                self.maximizedIcon = replace_url_prefix(str(restore["maximizedIcon"]), "Qss/icons")
                             else:
                                 self.maximizedIcon = ""
 
@@ -1083,7 +1081,7 @@ def applyJsonStyle(self, ui, data):
                 if hasattr(self.ui, str(button["name"])):
                     buttonObject = getattr(self.ui, str(button["name"]))
                     # VERIFY IF THE OBJECT IS A BUTTON
-                    if not str(buttonObject.metaObject().className()) == "QCustomQPushButton":
+                    if not str(buttonObject.metaObject().className()) == "QCustomQPushButton" and not buttonObject.metaObject().className() == "QPushButtonThemed":
                         raise Exception(buttonObject.metaObject().className(), buttonObject, " is not of type QPushButton")
 
                     buttonObject.wasFound = False
