@@ -78,26 +78,7 @@ The examples folder in this repository contains a few code examples you can use 
 
 </div>
 
-<style>
-  .gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between; /* Adjust as needed */
-  }
-
-  .gallery-item {
-    flex: 1 0 200px; /* Minimum width of 200px for each item */
-    margin-bottom: 10px;
-    flex-grow: 0;
-  }
-
-  .gallery-item img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    max-height: 300px; /* Set maximum height for images */
-  }
-</style>
+<link rel="stylesheet" href="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/style/styles.css">
 
 
 
