@@ -19,8 +19,87 @@ pip install --upgrade QT-PyQt-PySide-Custom-Widgets
 # Testing
 The examples folder in this repository contains a few code examples you can use to test and learn about the custom widgets.
 
-Progress indicator example:
-![Custom Progress bar](https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true)
+# Gallery
+![Responsive pyside pyqt GUI](https://www.dropbox.com/scl/fi/v71slvbih1fo8nwjj1bug/Screenshot_20240130_105009.png?rlkey=0t1x2nzelmvysturs16x7iz7k&dl=0&raw=1)
+
+<div class="gallery">
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true" alt="Custom Progress Bar">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/18.png?raw=true" alt="Custom Title Bar">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/analog_qt_widget.png?raw=true" alt="Custom Title Bar">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-cards-on-dashboard.png?raw=true" alt="Qt Cards">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Qt-Custom-checkbox.png?raw=true" alt="Qt custom checkbox">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-nav-buttons.png?raw=true" alt="Qt side menu nav">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20230923_064515.png?raw=true" alt="Qt custom qpushbutton">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20230923_064515.png?raw=true" alt="Qt custom qpushbutton">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/responsive-qt-gui-python-intarface.png?raw=true" alt="responsive GUI">
+  </div>
+
+</div>
+
+![Responsive pyside pyqt GUI](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture.PNG?raw=true)
+
+<div class="gallery">
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture2.PNG?raw=true" alt="Responsive pyside pyqt GUI">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture3.PNG?raw=true" alt="Responsive pyside pyqt GUI">
+  </div>
+
+  <div class="gallery-item">
+    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture5.PNG?raw=true" alt="Responsive pyside pyqt GUI">
+  </div>
+
+</div>
+
+<style>
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjust as needed */
+  }
+
+  .gallery-item {
+    flex: 1 0 200px; /* Minimum width of 200px for each item */
+    margin-bottom: 10px;
+    flex-grow: 0;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    max-height: 300px; /* Set maximum height for images */
+  }
+</style>
+
+
 
 # What is new?
 ## Version 0.6.9:
