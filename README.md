@@ -120,6 +120,8 @@ Custom_Widgets --monitor-ui ui-path --qt-library your-lib
 Where: `ui-path` is the UI file path or folder containing UI files.
 `your-lib` is `PySide6`, `PySide2`, `PyQt5` or `PyQt6`
 
+> [Updating old GUI app to work with the current Custom Widgets module update](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/other-functions/Updating-old-GUI-app-to-work-with-the%20current-Custom-Widgets-module-update)
+
 ## Version 0.6.2:
 - Added support for loading multiple ``JSON Stylesheets``
     By default, the json file named ``style.json`` will be loaded, so no need to specify. The file must me inside the root directory of your project, ``json`` directory, or ``jsonstyles`` directory inside your project folder for it to be automatically loaded.
