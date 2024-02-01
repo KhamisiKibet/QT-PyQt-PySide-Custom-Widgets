@@ -22,63 +22,44 @@ The examples folder in this repository contains a few code examples you can use 
 # Gallery
 ![Responsive pyside pyqt GUI](https://www.dropbox.com/scl/fi/v71slvbih1fo8nwjj1bug/Screenshot_20240130_105009.png?rlkey=0t1x2nzelmvysturs16x7iz7k&dl=0&raw=1)
 
-<div class="gallery">
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true" alt="Custom Progress Bar">
-  </div>
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot.png?raw=true" alt="Custom Progress Bar">
+        </td>
+        <td>
+            <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/analog_qt_widget.png?raw=true" alt="Custom Title Bar">
+        </td>
+    <tr>
+</table>
 
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/18.png?raw=true" alt="Custom Title Bar">
-  </div>
+![Responsive pyside pyqt GUI](https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/responsive-qt-gui-python-intarface.png?raw=true)
 
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/analog_qt_widget.png?raw=true" alt="Custom Title Bar">
-  </div>
-
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-cards-on-dashboard.png?raw=true" alt="Qt Cards">
-  </div>
-
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Qt-Custom-checkbox.png?raw=true" alt="Qt custom checkbox">
-  </div>
-
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-nav-buttons.png?raw=true" alt="Qt side menu nav">
-  </div>
-
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20230923_064515.png?raw=true" alt="Qt custom qpushbutton">
-  </div>
-
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Screenshot_20230923_064515.png?raw=true" alt="Qt custom qpushbutton">
-  </div>
-
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/responsive-qt-gui-python-intarface.png?raw=true" alt="responsive GUI">
-  </div>
-
-</div>
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-cards-on-dashboard.png?raw=true" alt="Qt Cards">
+        </td>
+        <td>
+            <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/qt-nav-buttons.png?raw=true" alt="Qt side menu nav">
+        </td>
+</table>
 
 ![Responsive pyside pyqt GUI](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture.PNG?raw=true)
 
-<div class="gallery">
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture2.PNG?raw=true" alt="Responsive pyside pyqt GUI">
-  </div>
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture2.PNG?raw=true" alt="Responsive pyside pyqt GUI">
+        </td>
+        <td>
+            <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture3.PNG?raw=true" alt="Responsive pyside pyqt GUI">
+        </td>
+        <td>
+            <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture5.PNG?raw=true" alt="Responsive pyside pyqt GUI">
+        </td>
 
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture3.PNG?raw=true" alt="Responsive pyside pyqt GUI">
-  </div>
-
-  <div class="gallery-item">
-    <img src="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/Capture5.PNG?raw=true" alt="Responsive pyside pyqt GUI">
-  </div>
-
-</div>
-
-<link rel="stylesheet" href="https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/style/styles.css">
+</table>
 
 
 
