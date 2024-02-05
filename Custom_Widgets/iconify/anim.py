@@ -5,7 +5,7 @@ The animation objects for iconify
 from enum import Enum
 from typing import Optional, Sequence, Tuple
 
-from iconify.qt import QtCore, QtGui
+from Custom_Widgets.iconify.qt import QtCore, QtGui
 
 
 class GlobalTick(QtCore.QObject):
