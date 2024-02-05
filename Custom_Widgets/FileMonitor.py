@@ -7,7 +7,8 @@ from termcolor import colored
 import xml.etree.ElementTree as ET
 import re
 
-from . Qss.SvgToPngIcons import *
+from Custom_Widgets.Qss.SvgToPngIcons import *
+from Custom_Widgets.Qss.SassCompiler import CompileStyleSheet
 
 class FileMonitor(QObject):
     def __init__(self, files_to_monitor):
@@ -19,6 +20,9 @@ class FileMonitor(QObject):
         if not os.path.exists(file_folder):
             os.makedirs(file_folder)
         file_folder = os.path.join(os.getcwd(), "generated-files/json")
+        if not os.path.exists(file_folder):
+            os.makedirs(file_folder)
+        file_folder = os.path.join(os.getcwd(), "src")
         if not os.path.exists(file_folder):
             os.makedirs(file_folder)
 
@@ -354,6 +358,32 @@ def start_ui_conversion(file_or_folder, qt_binding="PySide6"):
     [convert_file(file) for file in files_to_convert]
 
     print("Done converting!")
+
+def start_qss_file_listener(self):
+    logInfo(self, "Live monitoring Qss/scss/defaultStyle.scss file for changes")
+    default_sass_path = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss/defaultStyle.scss'))
+
+    if os.path.isfile(default_sass_path):
+        # Monitor file for changes
+        self.qss_watcher = QFileSystemWatcher()
+        self.qss_watcher.addPath(default_sass_path)
+        self.qss_watcher.fileChanged.connect(lambda: qss_file_changed(self))
+    
+    else:
+        logError(self, "Error: Qss/scss/defaultStyle.scss file not found")
+
+def qss_file_changed(self):
+    logInfo(self, "Qss/scss/defaultStyle.scss changed, applying new stylesheet")
+
+    # Apply compiled stylesheet
+    CompileStyleSheet.applyCompiledSass(self)
+
+def stop_qss_file_listener(self):
+    if hasattr(self, 'qss_watcher'):
+        self.qss_watcher.fileChanged.disconnect(self.qss_file_changed)
+        self.qss_watcher.deleteLater()
+        del self.qss_watcher
+
 
 
     

@@ -13,12 +13,13 @@ import __main__
 ########################################################################
 ## COMPILE SASS
 ########################################################################
-from .Qss import SassCompiler
+from Custom_Widgets.Qss import SassCompiler
 CompileStyleSheet = SassCompiler.CompileStyleSheet
-from .Qss.SvgToPngIcons import NewIconsGenerator
+from Custom_Widgets.Qss.SvgToPngIcons import NewIconsGenerator
 
-from .QCustomQPushButtonGroup import QCustomQPushButtonGroup
-from .Theme import *
+from Custom_Widgets.QCustomQPushButtonGroup import QCustomQPushButtonGroup
+from Custom_Widgets.Theme import *
+from Custom_Widgets.FileMonitor import start_qss_file_listener, stop_qss_file_listener
 
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
@@ -309,6 +310,19 @@ def applyJsonStyle(self, ui, data):
         else:
             # Hide Logs
             self.showCustomWidgetsLogs = False
+
+    ########################################################################
+    ## Live QSS compiler
+    ########################################################################
+    if "LiveCompileQss" in data:
+        if data["LiveCompileQss"]:
+            # Show Logs
+            self.liveCompileQss = True
+            start_qss_file_listener(self)
+        else:
+            # Hide Logs
+            self.liveCompileQss = False
+            stop_qss_file_listener(self)
 
     ########################################################################
     ## QCARDS

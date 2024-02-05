@@ -21,7 +21,7 @@ import textwrap
 
 from qtpy.QtCore import Signal
 
-from . Qss.SvgToPngIcons import *
+from Custom_Widgets.Qss.SvgToPngIcons import *
 
 
 ########################################################################

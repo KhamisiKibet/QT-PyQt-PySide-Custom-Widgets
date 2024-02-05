@@ -1,8 +1,8 @@
 import argparse
 import textwrap
 
-from . ProjectMaker import create_project
-from . FileMonitor import start_file_listener, start_ui_conversion
+from Custom_Widgets.ProjectMaker import create_project
+from Custom_Widgets.FileMonitor import start_file_listener, start_ui_conversion
 
 def run_command():
     parser = argparse.ArgumentParser(description='Custom Widgets UI File Monitor')

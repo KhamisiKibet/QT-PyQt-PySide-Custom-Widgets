@@ -6,11 +6,11 @@ import shutil
 from urllib.parse import urlparse
 import __main__
 
-from . colorsystem import *
+from Custom_Widgets.Qss.colorsystem import *
 import qtpy
 from qtpy.QtCore import *
 
-from .. Log import *
+from Custom_Widgets.Log import *
 
 class NewIconsGenerator(QObject):
     def __init__(self, arg):

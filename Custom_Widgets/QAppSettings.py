@@ -16,7 +16,7 @@ from qtpy.QtCore import *
 from qtpy.QtGui import *
 from qtpy.QtWidgets import *
 
-from . Qss.SassCompiler import CompileStyleSheet
+from Custom_Widgets.Qss.SassCompiler import CompileStyleSheet
 
 ########################################################################
 ## QT APP SETTINGS

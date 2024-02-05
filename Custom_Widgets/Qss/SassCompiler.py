@@ -19,13 +19,13 @@ import qtsass
 import os
 import shutil
 
-from . colorsystem import CreateColorVariable
+from Custom_Widgets.Qss.colorsystem import CreateColorVariable
 ########################################################################
 ## IMPORT WORKER
 ########################################################################
-from .. WidgetsWorker import Worker, WorkerResponse
+from Custom_Widgets.WidgetsWorker import Worker, WorkerResponse
 
-from .. Log import *
+from Custom_Widgets.Log import *
 
 ########################################################################
 ## COMPILE STYLESHEET CLASS

@@ -1,9 +1,9 @@
-from . QCustomSlideMenu import QCustomSlideMenu
-from . QCustomQStackedWidget import QCustomQStackedWidget as QCustomStackedWidget
-from . QCustomProgressIndicator import QCustomProgressIndicator as FormProgressIndicator
-from . QAppSettings import QAppSettings
-from . QCustomQPushButton import QCustomQPushButton
-from .__init__ import *
+from Custom_Widgets.QCustomSlideMenu import QCustomSlideMenu
+from Custom_Widgets.QCustomQStackedWidget import QCustomQStackedWidget as QCustomStackedWidget
+from Custom_Widgets.QCustomProgressIndicator import QCustomProgressIndicator as FormProgressIndicator
+from Custom_Widgets.QAppSettings import QAppSettings
+from Custom_Widgets.QCustomQPushButton import QCustomQPushButton
+from Custom_Widgets.__init__ import *
 
 import warnings
 
