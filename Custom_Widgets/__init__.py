@@ -8,8 +8,6 @@
 ## IMPORTS
 ########################################################################
 import os
-import platform
-import chardet
 import __main__
 
 ########################################################################
@@ -46,6 +44,9 @@ class QMainWindow(QtWidgets.QMainWindow):
 
         self.clickPosition = None  # Initialize clickPosition attribute
         self.normalGeometry = self.geometry()
+
+        self.iconsWorker = None
+        self.allIconsWorker = None
 
         QCoreApplication.instance().aboutToQuit.connect(self.stopWorkers)
 
@@ -184,8 +185,8 @@ class QMainWindow(QtWidgets.QMainWindow):
 
     def applyIcons(self, folder):
         jsonFilesFolder = os.path.abspath(os.path.join(os.getcwd(), "generated-files/json"))
-        # prefix_to_remove = re.compile(r'^qss/icons/[^/]+/')
-        # prefix_to_remove = re.compile(r'^qss/icons/[^/]+/Icons/')
+        if not os.path.exists(jsonFilesFolder):
+            os.makedirs(jsonFilesFolder)
         prefix_to_remove = re.compile(r'icons(.*?)Icons')
 
         # Loop through JSON files in the folder
@@ -267,26 +268,17 @@ def loadJsonStyle(self, ui, **jsonFiles):
     self.ui = ui
     if not jsonFiles:
         if os.path.isfile("style.json"):
-            with open("style.json", 'rb') as f:
-                result = chardet.detect(f.read())
-                file_encoding = result['encoding']
-            file = open('style.json', encoding=file_encoding)
+            file = open('style.json',)
             data = json.load(file)
             applyJsonStyle(self, self.ui, data)
 
         elif os.path.isfile("json/style.json"):
-            with open("json/style.json", 'rb') as f:
-                result = chardet.detect(f.read())
-                file_encoding = result['encoding']
-            file = open('json/style.json', encoding=file_encoding)
+            file = open('json/style.json',)
             data = json.load(file)
             applyJsonStyle(self, self.ui, data)
 
         elif os.path.isfile("jsonstyles/style.json"):
-            with open("jsonstyles/style.json", 'rb') as f:
-                result = chardet.detect(f.read())
-                file_encoding = result['encoding']
-            file = open('jsonstyles/style.json', encoding=file_encoding)
+            file = open('jsonstyles/style.json',)
             data = json.load(file)
             applyJsonStyle(self, self.ui, data)
 
@@ -294,10 +286,7 @@ def loadJsonStyle(self, ui, **jsonFiles):
         for file in jsonFiles['jsonFiles']:
             if os.path.isfile(file):
                 jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
-                with open(jsonFile, 'rb') as f:
-                    result = chardet.detect(f.read())
-                    file_encoding = result['encoding']
-                jsonFile = open(jsonFile,encoding=file_encoding)
+                jsonFile = open(jsonFile,)
                 # Read file
                 data = json.load(jsonFile)
                 ########################################################################
