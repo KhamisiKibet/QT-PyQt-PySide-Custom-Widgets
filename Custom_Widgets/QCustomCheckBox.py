@@ -62,6 +62,24 @@ class QCustomCheckBox(QCheckBox):
         # self.label.setContentsMargins(0, 0, 0, 0)  # Set contents margins to 0 to remove spacing
         self.label.setWordWrap(True)
 
+        # Initialize icon
+        self.icon = QIcon()
+        self._iconSize = QSize(2, 2)  # Default icon size
+
+    def setIcon(self, icon):
+        self.icon = icon
+        self.update()
+    
+    def setIconSize(self, size):
+        """
+        Set the size of the icon for the checkbox.
+
+        Parameters:
+            size (QSize): The size of the icon.
+        """
+        self._iconSize = size
+        self.update()
+
     ########################################################################
     # Customize QCustomCheckBox
     ########################################################################
@@ -91,11 +109,17 @@ class QCustomCheckBox(QCheckBox):
 
         # Update checkbox size
         # Update label position and width
-        labelx = self.height() * 2.1 + 2
-        labely = 0
-        # self.label.setGeometry(labelx, labely, labelwidth, labelheight)
-        self.label.setGeometry(labelx, labely, 0, 0)  # Set initial dimensions to 0, 0
-        self.label.adjustSize()  # Adjust the size based on the content
+        icon_size = self._iconSize.width()
+        label_margin = 5  # Adjust the margin between the icon and the label
+
+        label_width = self.width() - (self.height() * 2.1 + icon_size + label_margin)  # Calculate the width of the label area
+        label_height = self.height()  # Use the height of the checkbox for the label height
+
+        label_x = self.height() * 2.1 + icon_size + label_margin  # Calculate the x position of the label
+        label_y = (self.height() - label_height) / 2  # Center the label vertically within the checkbox area
+
+        self.label.setGeometry(label_x, label_y, label_width, label_height)
+        self.label.adjustSize()
 
 
     def setText(self, text):
@@ -131,12 +155,15 @@ class QCustomCheckBox(QCheckBox):
         p.setPen(Qt.NoPen)
 
         # DRAW RECT
-        rect = QRect(0, 0, self.height() * 2.2, self.height())        
+        rect = QRect(0, 0, self.height() * 2.2, self.height())
+
+        # Define margins
+        margin = 3
 
         if not self.isChecked():
             p.setBrush(QColor(self.bgColor))
             p.drawRoundedRect(0, 0, self.height() * 2.1, self.height(), self.height() * .5, self.height() * .5)
-            
+
             p.setBrush(QColor(self.circleColor))
             p.drawEllipse(self.pos, 0, self.height(), self.height())
         else:
@@ -145,5 +172,14 @@ class QCustomCheckBox(QCheckBox):
 
             p.setBrush(QColor(self.circleColor))
             p.drawEllipse(self.pos, 0, self.height(), self.height())
+
+        # DRAW ICON (Optional)
+        if not self.icon.isNull():
+            icon_size = self.height() * 0.7 if self.icon.availableSizes() else QSize(16, 16)  
+            pixmap = self.icon.pixmap(self._iconSize)
+            # Adjust horizontal position to add margin between checkbox and icon
+            icon_x = self.height() * 2.1 + margin
+            icon_y = (self.height() - self._iconSize.height()) / 2  # Center the icon vertically within the checkbox area
+            p.drawPixmap(icon_x, icon_y, pixmap)
 
         p.end()

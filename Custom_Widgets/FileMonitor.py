@@ -5,6 +5,7 @@ from qtpy.QtCore import QObject, QFileSystemWatcher
 from qtpy.QtWidgets import QApplication
 from termcolor import colored
 import xml.etree.ElementTree as ET
+from lxml import etree
 import re
 
 from Custom_Widgets.Qss.SvgToPngIcons import *
@@ -51,89 +52,96 @@ class FileMonitor(QObject):
             convert_file(path)
     
 def convert_file(path):
-    # Get the root element for the updated file
-    replacements_list = [
-        ("widget", "class", "QPushButton", "QPushButtonThemed"),
-        ("widget", "class", "QLabel", "QLabelThemed"),
-    ]
-    root = replace_attributes_values(path, replacements_list)
+    # Load the UI file
+    tree = etree.parse(path)
+    root = tree.getroot()
+
+    # Initialize an empty dictionary to store widget names and their icons
+    widget_info = {}
+
+    # Iterate through each element in the UI file
+    for element in root.iter():
+        if 'name' in element.attrib and (element.attrib['name'] == 'icon' or element.attrib['name'] == "windowIcon"):
+            widget = element.getparent()  # Get the parent widget
+            widget_class = widget.get('class')  # Get the widget class
+            widget_name = widget.get('name')  # Get the widget name
+            
+            iconset_element = element.find('iconset')
+
+            if iconset_element is not None:
+                if 'resource' in iconset_element.attrib:
+                    # Extract the QRC file path from the 'resource' attribute
+                    qrc_file_path = iconset_element.attrib['resource']
+                    # Extract the folder name containing the QRC file
+                    qrc_folder = os.path.dirname(qrc_file_path)
+                    # Combine with the relative path within the <iconset> tag
+                    relative_path = iconset_element.find("normaloff").text
+                    icon_url = replace_url_prefix(relative_path, qrc_folder)
+
+                else:
+                    icon_url = generate_relative_path(path, iconset_element.find("normaloff").text)
+                
+                # Check if the widget's parent is a QTabWidget
+                parent_widget = widget.getparent()
+                if parent_widget.tag == 'widget' and parent_widget.get('class') == 'QTabWidget':
+                    # Get the tab name
+                    tab_name = parent_widget.get('name')
+                    # Add the widget info to the dictionary
+                    if widget_class in widget_info:
+                        widget_info[widget_class].append({"QTabWidget": tab_name, "name": widget_name, "icon": icon_url})
+                    else:
+                        widget_info[widget_class] = [{"QTabWidget": tab_name, "name": widget_name, "icon": icon_url}]
+                else:
+                    # Add the widget info to the dictionary
+                    if widget_class in widget_info:
+                        widget_info[widget_class].append({"name": widget_name, "icon": icon_url})
+                    else:
+                        widget_info[widget_class] = [{"name": widget_name, "icon": icon_url}]
+        
+        if 'name' in element.attrib and element.attrib['name'] == 'pixmap':
+            widget = element.getparent()  # Get the parent widget
+            widget_class = widget.get('class')  # Get the widget class
+            widget_name = widget.get('name')  # Get the widget name
+            
+            pixmap_element = element.find('pixmap')
+            
+            if pixmap_element is not None:
+                if 'resource' in pixmap_element.attrib:
+                    # Extract the QRC file path from the 'resource' attribute
+                    qrc_file_path = pixmap_element.attrib['resource']
+                    # Extract the folder name containing the QRC file
+                    qrc_folder = os.path.dirname(qrc_file_path)
+                    # Combine with the relative path within the <pixmap> tag
+                    relative_path = pixmap_element.text
+                    pixmap_url = replace_url_prefix(relative_path, qrc_folder)
+                else:
+                    pixmap_url = generate_relative_path(path, pixmap_element.text)
+
+                # Add the widget info to the dictionary
+                if widget_class in widget_info:
+                    widget_info[widget_class].append({"name": widget_name, "pixmap": pixmap_url})
+                else:
+                    widget_info[widget_class] = [{"name": widget_name, "pixmap": pixmap_url}]
+
 
     # Generate JSON file name from UI name
     base_name, _ = os.path.splitext(os.path.basename(path))
     json_file_name = f"{base_name}.json"
 
     # Update JSON data for the specific file
-    update_json(root, json_file_name, path)
+    update_json(widget_info, json_file_name)
 
-def update_json(root, json_file_name, ui_path):
-    button_tag = "widget"
-    button_value = "QPushButtonThemed"
+    replacements_list = [
+        # ("widget", "class", "QPushButton", "QPushButtonThemed"),
+        # ("widget", "class", "QLabel", "QLabelThemed"),
+    ]
+    root = replace_attributes_values(path, replacements_list)
 
-    label_tag = "widget"
-    label_value = "QLabelThemed"
-
-    # Find all QPushButton elements with the specified tag and class
-    buttons = root.findall(".//{}[@class='{}']".format(button_tag, button_value))
-
-    # Find all QLabel elements with the specified tag and class
-    labels = root.findall(".//{}[@class='{}']".format(label_tag, label_value))
-
-    # Extract button names and icon URLs
-    button_data = []
-
-    for button in buttons:
-        button_name = button.get("name")
-        iconset_element = button.find(".//iconset")
-
-        if iconset_element is not None and 'resource' in iconset_element.attrib:
-            # Extract the QRC file path from the 'resource' attribute
-            qrc_file_path = iconset_element.attrib['resource']
-            # Extract the folder name containing the QRC file
-            qrc_folder = os.path.dirname(qrc_file_path)
-            # Combine with the relative path within the <iconset> tag
-            relative_path = iconset_element.find("normaloff").text
-            icon_url = replace_url_prefix(relative_path, qrc_folder)
-        elif iconset_element is not None:
-            icon_url = generate_relative_path(ui_path, iconset_element.find("normaloff").text)
-        else:
-            # Handle the case where icon_element is None
-            icon_url = "default_icon_url"  # Set a default value or handle it as needed
-
-        button_data.append({"name": button_name, "icon": icon_url})
-
-    # Extract label names and pixmap URLs
-    label_data = []
-
-    for label in labels:
-        label_name = label.get("name")
-        pixmap_element = label.find(".//pixmap")
-        
-        if pixmap_element is not None and 'resource' in pixmap_element.attrib:
-            # Extract the QRC file path from the 'resource' attribute
-            qrc_file_path = pixmap_element.attrib['resource']
-            # Extract the folder name containing the QRC file
-            qrc_folder = os.path.dirname(qrc_file_path)
-            # Combine with the relative path within the <pixmap> tag
-            relative_path = pixmap_element.text
-            pixmap_url = replace_url_prefix(relative_path, qrc_folder)
-        elif pixmap_element is not None:
-            pixmap_url = generate_relative_path(ui_path, pixmap_element.text)
-        else:
-            # Handle the case where pixmap_element is None
-            pixmap_url = "default_pixmap_url"  # Set a default value or handle it as needed
-
-        label_data.append({"name": label_name, "pixmap": pixmap_url})
-    
-    # Update the JSON data for buttons
-    button_info = button_data
-
-    # Update the JSON data for labels
-    label_info = label_data
-
+def update_json(data, json_file_name):
     # Save the JSON data back to the file
     json_path = os.path.join(os.getcwd(), "generated-files/json/"+json_file_name)
     with open(json_path, "w") as json_file:
-        json.dump({"buttons": button_info, "labels": label_info}, json_file, indent=2)
+        json.dump(data, json_file, indent=2)
 
 def generate_relative_path(ui_path, relative_url):
     # Determine the directory of the UI file
@@ -197,8 +205,6 @@ def start_file_listener(file_or_folder, qt_binding="PySide6"):
 
     sys.exit(app.exec_())  # Start the application event loop
 
-
-
 def replace_attributes_values(ui_file_path, replacements):
     # Parse the XML file
     tree = ET.parse(ui_file_path)
@@ -229,8 +235,8 @@ def replace_attributes_values(ui_file_path, replacements):
 
     # Append custom widgets
     widget_list = [
-        ("QPushButtonThemed", "QPushButton", "Custom_Widgets.Theme.h", 1),
-        ("QLabelThemed", "QLabel", "Custom_Widgets.Theme.h", 1)
+        ("QPushButton", "QPushButton", "Custom_Widgets.Theme.h", 1),
+        ("QLabel", "QLabel", "Custom_Widgets.Theme.h", 1)
     ]
     append_custom_widgets(new_file_path, widget_list)
 
