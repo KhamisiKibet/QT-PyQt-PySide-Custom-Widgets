@@ -252,6 +252,10 @@ Please read the required **project structure** above before proceeding.
 - Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
 
 
+## Support 💖
+
+If you find this project valuable and would like to contribute to its development and maintenance, you can support me on [Patreon](https://www.patreon.com/spinntv). Your sponsorship means a lot and is greatly appreciated!💖
+
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
