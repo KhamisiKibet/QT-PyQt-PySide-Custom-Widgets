@@ -117,6 +117,11 @@ class NewIconsGenerator(QObject):
                 
 
     def generateAllIcons(self, progress_callback):
+        if not self.checkForMissingicons:
+            # emit 100% progress
+            progress_callback.emit(100)
+            return
+        
         themes = self.ui.themes
         def get_theme_color(theme):
             if hasattr(theme, "iconsColor") and theme.iconsColor != "":
@@ -136,7 +141,7 @@ class NewIconsGenerator(QObject):
             NewIconsGenerator.generateIcons(progress_callback, color, "", iconsFolderName)
         
         # then make icons for qt designer
-        print(f"Checking icons for qt designer app.")
+        logInfo(self, f"Checking icons for qt designer app.")
         if settings.value("DESIGNER-ICONS-COLOR") is not None:
             NewIconsGenerator.generateIcons(progress_callback, settings.value("DESIGNER-ICONS-COLOR"), "", "icons", createQrc=True)
         else:

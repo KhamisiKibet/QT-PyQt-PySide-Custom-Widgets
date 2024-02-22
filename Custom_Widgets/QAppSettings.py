@@ -28,7 +28,6 @@ class QAppSettings():
         ## CREATE APP SETTINGS
         ########################################################################
 
-
     def updateAppSettings(self):
 
         if len(str(self.orginazationName)) > 0:
@@ -50,6 +49,7 @@ class QAppSettings():
         #######################################################################
         # APPLY COMPILED STYLESHEET
         #######################################################################
+        self.reloadJsonStyles(update = True)
         CompileStyleSheet.applyCompiledSass(self)
 
 

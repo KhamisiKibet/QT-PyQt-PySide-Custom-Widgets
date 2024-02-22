@@ -5,6 +5,8 @@ import os
 import __main__
 
 from Custom_Widgets.Qss import SassCompiler
+
+from Custom_Widgets.Qss.colorsystem import CreateColorVariable
 CompileStyleSheet = SassCompiler.CompileStyleSheet
 from Custom_Widgets.Qss.SvgToPngIcons import NewIconsGenerator
 from Custom_Widgets.Theme import setNewIcon, setNewPixmap, setNewTabIcon
@@ -46,6 +48,27 @@ class QMainWindow(QtWidgets.QMainWindow):
 
         self.iconsWorker = None
         self.allIconsWorker = None
+
+        # Create global color variables
+        self.theme = Object()
+        self.theme.COLOR_BACKGROUND_1 = ""
+        self.theme.COLOR_BACKGROUND_2 = ""
+        self.theme.COLOR_BACKGROUND_3 = ""
+        self.theme.COLOR_BACKGROUND_4 = ""
+        self.theme.COLOR_BACKGROUND_5 = ""
+        self.theme.COLOR_BACKGROUND_6 = ""
+
+        self.theme.COLOR_TEXT_1 = ""
+        self.theme.COLOR_TEXT_2 =""
+        self.theme.COLOR_TEXT_3 = ""
+        self.theme.COLOR_TEXT_4 = ""
+
+        self.theme.COLOR_ACCENT_1 = ""
+        self.theme.COLOR_ACCENT_2 = ""
+        self.theme.COLOR_ACCENT_3 = ""
+        self.theme.COLOR_ACCENT_4 = ""
+
+        self.theme.PATH_RESOURCES = ""
 
         QCoreApplication.instance().aboutToQuit.connect(self.stopWorkers)
     
@@ -131,20 +154,32 @@ class QMainWindow(QtWidgets.QMainWindow):
         self.updateRestoreButtonIcon()
 
     ## Check Button Groups
-    def checkButtonGroup(self):
-        btn = self.sender()
+    def checkButtonGroup(self, button = None):
+        if self.sender() is not None:
+            btn = self.sender()
+        else:
+            btn = button
+                
         group = btn.group
         groupBtns = getattr(self, "group_btns_"+str(group))
         active = getattr(self, "group_active_"+str(group))
         notActive = getattr(self, "group_not_active_"+str(group))
 
         for x in groupBtns:
-            if not x == btn:
-                x.setStyleSheet(notActive)
-                x.active = False
+            if x == btn and self.sender() is not None:
+                x.setStyleSheet(self.styleVariablesFromTheme(active))
+                x.active = True
 
-        btn.setStyleSheet(active)
-        btn.active = True
+            elif  x.active and self.sender() is None:
+                x.setStyleSheet(self.styleVariablesFromTheme(active))
+                x.active = True
+
+            else:
+                x.setStyleSheet(self.styleVariablesFromTheme(notActive))
+                x.active = False
+            
+            # if x.active:
+            #     x.setProperty("clicked", True)
 
     def compileSassTheme(self, progress_callback):
         ## GENERATE NEW ICONS FOR CURRENT THEME
@@ -223,9 +258,82 @@ class QMainWindow(QtWidgets.QMainWindow):
         if self.allIconsWorker is not None:
             self.allIconsWorker.stop()
 
+    def styleVariablesFromTheme(self, stylesheet):
+        self.defineThemeVarMapping()
+        # Replace variables in the stylesheet string
+        for var, value in self.theme_variable_mapping.items():
+            # Escape special characters in the variable name
+            var_pattern = re.escape(var)
+            # Replace the variable with its corresponding value
+            stylesheet = re.sub(var_pattern, value, stylesheet)
+            
+        return stylesheet
+    
+    def getThemeVariableValue(self, color_variable):
+        self.defineThemeVarMapping()
+        return self.theme_variable_mapping.get(color_variable, color_variable)
+    
+    def defineThemeVarMapping(self):
+        CreateColorVariable.CreateVariables(self)
+        # Define the mapping of variables to their corresponding values in self.theme
+        self.theme_variable_mapping = {
+            '$COLOR_BACKGROUND_1': self.theme.COLOR_BACKGROUND_1,
+            '$COLOR_BACKGROUND_2': self.theme.COLOR_BACKGROUND_2,
+            '$COLOR_BACKGROUND_3': self.theme.COLOR_BACKGROUND_3,
+            '$COLOR_BACKGROUND_4': self.theme.COLOR_BACKGROUND_4,
+            '$COLOR_BACKGROUND_5': self.theme.COLOR_BACKGROUND_5,
+            '$COLOR_BACKGROUND_6': self.theme.COLOR_BACKGROUND_6,
+            '$COLOR_TEXT_1': self.theme.COLOR_TEXT_1,
+            '$COLOR_TEXT_2': self.theme.COLOR_TEXT_2,
+            '$COLOR_TEXT_3': self.theme.COLOR_TEXT_3,
+            '$COLOR_TEXT_4': self.theme.COLOR_TEXT_4,
+            '$COLOR_ACCENT_1': self.theme.COLOR_ACCENT_1,
+            '$COLOR_ACCENT_2': self.theme.COLOR_ACCENT_2,
+            '$COLOR_ACCENT_3': self.theme.COLOR_ACCENT_3,
+            '$COLOR_ACCENT_4': self.theme.COLOR_ACCENT_4,
+            '$OPACITY_TOOLTIP': '230',
+            '$SIZE_BORDER_RADIUS': '4px',
+            '$BORDER_1': '1px solid ' + self.theme.COLOR_BACKGROUND_1,
+            '$BORDER_2': '1px solid ' + self.theme.COLOR_BACKGROUND_4,
+            '$BORDER_3': '1px solid ' + self.theme.COLOR_BACKGROUND_6,
+            '$BORDER_SELECTION_3': '1px solid ' + self.theme.COLOR_ACCENT_3,
+            '$BORDER_SELECTION_2': '1px solid ' + self.theme.COLOR_ACCENT_2,
+            '$BORDER_SELECTION_1': '1px solid ' + self.theme.COLOR_ACCENT_1,
+            '$PATH_RESOURCES': f"'{self.theme.PATH_RESOURCES}'",
+            
+            'THEME.COLOR_BACKGROUND_1': self.theme.COLOR_BACKGROUND_1,
+            'THEME.COLOR_BACKGROUND_2': self.theme.COLOR_BACKGROUND_2,
+            'THEME.COLOR_BACKGROUND_3': self.theme.COLOR_BACKGROUND_3,
+            'THEME.COLOR_BACKGROUND_4': self.theme.COLOR_BACKGROUND_4,
+            'THEME.COLOR_BACKGROUND_5': self.theme.COLOR_BACKGROUND_5,
+            'THEME.COLOR_BACKGROUND_6': self.theme.COLOR_BACKGROUND_6,
+            'THEME.COLOR_TEXT_1': self.theme.COLOR_TEXT_1,
+            'THEME.COLOR_TEXT_2': self.theme.COLOR_TEXT_2,
+            'THEME.COLOR_TEXT_3': self.theme.COLOR_TEXT_3,
+            'THEME.COLOR_TEXT_4': self.theme.COLOR_TEXT_4,
+            'THEME.COLOR_ACCENT_1': self.theme.COLOR_ACCENT_1,
+            'THEME.COLOR_ACCENT_2': self.theme.COLOR_ACCENT_2,
+            'THEME.COLOR_ACCENT_3': self.theme.COLOR_ACCENT_3,
+            'THEME.COLOR_ACCENT_4': self.theme.COLOR_ACCENT_4,
+            'THEME.OPACITY_TOOLTIP': '230',
+            'THEME.SIZE_BORDER_RADIUS': '4px',
+            'THEME.BORDER_1': '1px solid ' + self.theme.COLOR_BACKGROUND_1,
+            'THEME.BORDER_2': '1px solid ' + self.theme.COLOR_BACKGROUND_4,
+            'THEME.BORDER_3': '1px solid ' + self.theme.COLOR_BACKGROUND_6,
+            'THEME.BORDER_SELECTION_3': '1px solid ' + self.theme.COLOR_ACCENT_3,
+            'THEME.BORDER_SELECTION_2': '1px solid ' + self.theme.COLOR_ACCENT_2,
+            'THEME.BORDER_SELECTION_1': '1px solid ' + self.theme.COLOR_ACCENT_1,
+            'THEME.PATH_RESOURCES': f"'{self.theme.PATH_RESOURCES}'"
+        }
+
+        return self.theme_variable_mapping
+
+    def reloadJsonStyles(self, update = False):
+        loadJsonStyle(self, self.ui, jsonFiles = self.jsonStyleSheets, update = update)
+
 def mouseReleaseEvent(self, QMouseEvent):
     cursor = QtGui.QCursor()
     # self.ui.frame.setGeometry(QRect(cursor.pos().x(), cursor.pos().y(), 151, 111))
 
-def navigationButtons(stackedWidget, pushButton, widgetPage):
-    pushButton.clicked.connect(lambda: stackedWidget.setCurrentWidget(widgetPage))
+class Object(object):
+    pass

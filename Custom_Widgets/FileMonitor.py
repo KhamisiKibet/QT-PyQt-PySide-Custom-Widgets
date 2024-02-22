@@ -9,7 +9,8 @@ from lxml import etree
 import re
 
 from Custom_Widgets.Qss.SvgToPngIcons import *
-from Custom_Widgets.Qss.SassCompiler import CompileStyleSheet
+
+from Custom_Widgets.QAppSettings import QAppSettings
 
 class FileMonitor(QObject):
     def __init__(self, files_to_monitor):
@@ -365,30 +366,56 @@ def start_ui_conversion(file_or_folder, qt_binding="PySide6"):
 
     print("Done converting!")
 
-def start_qss_file_listener(self):
-    logInfo(self, "Live monitoring Qss/scss/defaultStyle.scss file for changes")
-    default_sass_path = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss/defaultStyle.scss'))
 
-    if os.path.isfile(default_sass_path):
-        # Monitor file for changes
-        self.qss_watcher = QFileSystemWatcher()
-        self.qss_watcher.addPath(default_sass_path)
-        self.qss_watcher.fileChanged.connect(lambda: qss_file_changed(self))
-    
-    else:
-        logError(self, "Error: Qss/scss/defaultStyle.scss file not found")
+class QSsFileMonitor():
+    def __init__(self, parent=None):
+        super(QSsFileMonitor, self).__init__(parent)
 
-def qss_file_changed(self):
-    logInfo(self, "Qss/scss/defaultStyle.scss changed, applying new stylesheet")
+    def start_qss_file_listener(self):
+        if self.liveCompileQss:
+            logInfo(self, "Live monitoring Qss/scss/defaultStyle.scss file for changes")
+            default_sass_path = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss/defaultStyle.scss'))
 
-    # Apply compiled stylesheet
-    CompileStyleSheet.applyCompiledSass(self)
+            if os.path.isfile(default_sass_path):
+                # Monitor defaultStyle.scss file for changes
+                self.qss_watcher = QFileSystemWatcher()
+                self.qss_watcher.addPath(default_sass_path)
 
-def stop_qss_file_listener(self):
-    if hasattr(self, 'qss_watcher'):
-        self.qss_watcher.fileChanged.disconnect(self.qss_file_changed)
-        self.qss_watcher.deleteLater()
-        del self.qss_watcher
+                # Monitor JSON style sheets for changes
+                for json_file in self.jsonStyleSheets:
+                    json_file_path = os.path.abspath(os.path.join(os.getcwd(), json_file))
+                    if os.path.isfile(json_file_path):
+                        self.qss_watcher.addPath(json_file_path)
+
+                        logInfo(self, f"Live monitoring {json_file} for changes")
+                    else:
+                        logError(self, f"Error: JSON file {json_file} not found")
+
+            else:
+                logError(self, "Error: Qss/scss/defaultStyle.scss file not found")
+
+        self.qss_watcher.fileChanged.connect(lambda path=default_sass_path: QSsFileMonitor.qss_file_changed(self, path))
+
+
+    def qss_file_changed(self, file_path):
+        logInfo(self, f"File changed: {file_path}")
+
+        # # Check if the file extension is '.json'
+        # if file_path.endswith('.json'):
+        #     # reload jsons
+        #     self.reloadJsonStyles(update = True)
+        # else:
+        #     # Apply compiled stylesheet
+        #     QAppSettings.updateAppSettings(self)
+
+        QAppSettings.updateAppSettings(self)
+
+    def stop_qss_file_listener(self):
+        if hasattr(self, 'qss_watcher'):
+            # Disconnect the fileChanged signal from the qss_file_changed slot
+            self.qss_watcher.fileChanged.disconnect(QSsFileMonitor.qss_file_changed)
+            self.qss_watcher.deleteLater()
+            del self.qss_watcher
 
 
 

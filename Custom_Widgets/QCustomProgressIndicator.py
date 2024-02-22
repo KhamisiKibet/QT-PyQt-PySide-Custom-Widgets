@@ -17,7 +17,7 @@ from qtpy.QtGui import *
 from qtpy.QtWidgets import *
 from qtpy import  QtCore
 
-from Custom_Widgets.__init__ import returnAnimationEasingCurve
+from Custom_Widgets.QPropertyAnimation import returnAnimationEasingCurve
 
 import warnings
 

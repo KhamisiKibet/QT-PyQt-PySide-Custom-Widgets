@@ -235,17 +235,21 @@ class CreateColorVariable():
             theme = Dark()
 
         else:
-            for themes in self.ui.themes:
-                if themes.defaultTheme or themes.name == THEME:
-                    # generate app theme
-                    settings.setValue("THEME", themes.name)
+            if not hasattr(self.ui, 'themes'):
+                theme = Light()
+                
+            else:
+                for themes in self.ui.themes:
+                    if themes.defaultTheme or themes.name == THEME:
+                        # generate app theme
+                        settings.setValue("THEME", themes.name)
 
-                    theme = themes
-                    theme.bg_color = themes.backgroundColor
-                    theme.txt_color = themes.textColor
-                    theme.accent_color = themes.accentColor
-                    theme.icons_color = theme.iconsColor
-                    themeFound = True
+                        theme = themes
+                        theme.bg_color = themes.backgroundColor
+                        theme.txt_color = themes.textColor
+                        theme.accent_color = themes.accentColor
+                        theme.icons_color = theme.iconsColor
+                        themeFound = True
 
         if not themeFound and THEME is None:
             theme = Light()
@@ -265,17 +269,33 @@ class CreateColorVariable():
             theme.BG_4 = adjust_lightness(theme.bg_color, 0.70)
             theme.BG_5 = adjust_lightness(theme.bg_color, 0.60)
             theme.BG_6 = adjust_lightness(theme.bg_color, 0.50)
+            # theme.BG_2 = lighten_color(theme.bg_color, 0.05)
+            # theme.BG_3 = lighten_color(theme.bg_color, 0.1)
+            # theme.BG_4 = lighten_color(theme.bg_color, 0.15)
+            # theme.BG_5 = lighten_color(theme.bg_color, 0.2)
+            # theme.BG_6 = lighten_color(theme.bg_color, 0.25)
 
+        if is_color_dark_or_light(theme.txt_color) == "light":
+            theme.CT_1 = theme.txt_color
+            theme.CT_2 = darken_color(theme.txt_color, 0.2)
+            theme.CT_3 = darken_color(theme.txt_color, 0.4)
+            theme.CT_4 = darken_color(theme.txt_color, 0.6)
+        else:
+            theme.CT_1 = theme.txt_color
+            theme.CT_2 = lighten_color(theme.txt_color, 0.2)
+            theme.CT_3 = lighten_color(theme.txt_color, 0.4)
+            theme.CT_4 = lighten_color(theme.txt_color, 0.6)
 
-        theme.CT_1 = adjust_lightness(theme.txt_color, 1)
-        theme.CT_2 = adjust_lightness(theme.txt_color, 0.9)
-        theme.CT_3 = adjust_lightness(theme.txt_color, 0.8)
-        theme.CT_4 = adjust_lightness(theme.txt_color, 0.7)
-
-        theme.CA_1 = adjust_lightness(theme.accent_color, 1)
-        theme.CA_2 = adjust_lightness(theme.accent_color, .9)
-        theme.CA_3 = adjust_lightness(theme.accent_color, .8)
-        theme.CA_4 = adjust_lightness(theme.accent_color, .7)
+        if is_color_dark_or_light(theme.txt_color) == "light":
+            theme.CA_1 = theme.accent_color
+            theme.CA_2 = darken_color(theme.accent_color, .2)
+            theme.CA_3 = darken_color(theme.accent_color, .4)
+            theme.CA_4 = darken_color(theme.accent_color, .6)
+        else:
+            theme.CA_1 = theme.accent_color
+            theme.CA_2 = lighten_color(theme.accent_color, .2)
+            theme.CA_3 = lighten_color(theme.accent_color, .4)
+            theme.CA_4 = lighten_color(theme.accent_color, .6)
 
         if theme.icons_color is not None and theme.icons_color != "":
             folder = theme.icons_color.replace("#", "")
@@ -287,8 +307,7 @@ class CreateColorVariable():
         theme.ICONS = "theme-icons:"+folder+"/feather/"
             
 
-        # Create global color variables
-        self.theme = Object()
+        # Update global color variables
         self.theme.COLOR_BACKGROUND_1 = theme.BG_1
         self.theme.COLOR_BACKGROUND_2 = theme.BG_2
         self.theme.COLOR_BACKGROUND_3 = theme.BG_3
@@ -349,8 +368,3 @@ class CreateColorVariable():
 
         f.close()
 
-########################################################################
-##
-########################################################################
-class Object(object):
-    pass

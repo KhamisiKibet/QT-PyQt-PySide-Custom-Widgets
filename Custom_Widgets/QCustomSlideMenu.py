@@ -159,8 +159,10 @@ class QCustomSlideMenu(QWidget):
                 else:
                     self.autoHide = True
 
-
-        self.refresh()
+        if "update" in customValues and not customValues["update"]:
+            # self.refresh()
+            pass
+            
 
     ########################################################################
     # Float menu
@@ -227,7 +229,8 @@ class QCustomSlideMenu(QWidget):
 
             self.targetBtn = toggleButton
 
-            self.activateMenuButton(self.targetBtn)
+            if "update" in values and not values["update"]:
+                self.activateMenuButton(self.targetBtn)
 
 
         if "iconWhenMenuIsCollapsed" in values and len(str(values["iconWhenMenuIsCollapsed"])) > 0:

@@ -8,51 +8,54 @@ from qtpy import QtWidgets, QtGui, QtCore
 from qtpy.QtGui import *
 from qtpy.QtWidgets import *
 
-from Custom_Widgets.FileMonitor import start_qss_file_listener, stop_qss_file_listener
+from Custom_Widgets.FileMonitor import QSsFileMonitor
 from Custom_Widgets.QCustomQPushButtonGroup import QCustomQPushButtonGroup
 from Custom_Widgets.QCustomQPushButton import applyAnimationThemeStyle, applyButtonShadow, iconify, applyCustomAnimationThemeStyle, applyStylesFromColor
-from Custom_Widgets.QPropertyAnimation import returnAnimationEasingCurve
+from Custom_Widgets.QPropertyAnimation import returnAnimationEasingCurve, returnQtDirection
 
-## Read JSon stylesheet
-def loadJsonStyle(self, ui, **jsonFiles):  
+from Custom_Widgets.Qss.colorsystem import CreateColorVariable
+
+
+## Read JSON stylesheet
+def loadJsonStyle(self, ui, update = False, **jsonFiles):
     # START THREAD
     self.customWidgetsThreadpool = QThreadPool()
     # Show Logs
-    self.showCustomWidgetsLogs = True  
+    self.showCustomWidgetsLogs = True
+    self.checkForMissingicons = True
     self.ui = ui
+    self.jsonStyleSheets = []  # List to store loaded JSON style sheets
+    self.jsonStyleData = {}
+
     if not jsonFiles:
-        if os.path.isfile("style.json"):
-            file = open('style.json',)
-            data = json.load(file)
-            applyJsonStyle(self, self.ui, data)
-
-        elif os.path.isfile("json/style.json"):
-            file = open('json/style.json',)
-            data = json.load(file)
-            applyJsonStyle(self, self.ui, data)
-
-        elif os.path.isfile("jsonstyles/style.json"):
-            file = open('jsonstyles/style.json',)
-            data = json.load(file)
-            applyJsonStyle(self, self.ui, data)
+        json_file_paths = ["style.json", "json/style.json", "jsonstyles/style.json"]
+        for file_path in json_file_paths:
+            if os.path.isfile(file_path):
+                with open(file_path) as file:
+                    data = json.load(file)
+                    self.jsonStyleData.update(data)  # Update existing data with new data
+                    self.jsonStyleSheets.append(file_path)
 
     else:
-        for file in jsonFiles['jsonFiles']:
+        for file in jsonFiles.get('jsonFiles', []):
             if os.path.isfile(file):
                 jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
-                jsonFile = open(jsonFile,)
-                # Read file
-                data = json.load(jsonFile)
-                # APPLY JSON STYLESHEET
-                # self = QMainWindow class
-                # self.ui = Ui_MainWindow / user interface class
-                applyJsonStyle(self, self.ui, data)
-              
+                with open(jsonFile) as jsonFile:
+                    data = json.load(jsonFile)
+                    # APPLY JSON STYLESHEET
+                    # self = QMainWindow class
+                    # self.ui = Ui_MainWindow / user interface class
+                    self.jsonStyleData.update(data)  # Update existing data with new data
+                    self.jsonStyleSheets.append(file)
             else:
-                raise Exception("Error loading your JSON files : '"+str(file)+"' does not exist")
+                raise Exception("Error loading your JSON files: '{}' does not exist".format(file))
+
+    applyJsonStyle(self, update = update)
+
 
 ## Apply JSon stylesheet
-def applyJsonStyle(self, ui, data):
+def applyJsonStyle(self, update = False):
+    data = self.jsonStyleData
     ## Show logs
     if "ShowLogs" in data:
         if data["ShowLogs"]:
@@ -65,11 +68,122 @@ def applyJsonStyle(self, ui, data):
     ## Live QSS compiler
     if "LiveCompileQss" in data:
         if data["LiveCompileQss"]:
-            self.liveCompileQss = True
-            start_qss_file_listener(self)
+            if not hasattr(self, 'qss_watcher') and not hasattr(self, 'liveCompileQss'):
+                self.liveCompileQss = True
+                QSsFileMonitor.start_qss_file_listener(self)
+            
         else:
             self.liveCompileQss = False
-            stop_qss_file_listener(self)
+            # QSsFileMonitor.stop_qss_file_listener(self)
+
+    # Generate missing icons including qt designer icons
+    if "CheckForMissingicons" in data:
+        if data["CheckForMissingicons"]:
+            self.checkForMissingicons = data["CheckForMissingicons"]
+        else:
+            self.checkForMissingicons = False
+
+
+    ## QSETTINGS
+    if "QSettings" in data:
+        for settings in data['QSettings']:
+            if "AppSettings" in settings:
+                appSettings = settings['AppSettings']
+                if "OrginizationName" in appSettings and len(str(appSettings["OrginizationName"])) > 0:
+                    self.orginazationName = str(appSettings["OrginizationName"])
+                else:
+                    self.orginazationName = ""
+
+                if "ApplicationName" in settings['AppSettings'] and len(str(appSettings["ApplicationName"])) > 0:
+                    self.applicationName = str(appSettings["ApplicationName"])
+
+                else:
+                    self.applicationName = ""
+
+
+                if "OrginizationDormain" in settings['AppSettings'] and len(str(appSettings["OrginizationDormain"])) > 0:
+                    self.orginazationDomain = str(appSettings["OrginizationDormain"]).replace(" ", "")
+                else:
+                    self.orginazationDomain = ""
+
+            if "ThemeSettings" in settings:
+                for themeSettings in settings['ThemeSettings']:
+                    if "CustomTheme" in themeSettings:
+                        # Create themes
+                        if not hasattr(self.ui, "themes"):
+                            setattr(self.ui, "themes", [])
+                        themes = getattr(self.ui, "themes")
+
+                        for customTheme in themeSettings['CustomTheme']:
+                            if "Theme-name" in customTheme and len(str(customTheme['Theme-name'])) > 0:
+                                theme_name = str(customTheme['Theme-name'])
+
+                                if not hasattr(self.ui, theme_name):
+                                    setattr(self.ui, theme_name, Object())
+                                
+                                theme = getattr(self.ui, theme_name)
+                                theme.name = theme_name
+
+                                if "Background-color" in customTheme and len(str(customTheme['Background-color'])) > 0:
+                                    setattr(theme, "backgroundColor", str(customTheme['Background-color']))
+                                else:
+                                    theme.backgroundColor = ""
+
+                                if "Text-color" in customTheme and len(str(customTheme['Text-color'])) > 0:
+                                    theme.textColor = str(customTheme['Text-color'])
+
+                                else:
+                                    theme.textColor = ""
+
+                                if "Accent-color" in customTheme and len(str(customTheme['Accent-color'])) > 0:
+                                    theme.accentColor = str(customTheme['Accent-color'])
+
+                                else:
+                                    theme.accentColor = ""
+
+                                if "Icons-color" in customTheme and len(str(customTheme['Icons-color'])) > 0:
+                                    theme.iconsColor = str(customTheme['Icons-color'])
+
+                                else:
+                                    theme.iconsColor = ""
+
+                                if "Default-Theme" in customTheme and bool(customTheme['Default-Theme']) == True:
+                                    # THEME = settings.value("THEME")
+                                    setngs = QSettings()
+                                    if setngs.contains("THEME") and setngs.contains("THEME") is not None:
+                                        theme.defaultTheme = False
+                                    else:
+                                        theme.defaultTheme = True
+
+                                else:
+                                    theme.defaultTheme = False
+
+                                if "Create-icons" in customTheme and bool(customTheme['Create-icons']) == False:
+                                    theme.createNewIcons = False
+                                else:
+                                    theme.createNewIcons = True
+
+                                themes.append(theme)
+
+        if not hasattr(self.ui, "DARK"):
+            setattr(self.ui, "DARK", Object())
+            darkTheme = getattr(self.ui, "DARK")
+            darkTheme.name = "DARK"
+            darkTheme.defaultTheme = False
+            darkTheme.createNewIcons = True
+            themes.append(darkTheme)
+        if not hasattr(self.ui, "LIGHT"):
+            setattr(self.ui, "LIGHT", Object())
+            lightTheme = getattr(self.ui, "LIGHT")
+            lightTheme.name = "LIGHT"
+            lightTheme.defaultTheme = False
+            lightTheme.createNewIcons = True
+            themes.append(lightTheme)
+
+        # QAppSettings.updateAppSettings(self)
+            
+    if update:
+        CreateColorVariable.CreateVariables(self)
 
     ## QCARDS
     if "QCard" in data:
@@ -83,7 +197,7 @@ def applyJsonStyle(self, ui, data):
                             effect = QtWidgets.QGraphicsDropShadowEffect(cardWidget)
                             for shadow in QCard['shadow']:
                                 if "color" in shadow and len(str(shadow["color"])) > 0:
-                                    effect.setColor(QColor(str(shadow["color"])))
+                                    effect.setColor(QColor(self.getThemeVariableValue(str(shadow["color"]))))
                                 else:
                                     effect.setColor(QColor(0,0,0,0))
                                 if "blurRadius" in shadow and int(shadow["blurRadius"]) > 0:
@@ -119,7 +233,11 @@ def applyJsonStyle(self, ui, data):
                     if hasattr(self.ui, str(button)):
                         btn = getattr(self.ui, str(button))
                         btn.groupParent = self
-                        btn.active = False
+                        if not hasattr(btn, "active"):
+                            if "ActiveButton" in QPushButtonGroup and QPushButtonGroup["ActiveButton"] == button:
+                                btn.active = True
+                            else:
+                                btn.active = False
 
                         if not btn.metaObject().className() == "QPushButton" and not btn.metaObject().className() == "QPushButtonThemed":
                             raise Exception("Error: "+str(button)+" is not a QPushButton object.")
@@ -130,7 +248,8 @@ def applyJsonStyle(self, ui, data):
 
                         getattr(self, "group_btns_"+str(grp_count)).append(btn)
 
-                        btn.clicked.connect(self.checkButtonGroup)
+                        if not update:
+                            btn.clicked.connect(self.checkButtonGroup)
                     else:
                         raise Exception("Error: Button named "+str(button)+" was not found.")
                         
@@ -141,13 +260,16 @@ def applyJsonStyle(self, ui, data):
             if "Style" in QPushButtonGroup:
                 for style in QPushButtonGroup["Style"]:
                     if "Active" in style:
-                        activeStyle = style['Active']
+                        activeStyle = self.styleVariablesFromTheme(style['Active'])
                     if "NotActive" in style:
-                        notActiveStyle = style['NotActive']
+                        notActiveStyle = self.styleVariablesFromTheme(style['NotActive'])
 
-            getattr(self, "group_btns_"+str(grp_count))[0].active = True
-            setattr(self, "group_active_"+str(grp_count), activeStyle)
-            setattr(self, "group_not_active_"+str(grp_count), notActiveStyle)
+                # getattr(self, "group_btns_"+str(grp_count))[0].active = True
+                setattr(self, "group_active_"+str(grp_count), activeStyle)
+                setattr(self, "group_not_active_"+str(grp_count), notActiveStyle)
+
+                if update:
+                    self.checkButtonGroup(button = btn)
 
 
 
@@ -238,29 +360,29 @@ def applyJsonStyle(self, ui, data):
 
                     if "needleColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["needleColor"])) > 0:
                         # Set needle color
-                        gaugeWidget.NeedleColor = QColor(str(AnalogGaugeWidget["needleColor"]))
-                        gaugeWidget.NeedleColorReleased = QColor(str(AnalogGaugeWidget["needleColor"]))
+                        gaugeWidget.NeedleColor = QColor(self.getThemeVariableValue(str(AnalogGaugeWidget["needleColor"])))
+                        gaugeWidget.NeedleColorReleased = QColor(self.getThemeVariableValue(str(AnalogGaugeWidget["needleColor"])))
 
 
                     if "needleColorOnDrag" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["needleColorOnDrag"])) > 0:
                         # Set needle color on drag
-                        gaugeWidget.NeedleColorDrag = QColor(str(AnalogGaugeWidget["needleColorOnDrag"]))
+                        gaugeWidget.NeedleColorDrag = QColor(self.getThemeVariableValue(str(AnalogGaugeWidget["needleColorOnDrag"])))
 
                     if "scaleValueColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["scaleValueColor"])) > 0:
                         # Set value color
-                        gaugeWidget.ScaleValueColor = QColor(str(AnalogGaugeWidget["scaleValueColor"]))
+                        gaugeWidget.ScaleValueColor = QColor(self.getThemeVariableValue(str(AnalogGaugeWidget["scaleValueColor"])))
 
                     if "displayValueColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["displayValueColor"])) > 0:
                         # Set display value color
-                        gaugeWidget.DisplayValueColor = QColor(str(AnalogGaugeWidget["displayValueColor"]))
+                        gaugeWidget.DisplayValueColor = QColor(self.getThemeVariableValue(str(AnalogGaugeWidget["displayValueColor"])))
 
                     if "bigScaleColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["bigScaleColor"])) > 0:
                         # Set big scale color
-                        gaugeWidget.setBigScaleColor(QColor(str(AnalogGaugeWidget["bigScaleColor"])))
+                        gaugeWidget.setBigScaleColor(QColor(self.getThemeVariableValue(str(AnalogGaugeWidget["bigScaleColor"]))))
 
                     if "fineScaleColor" in AnalogGaugeWidget and len(str(AnalogGaugeWidget["fineScaleColor"])) > 0:
                         # Set fine scale color
-                        gaugeWidget.setFineScaleColor(QColor(str(AnalogGaugeWidget["fineScaleColor"])))
+                        gaugeWidget.setFineScaleColor(QColor(self.getThemeVariableValue(str(AnalogGaugeWidget["fineScaleColor"]))))
 
                     if "customGaugeTheme" in AnalogGaugeWidget:
                         # Set custom gauge theme
@@ -273,22 +395,22 @@ def applyJsonStyle(self, ui, data):
                                     if "color3" in x and len(str(x['color3'])) > 0:
 
                                         gaugeWidget.setCustomGaugeTheme(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
-                                                color3 = str(x['color3'])
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2'])),
+                                                color3 = self.getThemeVariableValue(str(x['color3']))
                                             )
 
                                     else:
 
                                         gaugeWidget.setCustomGaugeTheme(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2']))
                                             )
 
                                 else:
 
                                     gaugeWidget.setCustomGaugeTheme(
-                                            color1 = str(x['color1']),
+                                            color1 = self.getThemeVariableValue(str(x['color1']))
                                         )
 
                     if "scalePolygonColor" in AnalogGaugeWidget:
@@ -302,22 +424,22 @@ def applyJsonStyle(self, ui, data):
                                     if "color3" in x and len(str(x['color3'])) > 0:
 
                                         gaugeWidget.setScalePolygonColor(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
-                                                color3 = str(x['color3'])
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2'])),
+                                                color3 = self.getThemeVariableValue(str(x['color3']))
                                             )
 
                                     else:
 
                                         gaugeWidget.setScalePolygonColor(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2'])),
                                             )
 
                                 else:
 
                                     gaugeWidget.setScalePolygonColor(
-                                            color1 = str(x['color1']),
+                                            color1 = self.getThemeVariableValue(str(x['color1'])),
                                         )
 
                     if "needleCenterColor" in AnalogGaugeWidget:
@@ -331,22 +453,22 @@ def applyJsonStyle(self, ui, data):
                                     if "color3" in x and len(str(x['color3'])) > 0:
 
                                         gaugeWidget.setNeedleCenterColor(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
-                                                color3 = str(x['color3'])
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2'])),
+                                                color3 = self.getThemeVariableValue(str(x['color3']))
                                             )
 
                                     else:
 
                                         gaugeWidget.setNeedleCenterColor(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2'])),
                                             )
 
                                 else:
 
                                     gaugeWidget.setNeedleCenterColor(
-                                            color1 = str(x['color1']),
+                                            color1 = self.getThemeVariableValue(str(x['color1'])),
                                         )
 
                     if "outerCircleColor" in AnalogGaugeWidget:
@@ -360,22 +482,22 @@ def applyJsonStyle(self, ui, data):
                                     if "color3" in x and len(str(x['color3'])) > 0:
 
                                         gaugeWidget.setOuterCircleColor(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
-                                                color3 = str(x['color3'])
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2'])),
+                                                color3 = self.getThemeVariableValue(str(x['color3']))
                                             )
 
                                     else:
 
                                         gaugeWidget.setOuterCircleColor(
-                                                color1 = str(x['color1']),
-                                                color2= str(x['color2']),
+                                                color1 = self.getThemeVariableValue(str(x['color1'])),
+                                                color2= self.getThemeVariableValue(str(x['color2'])),
                                             )
 
                                 else:
 
                                     gaugeWidget.setOuterCircleColor(
-                                            color1 = str(x['color1']),
+                                            color1 = self.getThemeVariableValue(str(x['color1'])),
                                         )
 
                     if "valueFontFamily" in AnalogGaugeWidget:
@@ -472,7 +594,7 @@ def applyJsonStyle(self, ui, data):
                             if "shadow" in floatPosition:
                                 for shadow in floatPosition["shadow"]:
                                     if "color" in shadow:
-                                        shadowColor = shadow["color"]
+                                        shadowColor = self.getThemeVariableValue(shadow["color"])
                                     if "blurRadius" in shadow:
                                         shadowBlurRadius = shadow["blurRadius"]
                                     if "xOffset" in shadow:
@@ -556,7 +678,7 @@ def applyJsonStyle(self, ui, data):
                                     colSty +=str(collapsedStyle)
 
                                 if len(colSty) > 0:
-                                    collapsedStyle = colSty
+                                    collapsedStyle = self.styleVariablesFromTheme(colSty)
 
                             if "whenMenuIsExpanded" in menuContainerStyle and len(str(menuContainerStyle["whenMenuIsExpanded"])) > 0:
                                 expSty = ""
@@ -564,7 +686,7 @@ def applyJsonStyle(self, ui, data):
                                     expSty += str(expandedStyle)
 
                                 if len(expSty) > 0:
-                                    expandedStyle = expSty
+                                    expandedStyle = self.styleVariablesFromTheme(expSty)
 
                     containerWidget.customizeQCustomSlideMenu(
                         defaultWidth = defaultWidth,
@@ -574,9 +696,9 @@ def applyJsonStyle(self, ui, data):
                         expandedWidth = expandedWidth,
                         expandedHeight = expandedHeight,
                         animationDuration = animationDuration,
-                        animationEasingCurve = collapsingAnimationDuration,
+                        animationEasingCurve = animationEasingCurve,
                         collapsingAnimationDuration = collapsingAnimationDuration,
-                        collapsingAnimationEasingCurve = animationEasingCurve,
+                        collapsingAnimationEasingCurve = collapsingAnimationEasingCurve,
                         expandingAnimationDuration = expandingAnimationDuration,
                         expandingAnimationEasingCurve = expandingAnimationEasingCurve,
                         collapsedStyle = collapsedStyle,
@@ -588,7 +710,8 @@ def applyJsonStyle(self, ui, data):
                         shadowBlurRadius    = shadowBlurRadius,
                         shadowXOffset   = shadowXOffset,
                         shadowYOffset   = shadowYOffset,
-                        autoHide = autoHide
+                        autoHide = autoHide,
+                        update = update
                     )
 
                     if "toggleButton" in QCustomSlideMenu:
@@ -617,7 +740,7 @@ def applyJsonStyle(self, ui, data):
                                                     colSty += str(collapsedStyle)
 
                                                 if len(colSty) > 0:
-                                                    menuCollapsedStyle = colSty
+                                                    menuCollapsedStyle = self.styleVariablesFromTheme(colSty)
 
 
                                             if "whenMenuIsExpanded" in style:
@@ -626,7 +749,7 @@ def applyJsonStyle(self, ui, data):
                                                     expSty += str(collapsedStyle)
 
                                                 if len(expSty) > 0:
-                                                    menuExpandedStyle = expSty
+                                                    menuExpandedStyle = self.styleVariablesFromTheme(expSty)
 
 
                                     containerWidget.toggleButton(
@@ -634,13 +757,14 @@ def applyJsonStyle(self, ui, data):
                                         iconWhenMenuIsCollapsed = menuCollapsedIcon,
                                         iconWhenMenuIsExpanded = menuExpandedIcon,
                                         styleWhenMenuIsCollapsed = menuCollapsedStyle,
-                                        styleWhenMenuIsExpanded = menuExpandedStyle
+                                        styleWhenMenuIsExpanded = menuExpandedStyle,
+                                        update = update
                                     )
 
                                 else:
                                     raise Exception(str(toggleButton["buttonName"])+" toggle button could not be found")
-
-                    containerWidget.refresh()
+                    if not update:
+                        containerWidget.refresh()
 
 
                 else:
@@ -676,7 +800,7 @@ def applyJsonStyle(self, ui, data):
                         if hasattr(self.ui, str(shadow["centralWidget"])):
                             self.shadow = QGraphicsDropShadowEffect(self)
                             if "color" in shadow and len(str(shadow['color'])) > 0:
-                                self.shadow.setColor(QColor(str(shadow['color'])))
+                                self.shadow.setColor(QColor(self.getThemeVariableValue(str(shadow['color']))))
                             if "blurRadius" in shadow and int(shadow['blurRadius']) > 0:
                                 self.shadow.setBlurRadius(int(shadow['blurRadius']))
                             if "xOffset" in shadow and int(shadow['xOffset']) > 0:
@@ -757,7 +881,7 @@ def applyJsonStyle(self, ui, data):
                         if "customTheme" in button and len(button["customTheme"]) > 0:
                             for x in button["customTheme"]:
                                 if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
-                                    buttonObject.setObjectCustomTheme(x["color1"], x["color2"])
+                                    buttonObject.setObjectCustomTheme(self.getThemeVariableValue(x["color1"]), self.getThemeVariableValue(x["color2"]))
 
                         if "animateOn" in button and len(button["animateOn"]) > 0:
                             buttonObject.setObjectAnimateOn(button["animateOn"])
@@ -786,10 +910,10 @@ def applyJsonStyle(self, ui, data):
                         buttonObject.wasThemed = True
 
                         if len(fallBackStyle) > 0:
-                            buttonObject.setObjectFallBackStyle(fallBackStyle)
+                            buttonObject.setObjectFallBackStyle(self.styleVariablesFromTheme(fallBackStyle))
 
                         if len(defaultStyle) > 0:
-                            buttonObject.setObjectDefaultStyle(defaultStyle)
+                            buttonObject.setObjectDefaultStyle(self.styleVariablesFromTheme(defaultStyle))
 
                         if len(fallBackStyle) > 0:
                             buttonObject.setStyleSheet(defaultStyle + fallBackStyle)
@@ -799,7 +923,7 @@ def applyJsonStyle(self, ui, data):
                         elif "customTheme" in button and len(button["customTheme"]) > 0:
                             for x in button["customTheme"]:
                                 if len(x["color1"]) > 0 and len(x["color1"]) > 0 :
-                                    applyCustomAnimationThemeStyle(buttonObject, x["color1"], x["color2"])
+                                    applyCustomAnimationThemeStyle(buttonObject, self.getThemeVariableValue(x["color1"]), self.getThemeVariableValue(x["color2"]))
                         else:
                             buttonObject.wasThemed = False
 
@@ -809,7 +933,7 @@ def applyJsonStyle(self, ui, data):
                                 if "icon" in icon and len(icon['icon']) > 0:
                                     btnIcon = icon['icon']
                                     if "color" in icon and len(icon['color']) > 0:
-                                        color = icon['color']
+                                        color = self.getThemeVariableValue(icon['color'])
                                     else:
                                         color = ""
 
@@ -835,7 +959,7 @@ def applyJsonStyle(self, ui, data):
                         if "shadow" in button:
                             for shadow in button["shadow"]:
                                 if "color" in shadow and len(str(shadow['color'])) > 0:
-                                    shadowColor = shadow['color']
+                                    shadowColor = self.getThemeVariableValue(shadow['color'])
                                 else:
                                     shadowColor = ""
 
@@ -940,104 +1064,6 @@ def applyJsonStyle(self, ui, data):
                                             widgetPg = getattr(self.ui, str(widgetPage))
                                             navigationButtons(widget, pushBtn, widgetPg)
 
-    ## QSETTINGS
-    if "QSettings" in data:
-        for settings in data['QSettings']:
-            if "AppSettings" in settings:
-                appSettings = settings['AppSettings']
-                if "OrginizationName" in appSettings and len(str(appSettings["OrginizationName"])) > 0:
-                    self.orginazationName = str(appSettings["OrginizationName"])
-                else:
-                    self.orginazationName = ""
-
-                if "ApplicationName" in settings['AppSettings'] and len(str(appSettings["ApplicationName"])) > 0:
-                    self.applicationName = str(appSettings["ApplicationName"])
-
-                else:
-                    self.applicationName = ""
-
-
-                if "OrginizationDormain" in settings['AppSettings'] and len(str(appSettings["OrginizationDormain"])) > 0:
-                    self.orginazationDomain = str(appSettings["OrginizationDormain"]).replace(" ", "")
-                else:
-                    self.orginazationDomain = ""
-
-            if "ThemeSettings" in settings:
-                for themeSettings in settings['ThemeSettings']:
-                    if "CustomTheme" in themeSettings:
-                        # Create themes
-                        if not hasattr(self.ui, "themes"):
-                            setattr(self.ui, "themes", [])
-                            themes = getattr(self.ui, "themes")
-
-                        for customTheme in themeSettings['CustomTheme']:
-                            if "Theme-name" in customTheme and len(str(customTheme['Theme-name'])) > 0:
-                                if not hasattr(self.ui, str(customTheme['Theme-name'])):
-                                    setattr(self.ui, str(customTheme['Theme-name']), Object())
-
-                                    theme = getattr(self.ui, str(customTheme["Theme-name"]))
-                                    theme.name = str(customTheme["Theme-name"])
-
-                                if "Background-color" in customTheme and len(str(customTheme['Background-color'])) > 0:
-                                    # theme.backgroundColor = str(customTheme['Background-color'])
-                                    setattr(theme, "backgroundColor", str(customTheme['Background-color']))
-
-                                else:
-                                    theme.backgroundColor = ""
-
-                                if "Text-color" in customTheme and len(str(customTheme['Text-color'])) > 0:
-                                    theme.textColor = str(customTheme['Text-color'])
-
-                                else:
-                                    theme.textColor = ""
-
-                                if "Accent-color" in customTheme and len(str(customTheme['Accent-color'])) > 0:
-                                    theme.accentColor = str(customTheme['Accent-color'])
-
-                                else:
-                                    theme.accentColor = ""
-
-                                if "Icons-color" in customTheme and len(str(customTheme['Icons-color'])) > 0:
-                                    theme.iconsColor = str(customTheme['Icons-color'])
-
-                                else:
-                                    theme.iconsColor = ""
-
-                                if "Default-Theme" in customTheme and bool(customTheme['Default-Theme']) == True:
-                                    # THEME = settings.value("THEME")
-                                    setngs = QSettings()
-                                    if setngs.contains("THEME") and setngs.contains("THEME") is not None:
-                                        theme.defaultTheme = False
-                                    else:
-                                        theme.defaultTheme = True
-
-                                else:
-                                    theme.defaultTheme = False
-
-                                if "Create-icons" in customTheme and bool(customTheme['Create-icons']) == False:
-                                    theme.createNewIcons = False
-                                else:
-                                    theme.createNewIcons = True
-
-                                themes.append(theme)
-
-        if not hasattr(self.ui, "DARK"):
-            setattr(self.ui, "DARK", Object())
-            darkTheme = getattr(self.ui, "DARK")
-            darkTheme.name = "DARK"
-            darkTheme.defaultTheme = False
-            darkTheme.createNewIcons = True
-            themes.append(darkTheme)
-        if not hasattr(self.ui, "LIGHT"):
-            setattr(self.ui, "LIGHT", Object())
-            lightTheme = getattr(self.ui, "LIGHT")
-            lightTheme.name = "LIGHT"
-            lightTheme.defaultTheme = False
-            lightTheme.createNewIcons = True
-            themes.append(lightTheme)
-
-        # QAppSettings.updateAppSettings(self)
-
     ## QCustomProgressIndicator
     if "QCustomProgressIndicator" in data:
         for QCustomProgressIndicator in data['QCustomProgressIndicator']:
@@ -1050,23 +1076,23 @@ def applyJsonStyle(self, ui, data):
                         raise Exception("Error: "+str(QCustomProgressIndicator["name"])+" is not a QCustomProgressIndicator widget")
                     
                     if "color" in QCustomProgressIndicator:
-                        containerWidget.color = str(QCustomProgressIndicator["color"])
+                        containerWidget.color = self.getThemeVariableValue(str(QCustomProgressIndicator["color"]))
                         containerWidget.updateFormProgressIndicator(color = containerWidget.color)
                     
                     if "fillColor" in QCustomProgressIndicator:
-                        containerWidget.fillColor = str(QCustomProgressIndicator["fillColor"])
+                        containerWidget.fillColor = self.getThemeVariableValue(str(QCustomProgressIndicator["fillColor"]))
                         containerWidget.updateFormProgressIndicator(fillColor = containerWidget.fillColor)
 
                     if "warningFillColor" in QCustomProgressIndicator:
-                        containerWidget.warningFillColor = str(QCustomProgressIndicator["warningFillColor"])
+                        containerWidget.warningFillColor = self.getThemeVariableValue(str(QCustomProgressIndicator["warningFillColor"]))
                         containerWidget.updateFormProgressIndicator(warningFillColor = containerWidget.warningFillColor)
 
                     if "errorFillColor" in QCustomProgressIndicator:
-                        containerWidget.errorFillColor = str(QCustomProgressIndicator["errorFillColor"])
+                        containerWidget.errorFillColor = self.getThemeVariableValue(str(QCustomProgressIndicator["errorFillColor"]))
                         containerWidget.updateFormProgressIndicator(errorFillColor = containerWidget.errorFillColor)
 
                     if "successFillColor" in QCustomProgressIndicator:
-                        containerWidget.successFillColor = str(QCustomProgressIndicator["successFillColor"])
+                        containerWidget.successFillColor = self.getThemeVariableValue(str(QCustomProgressIndicator["successFillColor"]))
                         containerWidget.updateFormProgressIndicator(successFillColor = containerWidget.successFillColor)
 
                     if "formProgressCount" in QCustomProgressIndicator:
@@ -1088,7 +1114,7 @@ def applyJsonStyle(self, ui, data):
                     if "width" in QCustomProgressIndicator:
                         containerWidget.width = int(QCustomProgressIndicator["width"])
                         containerWidget.updateFormProgressIndicator(width = containerWidget.width)
-
+                    
                     if "startPercentage" in QCustomProgressIndicator:
                         containerWidget.startPercentage = int(QCustomProgressIndicator["startPercentage"])
                         containerWidget.updateFormProgressIndicator(startPercentage = containerWidget.startPercentage)
@@ -1121,15 +1147,15 @@ def applyJsonStyle(self, ui, data):
                             raise Exception("Error: "+str(checkBox)+" is not a QCustomCheckBox widget")
                         
                         if "bgColor" in QCustomCheckBox:
-                            containerWidget.bgColor = QColor(str(QCustomCheckBox["bgColor"]))
+                            containerWidget.bgColor = QColor(self.getThemeVariableValue(str(QCustomCheckBox["bgColor"])))
                             containerWidget.customizeQCustomCheckBox(bgColor = containerWidget.bgColor)
                         
                         if "circleColor" in QCustomCheckBox:
-                            containerWidget.circleColor = QColor(str(QCustomCheckBox["circleColor"]))
+                            containerWidget.circleColor = QColor(self.getThemeVariableValue(str(QCustomCheckBox["circleColor"])))
                             containerWidget.customizeQCustomCheckBox(circleColor = containerWidget.circleColor)
                         
                         if "activeColor" in QCustomCheckBox:
-                            containerWidget.activeColor = QColor(str(QCustomCheckBox["activeColor"]))
+                            containerWidget.activeColor = QColor(self.getThemeVariableValue(str(QCustomCheckBox["activeColor"])))
                             containerWidget.customizeQCustomCheckBox(activeColor = containerWidget.activeColor)
 
                         if "animationEasingCurve" in QCustomCheckBox:
@@ -1138,7 +1164,7 @@ def applyJsonStyle(self, ui, data):
 
                         if "animationDuration" in QCustomCheckBox:
                             containerWidget.animationDuration = int(QCustomCheckBox["animationDuration"])
-                            containerWidget.customizeQCustomCheckBox(color = containerWidget.animationDuration)
+                            containerWidget.customizeQCustomCheckBox(animationDuration = containerWidget.animationDuration)
 
                     else:
                         raise Exception("Error: "+str(checkBox)+" widget does not exist")
@@ -1149,3 +1175,6 @@ def replace_url_prefix(url, new_prefix):
 
 class Object(object):
     pass
+
+def navigationButtons(stackedWidget, pushButton, widgetPage):
+    pushButton.clicked.connect(lambda: stackedWidget.setCurrentWidget(widgetPage))
