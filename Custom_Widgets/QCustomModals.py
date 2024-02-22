@@ -1,6 +1,6 @@
 import weakref
 
-from qtpy.QtGui import QPaintEvent, QPainter, QIcon
+from qtpy.QtGui import QPaintEvent, QPainter, QIcon, QPalette
 from qtpy.QtCore import Qt, QPoint, QSize, QEvent, QTimer, QPropertyAnimation, QParallelAnimationGroup, QEasingCurve, QObject, Signal
 from qtpy.QtWidgets import QStyleOption, QWidget, QStyle, QGraphicsOpacityEffect
 from Custom_Widgets.components.python.ui_info import Ui_Form
@@ -14,12 +14,52 @@ class QCustomModals:
         closeIcon = None
         isClosable = True
         animationDuration = 5000
+        
+        margin = 24
+        spacing = 16
+        
         closedSignal = Signal()
+        
+        commonStyle = ("""
+                * {
+                    background-color: transparent;
+                }
+                QPushButton#closeButton{
+                    background-color: transparent;
+                    font-weight: 1000;
+                    min-width: 20px;
+                    min-height: 20px;
+                    max-width: 20px;
+                    max-height: 20px;
+                }
+                QLabel#iconlabel{
+                    min-width: 20px;
+                    min-height: 20px;
+                    max-width: 20px;
+                    max-height: 20px;
+                }
+            """)
         
         def __init__(self, **kwargs):
             super().__init__()
             self.setupUi(self)
+            
+            # get default icon:
+            self.closeIcon = self.style().standardIcon(QStyle.SP_TitleBarCloseButton).pixmap(QSize(32, 32))
+            self.closeButton.setIcon(self.closeIcon)
+            
+            # Get the info icon from the style
+            self.infoIcon = self.style().standardIcon(QStyle.SP_MessageBoxInformation).pixmap(QSize(32, 32))
+            # Get the success icon from the style
+            self.successIcon = self.style().standardIcon(QStyle.SP_DialogApplyButton).pixmap(QSize(32, 32))
+            # Get the warning icon from the style
+            self.warningIcon = self.style().standardIcon(QStyle.SP_MessageBoxWarning).pixmap(QSize(32, 32))
+            # Get the error icon from the style
+            self.errorIcon = self.style().standardIcon(QStyle.SP_MessageBoxCritical).pixmap(QSize(32, 32))
 
+
+
+            
             # Customize modal based on kwargs
             if 'title' in kwargs:
                 self.titlelabel.setText(kwargs['title'])
@@ -37,16 +77,30 @@ class QCustomModals:
         
             if 'parent' in kwargs:
                 self.setParent(kwargs['parent'])
+                
+                palette = self.parent().palette()
+                background_color = palette.color(QPalette.Window)
+
+                # Calculate the luminance of the background color
+                luminance = 0.2126 * background_color.red() + 0.7152 * background_color.green() + 0.0722 * background_color.blue()
+
+                # Determine if the background color is dark or light
+                if luminance < 128:
+                    # Dark background
+                    self.isDark = True
+                else:
+                    # Light background
+                    self.isDark = False
         
             if 'position' in kwargs:
                 self.position = kwargs['position']
-                self.calculate_position(kwargs['position'])
+                # self.calculate_position(kwargs['position'])
                 
             if 'animationDuration' in kwargs:
                 self.animationDuration = kwargs['animationDuration']
             
             self.closeButton.setFixedSize(20, 20)
-            self.closeButton.setIconSize(QSize(16, 16))
+            self.closeButton.setIconSize(QSize(self.spacing, self.spacing))
             self.closeButton.setCursor(Qt.PointingHandCursor)
             # Connect close button
             self.closeButton.clicked.connect(self.close)
@@ -56,30 +110,8 @@ class QCustomModals:
             self.opacityAni = QPropertyAnimation(
                 self.opacityEffect, b'opacity', self)
             
-            
-        def calculate_position(self, position):
-            parent_rect = self.parent().geometry()
-            modal_rect = self.geometry()
-            margin = 20  # Adjust the margin as needed
-
-            if position == 'top-right':
-                target_pos = parent_rect.topRight() - modal_rect.topRight() - QPoint(margin, 0)
-            elif position == 'top-center':
-                target_pos = parent_rect.center() - modal_rect.center() + QPoint(0, -parent_rect.height() / 4)
-            elif position == 'top-left':
-                target_pos = parent_rect.topLeft() - modal_rect.topLeft() + QPoint(margin, 0)
-            elif position == 'center-center':
-                target_pos = parent_rect.center() - modal_rect.center()
-            elif position == 'center-right':
-                target_pos = parent_rect.center() - modal_rect.center() + QPoint(parent_rect.width() / 4, 0)
-            elif position == 'center-left':
-                target_pos = parent_rect.center() - modal_rect.center() - QPoint(parent_rect.width() / 4, 0)
-            elif position == 'bottom-right':
-                target_pos = parent_rect.bottomRight() - modal_rect.bottomRight() - QPoint(margin, margin)
-            elif position == 'bottom-left':
-                target_pos = parent_rect.bottomLeft() - modal_rect.bottomLeft() + QPoint(margin, -margin)
-
-            self.move(target_pos)
+            # Set attribute to enable styled background
+            # self.setAttribute(Qt.WA_StyledBackground, True)
             
         def paintEvent(self, e: QPaintEvent):
             super().paintEvent(e)
@@ -92,8 +124,58 @@ class QCustomModals:
             painter.setRenderHints(QPainter.Antialiasing)
             painter.setPen(Qt.NoPen)
 
+            #
             rect = self.rect().adjusted(1, 1, -1, -1)
             painter.drawRoundedRect(rect, 6, 6)
+            
+            
+        def adjustSizeToContent(self):
+            # Calculate the size hint based on the content
+            content_size = self.layout().sizeHint()
+            # Add some padding if needed
+            padding = 0
+            self.setFixedSize(content_size.width() + padding, content_size.height() + padding)
+            
+            if self.position == 'top-right':
+                x = self.parent().size().width() - self.width() - self.margin
+                # Adjust x-position to have a 20-pixel margin
+                self.move(x, self.pos().y())
+            
+            if self.position == 'top-center':
+                x = (self.parent().size().width() - self.width()) / 2
+                self.move(x, self.pos().y())
+
+            elif self.position == 'top-left':
+                x = self.margin
+                self.move(x, self.pos().y())
+
+            elif self.position == 'center-center':
+                x = (self.parent().size().width() - self.width()) / 2
+                y = (self.parent().size().height() - self.height()) / 2
+                self.move(x, y)
+
+            elif self.position == 'center-right':
+                x = self.parent().size().width() - self.width() - self.margin
+                y = (self.parent().size().height() - self.height()) / 2
+                self.move(x, y)
+
+            elif self.position == 'center-left':
+                x = self.margin
+                y = (self.parent().size().height() - self.height()) / 2
+                self.move(x, y)
+
+            elif self.position == 'bottom-right':
+                x = self.parent().size().width() - self.width() - self.margin
+                y = self.parent().size().height() - self.height() - self.margin
+                self.move(x, y)
+
+            elif self.position == 'bottom-left':
+                x = self.margin
+                y = self.parent().size().height() - self.height() - self.margin
+                self.move(x, y)
+
+            
+
             
         def fadeOut(self):
             """ fade out """
@@ -106,7 +188,7 @@ class QCustomModals:
         def eventFilter(self, obj, e: QEvent):
             if obj is self.parent():
                 if e.type() in [QEvent.Resize, QEvent.WindowStateChange]:
-                    pass
+                    self.adjustSizeToContent()
 
             return super().eventFilter(obj, e)
 
@@ -117,6 +199,8 @@ class QCustomModals:
         def showEvent(self, e):
             super().showEvent(e)
 
+            self.adjustSizeToContent()
+            
             if self.animationDuration >= 0:
                 QTimer.singleShot(self.animationDuration, self.fadeOut)
 
@@ -132,23 +216,118 @@ class QCustomModals:
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.setWindowTitle("Information")
-            # Set the window modality to WindowModal
-            self.setWindowModality(Qt.WindowModal)
+            self.iconlabel.setPixmap(self.infoIcon)
+            lightStyle = """
+                /* Information Modal */
+                InformationModal {
+                    background-color: #E6F7FF; /* Light blue or teal */
+                }
+                InformationModal * {
+                    color: #333333;
+                }
+            """
+            
+            darkStyle = """
+                InformationModal {
+                    background-color: #2799be; /* Light blue or teal for improved contrast */
+                }
+                InformationModal * {
+                    color: #F5F5F5; /* Whitish color */
+                }
+            """
+            
+            if self.isDark:  
+                self.setStyleSheet(darkStyle + self.commonStyle)
+            else:
+                self.setStyleSheet(lightStyle + self.commonStyle)
 
     class SuccessModal(BaseModal):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.setWindowTitle("Success")
+            self.iconlabel.setPixmap(self.successIcon)
+            lightStyle = """
+                /* Success Modal */
+                SuccessModal {
+                    background-color: #C8E6C9; /* Light green */
+                }
+                SuccessModal * {
+                    color: #333333; /* Dark green or gray */
+                }
+            """
+            darkStyle = """
+                /* Success Modal */
+                SuccessModal {
+                    background-color: #29b328; /* Dark green for improved contrast */
+                }
+                SuccessModal * {
+                    color: #F5F5F5; /* Whitish color */
+                }
+            """
+            if self.isDark:
+                self.setStyleSheet(darkStyle + self.commonStyle)
+            else:
+                self.setStyleSheet(lightStyle + self.commonStyle)
+                
 
     class WarningModal(BaseModal):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.setWindowTitle("Warning")
+            self.iconlabel.setPixmap(self.warningIcon)
+            lightStyle = """
+                /* Warning Modal */
+                WarningModal {
+                    background-color: #FFF9E1; /* Light yellow */
+                }
+                WarningModal * {
+                    color: #333333; /* Dark yellow or gray */
+                }
+            """
+            darkStyle = """
+                /* Warning Modal */
+                WarningModal {
+                    background-color: #bb8128; /* Light yellow for improved contrast */
+                }
+                WarningModal * {
+                    color: #F5F5F5; /* Whitish color */
+                }
+            """
+            if self.isDark:
+                self.setStyleSheet(darkStyle + self.commonStyle)
+            else:
+                self.setStyleSheet(lightStyle + self.commonStyle)
+
 
     class ErrorModal(BaseModal):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.setWindowTitle("Error")
+            self.iconlabel.setPixmap(self.errorIcon)
+            lightStyle = """
+                /* Error Modal */
+                ErrorModal {
+                    background-color: #FFEBEE; /* Light red or pink */
+                }
+                ErrorModal * {
+                    color: #333333; /* Dark red or gray */
+                }
+            """
+            darkStyle = """
+                /* Error Modal */
+                ErrorModal {
+                    background-color: #bb221d; /* Light red or pink for improved contrast */
+                }
+                ErrorModal * {
+                    color: #F5F5F5; /* Whitish color */
+                }
+            """
+            if self.isDark:
+                self.setStyleSheet(darkStyle + self.commonStyle)
+            else:
+                self.setStyleSheet(lightStyle + self.commonStyle)
+
+
 
     class CustomModal(BaseModal):
         def __init__(self, **kwargs):
@@ -247,12 +426,23 @@ class QCustomModalsManager(QObject):
     def _createSlideAni(self, QCustomModals: QCustomModals):
         """Create a slide animation for the given modal"""
         slideAni = QPropertyAnimation(QCustomModals, b'pos')  # Create a slide animation
-        slideAni.setEasingCurve(QEasingCurve.OutQuad)        # Set easing curve for smooth animation
-        slideAni.setDuration(200)                             # Set the duration of the animation
+        
+        # Set easing curve for smooth animation
+        easing_curve = QEasingCurve.OutCubic
+        slideAni.setEasingCurve(easing_curve)
+        
+        slideAni.setDuration(500)  # Set the duration of the animation
 
+        # Set initial position and end value for the animation
+        start_pos = self._slideStartPos(QCustomModals)
+        end_pos = self._pos(QCustomModals)
+        
+        # Ensure that the initial position is set correctly
+        QCustomModals.move(start_pos)
+        
         # Set start and end values for the animation
-        slideAni.setStartValue(self._slideStartPos(QCustomModals))
-        slideAni.setEndValue(self._pos(QCustomModals))
+        slideAni.setStartValue(start_pos)
+        slideAni.setEndValue(end_pos)
 
         return slideAni
 
@@ -266,13 +456,50 @@ class QCustomModalsManager(QObject):
             ani.setStartValue(bar.pos())   # Set the start value of the animation
             ani.setEndValue(self._pos(bar))  # Set the end value of the animation
 
-    def _pos(self, QCustomModals: QCustomModals, parentSize=None) -> QPoint:
-        """Return the position of the info bar"""
-        raise NotImplementedError
+    def _pos(self, parentSize=None) -> QPoint:
+        """Return the position of the modal"""
+        if self.position == 'top-right':
+            x = parentSize.width() - self.width() - self.margin
+            y = self.margin
+        elif self.position == 'top-center':
+            x = (parentSize.width() - self.width()) / 2
+            y = self.margin
+        elif self.position == 'top-left':
+            x = self.margin
+            y = self.margin
+        elif self.position == 'center-center':
+            x = (parentSize.width() - self.width()) / 2
+            y = (parentSize.height() - self.height()) / 2
+        elif self.position == 'center-right':
+            x = parentSize.width() - self.width() - self.margin
+            y = (parentSize.height() - self.height()) / 2
+        elif self.position == 'center-left':
+            x = self.margin
+            y = (parentSize.height() - self.height()) / 2
+        elif self.position == 'bottom-right':
+            x = parentSize.width() - self.width() - self.margin
+            y = parentSize.height() - self.height() - self.margin
+        elif self.position == 'bottom-left':
+            x = self.margin
+            y = parentSize.height() - self.height() - self.margin
+        else:
+            # Default to top-right position if position is not recognized
+            x = parentSize.width() - self.width() - self.margin
+            y = self.margin
 
-    def _slideStartPos(self, QCustomModals: QCustomModals) -> QPoint:
+        return QPoint(x, y)
+
+    def _slideStartPos(self) -> QPoint:
         """Return the start position of slide animation"""
-        raise NotImplementedError
+        if self.position.startswith('top'):
+            return QPoint(self.pos().x(), -self.height())
+        elif self.position.startswith('center'):
+            return QPoint(self.pos().x(), self.parent().height())
+        elif self.position.startswith('bottom'):
+            return QPoint(self.pos().x(), self.parent().height() + self.height())
+        else:
+            # Default to top position if position is not recognized
+            return QPoint(self.pos().x(), -self.height())
 
     def eventFilter(self, obj, e: QEvent):
         """Event filter to handle resize and window state change events"""
@@ -322,7 +549,7 @@ class CenterCenterQCustomModalsManager(QCustomModalsManager):
     def _slideStartPos(self, QCustomModals: QCustomModals):
         """Calculate the start position of slide animation for center-center"""
         pos = self._pos(QCustomModals)
-        return QPoint(pos.x(), pos.y() - 16)
+        return QPoint(pos.x(), pos.y() - self.spacing)
 
 @QCustomModalsManager.register("top-center")
 class TopQCustomModalsManager(QCustomModalsManager):
@@ -342,7 +569,7 @@ class TopQCustomModalsManager(QCustomModalsManager):
 
     def _slideStartPos(self, QCustomModals: QCustomModals):
         pos = self._pos(QCustomModals)
-        return QPoint(pos.x(), pos.y() - 16)
+        return QPoint(pos.x(), pos.y() - self.spacing)
 
 
 @QCustomModalsManager.register("top-right")
@@ -445,6 +672,6 @@ class BottomQCustomModalsManager(QCustomModalsManager):
 
     def _slideStartPos(self, QCustomModals: QCustomModals):
         pos = self._pos(QCustomModals)
-        return QPoint(pos.x(), pos.y() + 16)
+        return QPoint(pos.x(), pos.y() + self.spacing)
 
     
