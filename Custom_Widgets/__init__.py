@@ -202,7 +202,7 @@ class QMainWindow(QtWidgets.QMainWindow):
         jsonFilesFolder = os.path.abspath(os.path.join(os.getcwd(), "generated-files/json"))
         if not os.path.exists(jsonFilesFolder):
             os.makedirs(jsonFilesFolder)
-        prefix_to_remove = re.compile(r'icons(.*?)Icons')
+        prefix_to_remove = re.compile(r'icons(.*?)icons')
 
         # Define a list of widget classes and their corresponding setter methods
         widget_classes = {

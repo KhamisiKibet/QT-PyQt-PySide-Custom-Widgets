@@ -63,7 +63,7 @@ class NewIconsGenerator(QObject):
                 file_name = os.path.basename(urlparse(file_path).path).replace(".svg", f"{suffix}.png")
                 output_path = os.path.abspath(os.path.join(icons_folder_path, file_name))
 
-                qrc_content += f'    <file>Icons/{folder}/{file_name}</file>\n'
+                qrc_content += f'    <file>icons/{folder}/{file_name}</file>\n'
                 progress_callback.emit(int((index / total_icons) * 100))
 
                 if os.path.exists(output_path):

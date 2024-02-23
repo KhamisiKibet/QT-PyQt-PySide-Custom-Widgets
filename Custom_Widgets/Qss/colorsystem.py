@@ -304,7 +304,7 @@ class CreateColorVariable():
         
         # Add icons folder to search path
         QDir.addSearchPath('theme-icons', os.path.join(os.getcwd(), 'Qss/icons/'))
-        theme.ICONS = "theme-icons:"+folder+"/feather/"
+        theme.ICONS = "theme-icons:"+folder+"/"
             
 
         # Update global color variables

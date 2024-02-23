@@ -1,6 +1,6 @@
 import weakref
 
-from qtpy.QtGui import QPaintEvent, QPainter, QIcon, QPalette
+from qtpy.QtGui import QPaintEvent, QPainter, QIcon, QPalette, QPixmap
 from qtpy.QtCore import Qt, QPoint, QSize, QEvent, QTimer, QPropertyAnimation, QParallelAnimationGroup, QEasingCurve, QObject, Signal
 from qtpy.QtWidgets import QStyleOption, QWidget, QStyle, QGraphicsOpacityEffect
 from Custom_Widgets.components.python.ui_info import Ui_Form
@@ -75,7 +75,7 @@ class QCustomModals:
                 
             if 'modalIcon' in kwargs:
                 # Set modal icon
-                self.modalIcon = kwargs['modalIcon']
+                self.modalIcon = QPixmap(kwargs['modalIcon'])
                 self.iconlabel.setPixmap(self.modalIcon)
                 
             if "isClosable"  in kwargs:
@@ -232,6 +232,7 @@ class QCustomModals:
                 }
                 InformationModal * {
                     color: #333333;
+                    background-color: transparent;
                 }
             """
             
@@ -241,6 +242,7 @@ class QCustomModals:
                 }
                 InformationModal * {
                     color: #F5F5F5; /* Whitish color */
+                    background-color: transparent;
                 }
             """
             
@@ -263,6 +265,7 @@ class QCustomModals:
                 }
                 SuccessModal * {
                     color: #333333; /* Dark green or gray */
+                    background-color: transparent;
                 }
             """
             darkStyle = """
@@ -272,6 +275,7 @@ class QCustomModals:
                 }
                 SuccessModal * {
                     color: #F5F5F5; /* Whitish color */
+                    background-color: transparent;
                 }
             """
             if self.isDark:
@@ -294,6 +298,7 @@ class QCustomModals:
                 }
                 WarningModal * {
                     color: #333333; /* Dark yellow or gray */
+                    background-color: transparent;
                 }
             """
             darkStyle = """
@@ -303,6 +308,7 @@ class QCustomModals:
                 }
                 WarningModal * {
                     color: #F5F5F5; /* Whitish color */
+                    background-color: transparent;
                 }
             """
             if self.isDark:
@@ -325,6 +331,7 @@ class QCustomModals:
                 }
                 ErrorModal * {
                     color: #333333; /* Dark red or gray */
+                    background-color: transparent;
                 }
             """
             darkStyle = """
@@ -334,6 +341,7 @@ class QCustomModals:
                 }
                 ErrorModal * {
                     color: #F5F5F5; /* Whitish color */
+                    background-color: transparent;
                 }
             """
             if self.isDark:
@@ -347,7 +355,16 @@ class QCustomModals:
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self.setWindowTitle("Custom")
-            if self.modalIcon: self.iconlabel.setPixmap(self.modalIcon)
+            if self.modalIcon: self.iconlabel.setPixmap(QPixmap(self.modalIcon))
+
+            style = """
+                CustomModal * {
+                    background-color: transparent;
+                }
+            """
+
+            self.setStyleSheet(style)
+            
 
 class QCustomModalsManager(QObject):
     _instance = None
