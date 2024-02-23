@@ -394,7 +394,7 @@ class QSsFileMonitor():
             else:
                 logError(self, "Error: Qss/scss/defaultStyle.scss file not found")
 
-        self.qss_watcher.fileChanged.connect(lambda path=default_sass_path: QSsFileMonitor.qss_file_changed(self, path))
+            self.qss_watcher.fileChanged.connect(lambda path=default_sass_path: QSsFileMonitor.qss_file_changed(self, path))
 
 
     def qss_file_changed(self, file_path):
