@@ -48,10 +48,22 @@ Please read the required [**project structure**](https://khamisikibet.github.io/
 
 - Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
 
+# Credits
 
 ## Support 💖
 
-If you find this project valuable and would like to contribute to its development and maintenance, you can support me on [Patreon](https://www.patreon.com/spinntv). Your sponsorship means a lot and is greatly appreciated!💖
+Thanks to all supporters on [YouTube](https://youtube.com/spinntv), [Patreon](https://www.patreon.com/spinntv) and other platforms.
+
+If you find this project valuable and would like to contribute to its development and maintenance, you can support us on [Patreon](https://www.patreon.com/spinntv). Your sponsorship means a lot and is greatly appreciated!💖
+
+## Contributors
+Thanks to all the [contributors](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/contributors) involved in the development of the project!
+
+<a href="https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=KhamisiKibet/QT-PyQt-PySide-Custom-Widgets" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
 
 ## App gallery
 A list of modern GUI's made using the custom widgets module. [View](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/gallery)
