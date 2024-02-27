@@ -15,6 +15,24 @@ Upgrade/install the latest version:
 ```
 pip install --upgrade QT-PyQt-PySide-Custom-Widgets
 ```
+# Quick `CMD/Terminal` commands:
+- To launch `ProjectMaker / project wizard`, run
+```cmd
+Custom_Widgets --create-project
+```
+This will create a `Qt-python` project inside your empty folder, ready to run.
+- Easy to convert UI files to py. The cutom widgets `Theme Engine` eliminated the need for `QRC` to `python` file conversion, therefore to generate `UI-Python` files without any errors, use
+```cmd
+Custom_Widgets --convert-ui ui-path --qt-library your-lib
+```
+- Monitor changes made to UI file and generate new .py file and other necessary files for the custom widgets
+```cmd
+Custom_Widgets --monitor-ui ui-path --qt-library your-lib
+```
+Where: `ui-path` is the UI file path or folder containing UI files.
+`your-lib` is `PySide6`, `PySide2`, `PyQt5` or `PyQt6`
+
+> [Updating old GUI app to work with the current Custom Widgets module update](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/other-functions/Updating-old-GUI-app-to-work-with-the%20current-Custom-Widgets-module-update)
 
 # Testing
 The examples folder in this repository contains a few code examples you can use to test and learn about the custom widgets.
@@ -44,6 +62,7 @@ Please read the required [**project structure**](https://khamisikibet.github.io/
     - `QCustomQPushButtonGroup` - Create a group of `QPushButton`s with different `stylesheet`s for the current `active` or `clicked` button and other innactive buttons. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/other-functions/qpushbutton-group)
     - `Qt Theme Engine` - Beautify your app. This feature will create multiple themes for QT for Python apps. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/other-functions/qt-theme-engine)
     - `QSettings` - Easily save your app configurations that will be remembered even after restarting the app ie app theme from Qt Theme Engine`. [Watch the tutorial](https://youtu.be/mkBwInKhBsA)
+    - `JSON Stylesheet Cheatsheet` - JSON stylesheet is used to customize the appearance and behavior of PyQt/PySide custom widgets in the QT-PyQt-PySide-Custom-Widgets module. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/json-stylesheet-cheatsheet)
 
 
 - Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
