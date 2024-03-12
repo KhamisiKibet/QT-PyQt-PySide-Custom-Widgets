@@ -3,15 +3,6 @@
 # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
 # WEBSITE: spinncode.com
 ########################################################################
-
-########################################################################
-## IMPORTS
-########################################################################
-import os
-
-########################################################################
-## MODULE UPDATED TO USE QT.PY
-########################################################################
 from qtpy.QtCore import *
 from qtpy.QtGui import *
 from qtpy.QtWidgets import *
@@ -51,7 +42,7 @@ class QCustomCheckBox(QCheckBox):
         self.animationEasingCurve = QEasingCurve.OutBounce
         self.animationDuration = 300
 
-        self.pos = 3
+        self.pos = 0
         self.animation = QPropertyAnimation(self, b"position")
         self.animation.setEasingCurve(self.animationEasingCurve)
         self.animation.setDuration(self.animationDuration)
@@ -64,7 +55,7 @@ class QCustomCheckBox(QCheckBox):
 
         # Initialize icon
         self.icon = QIcon()
-        self._iconSize = QSize(2, 2)  # Default icon size
+        self._iconSize = QSize(0, 0)  # Default icon size
 
     def setIcon(self, icon):
         self.icon = icon
@@ -120,16 +111,18 @@ class QCustomCheckBox(QCheckBox):
 
         self.label.setGeometry(label_x, label_y, label_width, label_height)
         self.label.adjustSize()
+        
+        self.update()
 
 
     def setText(self, text):
-        super().setText(text)
+        # super().setText(text)
         self.label.setText(text)
 
     @Property(float)
     def position(self):
         return self.pos
-
+    
     @position.setter
     def position(self, pos):
         self.pos = pos
@@ -137,6 +130,7 @@ class QCustomCheckBox(QCheckBox):
 
     # START STOP ANIMATION
     def setup_animation(self, value):
+        self.pos = 0
         self.animation.stop()
         if value:
             self.animation.setEndValue(self.height() + 2)
@@ -147,31 +141,38 @@ class QCustomCheckBox(QCheckBox):
     def hitButton(self, pos: QPoint):
         return self.contentsRect().contains(pos)
 
-    def paintEvent(self, e):
-        p = QPainter(self)
-        p.setRenderHint(QPainter.Antialiasing)
+    def paintEvent(self, e: QPaintEvent):
+        super().paintEvent(e)
+     
+        opt = QStyleOption()
+        opt.initFrom(self)
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
 
         # SET PEN
-        p.setPen(Qt.NoPen)
-
-        # DRAW RECT
-        rect = QRect(0, 0, self.height() * 2.2, self.height())
+        painter.setPen(Qt.NoPen)
 
         # Define margins
         margin = 3
 
         if not self.isChecked():
-            p.setBrush(QColor(self.bgColor))
-            p.drawRoundedRect(0, 0, self.height() * 2.1, self.height(), self.height() * .5, self.height() * .5)
+            # Draw rounded rectangle for unchecked state
+            painter.setBrush(QColor(self.bgColor))
+            painter.drawRoundedRect(0, 0, self.height() * 2.1, self.height(), self.height() * .5, self.height() * .5)
 
-            p.setBrush(QColor(self.circleColor))
-            p.drawEllipse(self.pos, 0, self.height(), self.height())
+            # Draw circle for unchecked state
+            painter.setBrush(QColor(self.circleColor))
+            painter.drawEllipse(self.pos, 0, self.height(), self.height())
         else:
-            p.setBrush(QColor(self.activeColor))
-            p.drawRoundedRect(0, 0, self.height() * 2.1, self.height(), self.height() * .5, self.height() * .5)
+            # Draw rounded rectangle for checked state
+            painter.setBrush(QColor(self.activeColor))
+            painter.drawRoundedRect(0, 0, self.height() * 2.1, self.height(), self.height() * .5, self.height() * .5)
 
-            p.setBrush(QColor(self.circleColor))
-            p.drawEllipse(self.pos, 0, self.height(), self.height())
+            # Draw circle for checked state
+            painter.setBrush(QColor(self.circleColor))
+            painter.drawEllipse(self.pos, 0, self.height(), self.height())
+            
 
         # DRAW ICON (Optional)
         if not self.icon.isNull():
@@ -180,6 +181,12 @@ class QCustomCheckBox(QCheckBox):
             # Adjust horizontal position to add margin between checkbox and icon
             icon_x = self.height() * 2.1 + margin
             icon_y = (self.height() - self._iconSize.height()) / 2  # Center the icon vertically within the checkbox area
-            p.drawPixmap(icon_x, icon_y, pixmap)
+            painter.drawPixmap(icon_x, icon_y, pixmap)
 
-        p.end()
+        painter.end()
+        
+    def showEvent(self, event):
+        super().showEvent(event)
+        # Call update() to trigger a redraw of the widget
+        self.update()
+

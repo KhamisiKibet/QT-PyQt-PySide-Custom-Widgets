@@ -58,9 +58,6 @@ class QCustomModals:
             # Get the error icon from the style
             self.errorIcon = self.style().standardIcon(QStyle.SP_MessageBoxCritical).pixmap(QSize(32, 32))
 
-
-
-            
             # Customize modal based on kwargs
             if 'title' in kwargs:
                 self.titlelabel.setText(kwargs['title'])
@@ -179,8 +176,6 @@ class QCustomModals:
                 x = self.margin
                 y = self.parent().size().height() - self.height() - self.margin
                 self.move(x, y)
-
-            
 
             
         def fadeOut(self):

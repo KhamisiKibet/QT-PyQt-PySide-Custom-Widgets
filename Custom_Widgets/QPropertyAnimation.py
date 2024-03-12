@@ -86,7 +86,7 @@ def returnAnimationEasingCurve(easingCurveName):
         elif str(easingCurveName) == "OutInBounce":
             return QtCore.QEasingCurve.OutInBounce
         else:
-            raise Exception("Unknown value'" +easingCurveName+ "' for setEasingCurve() on ", animation)
+            raise Exception("Unknown value'" +easingCurveName+ "' for setEasingCurve()")
 ########################################################################
 ##
 ########################################################################

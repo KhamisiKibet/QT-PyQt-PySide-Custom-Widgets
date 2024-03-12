@@ -227,7 +227,8 @@ class CreateColorVariable():
         settings = QSettings()
         
         THEME = settings.value("THEME")
-        themeFound = False
+        theme = Light()
+        
         if THEME == "LIGHT":
             theme = Light()
 
@@ -239,20 +240,15 @@ class CreateColorVariable():
                 theme = Light()
                 
             else:
-                for themes in self.ui.themes:
-                    if themes.defaultTheme or themes.name == THEME:
+                for uitheme in self.ui.themes:
+                    if uitheme.defaultTheme or uitheme.name == THEME:
                         # generate app theme
-                        settings.setValue("THEME", themes.name)
+                        settings.setValue("THEME", uitheme.name)
 
-                        theme = themes
-                        theme.bg_color = themes.backgroundColor
-                        theme.txt_color = themes.textColor
-                        theme.accent_color = themes.accentColor
-                        theme.icons_color = theme.iconsColor
-                        themeFound = True
-
-        if not themeFound and THEME is None:
-            theme = Light()
+                        theme.bg_color = uitheme.backgroundColor
+                        theme.txt_color = uitheme.textColor
+                        theme.accent_color = uitheme.accentColor
+                        theme.icons_color = uitheme.iconsColor
 
         if is_color_dark_or_light(theme.bg_color) == "light":
             theme.BG_1 = theme.bg_color
