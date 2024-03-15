@@ -2,7 +2,7 @@ import weakref
 
 from qtpy.QtGui import QPaintEvent, QPainter, QIcon, QPalette, QPixmap
 from qtpy.QtCore import Qt, QPoint, QSize, QEvent, QTimer, QPropertyAnimation, QParallelAnimationGroup, QEasingCurve, QObject, Signal
-from qtpy.QtWidgets import QStyleOption, QWidget, QStyle, QGraphicsOpacityEffect
+from qtpy.QtWidgets import QStyleOption, QWidget, QStyle, QGraphicsOpacityEffect, QApplication
 from Custom_Widgets.components.python.ui_info import Ui_Form
 
 class QCustomModals:
@@ -80,20 +80,30 @@ class QCustomModals:
         
             if 'parent' in kwargs:
                 self.setParent(kwargs['parent'])
-                
+
+            if not self.parent() is None:
                 palette = self.parent().palette()
-                background_color = palette.color(QPalette.Window)
+            else:
+                # Get the existing QApplication instance (if it exists)
+                app = QApplication.instance()
+                # If no QApplication instance exists, create one
+                if app is None:
+                    app = QApplication([])
+                # Get the palette from the application
+                palette = app.palette()
+                
+            background_color = palette.color(QPalette.Window)
 
-                # Calculate the luminance of the background color
-                luminance = 0.2126 * background_color.red() + 0.7152 * background_color.green() + 0.0722 * background_color.blue()
+            # Calculate the luminance of the background color
+            luminance = 0.2126 * background_color.red() + 0.7152 * background_color.green() + 0.0722 * background_color.blue()
 
-                # Determine if the background color is dark or light
-                if luminance < 128:
-                    # Dark background
-                    self.isDark = True
-                else:
-                    # Light background
-                    self.isDark = False
+            # Determine if the background color is dark or light
+            if luminance < 128:
+                # Dark background
+                self.isDark = True
+            else:
+                # Light background
+                self.isDark = False
         
             if 'position' in kwargs:
                 self.position = kwargs['position']
