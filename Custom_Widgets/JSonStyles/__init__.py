@@ -38,8 +38,9 @@ def loadJsonStyle(self, ui, update = False, **jsonFiles):
 
     else:
         for file in jsonFiles.get('jsonFiles', []):
-            if os.path.isfile(file):
-                jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
+            # Construct the absolute path to the file
+            jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
+            if os.path.isfile(jsonFile):
                 with open(jsonFile) as jsonFile:
                     data = json.load(jsonFile)
                     # APPLY JSON STYLESHEET
