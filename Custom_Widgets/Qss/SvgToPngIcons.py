@@ -65,11 +65,13 @@ class NewIconsGenerator(QObject):
         new_icon_made = False
         qrc_content = f'<RCC>\n'
 
+        qrc_folder_path = os.path.abspath(os.path.join(os.getcwd(), f'Qss/icons'))
+        
         for folder in folders:
             qrc_prefix = (folder+suffix).replace("/", "_")
             qrc_prefix = (folder+suffix).replace("\\", "_")
             qrc_content += f'  <qresource prefix="{qrc_prefix}">\n'
-            qrc_folder_path = os.path.abspath(os.path.join(os.getcwd(), f'Qss/icons'))
+            
             icons_folder_path = os.path.abspath(os.path.join(os.getcwd(), f'Qss/icons/{iconsFolder}/{folder}'))
 
             if not os.path.exists(icons_folder_path):
