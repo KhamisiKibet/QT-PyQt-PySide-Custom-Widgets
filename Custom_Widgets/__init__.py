@@ -11,10 +11,9 @@ CompileStyleSheet = SassCompiler.CompileStyleSheet
 from Custom_Widgets.Qss.SvgToPngIcons import NewIconsGenerator
 from Custom_Widgets.Theme import setNewIcon, setNewPixmap, setNewTabIcon
 
-from qtpy import QtWidgets, QtGui, QtCore
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from qtpy.QtCore import QCoreApplication, Qt, QSettings
+from qtpy.QtGui import QCursor
+from qtpy.QtWidgets import QPushButton, QLabel, QTabWidget, QCheckBox, QMainWindow, QWidget
 from qtpy.QtCore import Signal
 
 import json
@@ -39,7 +38,7 @@ QLabel.setNewPixmap = setNewPixmap
 
 QTabWidget.setNewTabIcon = setNewTabIcon
 
-class QMainWindow(QtWidgets.QMainWindow):
+class QMainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -78,7 +77,7 @@ class QMainWindow(QtWidgets.QMainWindow):
         self.clickPosition = event.globalPos()
         # We will use this value to move the window
         # Hide floating widgets
-        cursor = QtGui.QCursor()
+        cursor = QCursor()
         xPos = cursor.pos().x()
         yPos = cursor.pos().y()
         if hasattr(self, "floatingWidgets"):
@@ -334,7 +333,7 @@ class QMainWindow(QtWidgets.QMainWindow):
         loadJsonStyle(self, self.ui, jsonFiles = self.jsonStyleSheets, update = update)
 
 def mouseReleaseEvent(self, QMouseEvent):
-    cursor = QtGui.QCursor()
+    cursor = QCursor()
     # self.ui.frame.setGeometry(QRect(cursor.pos().x(), cursor.pos().y(), 151, 111))
 
 class Object(object):

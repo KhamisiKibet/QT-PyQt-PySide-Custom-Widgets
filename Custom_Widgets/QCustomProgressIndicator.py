@@ -12,10 +12,10 @@ import os
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
-from qtpy import  QtCore
+from qtpy.QtCore import QVariantAnimation, QEasingCurve, QSize, QRect, Qt
+from qtpy.QtGui import QPaintEvent
+from qtpy.QtWidgets import QWidget, QVBoxLayout, QLabel, QFrame, QSizePolicy, QGridLayout
+# from qtpy import  QtCore
 
 from Custom_Widgets.QPropertyAnimation import returnAnimationEasingCurve
 
@@ -54,9 +54,9 @@ class QCustomProgressIndicator(QWidget):
         # Progress height
         self.formProgressHeight = 30
         # Animation
-        self.formProgressAnimation = QtCore.QVariantAnimation()
+        self.formProgressAnimation = QVariantAnimation()
         self.formProgressAnimation.valueChanged.connect(self.updateFormProgress)
-        self.formProgressAnimation.setEasingCurve(QtCore.QEasingCurve.OutQuad)
+        self.formProgressAnimation.setEasingCurve(QEasingCurve.OutQuad)
 
         # DEAFAULT ANIMATION DURATION
         self.formProgressAnimation.setDuration(500)

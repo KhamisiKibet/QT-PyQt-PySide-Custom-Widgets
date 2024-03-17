@@ -7,15 +7,13 @@
 ########################################################################
 ## IMPORTS
 ########################################################################
-import os
 
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
-from qtpy import QtCore
+from qtpy.QtCore import Qt, QEasingCurve, QPoint, Slot, QParallelAnimationGroup, QPropertyAnimation, QAbstractAnimation, QTimeLine
+from qtpy.QtGui import QPainter, QPixmap
+from qtpy.QtWidgets import QStackedWidget, QWidget
 
 
 """
@@ -41,21 +39,21 @@ class QCustomQStackedWidget(QStackedWidget):
         # Slide transition
         self.slideTransition = False
         # Default transition direction
-        self.transitionDirection = QtCore.Qt.Vertical
+        self.transitionDirection = Qt.Vertical
         # Default transition animation time
         self.transitionTime = 500
         # Default fade animation time
         self.fadeTime = 500
         # Default transition animation easing curve
-        self.transitionEasingCurve = QtCore.QEasingCurve.OutBack
+        self.transitionEasingCurve = QEasingCurve.OutBack
         # Default transition animation easing curve
-        self.fadeEasingCurve = QtCore.QEasingCurve.Linear
+        self.fadeEasingCurve = QEasingCurve.Linear
         # Default current widget index
         self.currentWidget = 0
         # Default next widget index
         self.nextWidget = 0
         # Default widget position
-        self._currentWidgetPosition = QtCore.QPoint(0, 0)
+        self._currentWidgetPosition = QPoint(0, 0)
         # Default boolean for active widget
         self.widgetActive = False
 
@@ -111,7 +109,7 @@ class QCustomQStackedWidget(QStackedWidget):
     ########################################################################
     ## Function to transition to previous widget
     ########################################################################
-    @QtCore.Slot()
+    @Slot()
     def slideToPreviousWidget(self):
         currentWidgetIndex = self.currentIndex()
         if currentWidgetIndex > 0:
@@ -120,7 +118,7 @@ class QCustomQStackedWidget(QStackedWidget):
     ########################################################################
     ## Function to transition to next widget
     ########################################################################
-    @QtCore.Slot()
+    @Slot()
     def slideToNextWidget(self):
         currentWidgetIndex = self.currentIndex()
         if currentWidgetIndex < (self.count() - 1):
@@ -166,7 +164,7 @@ class QCustomQStackedWidget(QStackedWidget):
         self.widget(_nextWidgetIndex).setGeometry(self.frameRect())
 
         # Set left right(horizontal) or up down(vertical) transition
-        if not self.transitionDirection == QtCore.Qt.Horizontal:
+        if not self.transitionDirection == Qt.Horizontal:
             if _currentWidgetIndex < _nextWidgetIndex:
                 # Down up transition
                 offsetX, offsetY = 0, -offsetY
@@ -186,12 +184,12 @@ class QCustomQStackedWidget(QStackedWidget):
         self._currentWidgetPosition = currentWidgetPosition
 
         # Animate transition
-        offset = QtCore.QPoint(offsetX, offsetY)
+        offset = QPoint(offsetX, offsetY)
         self.widget(_nextWidgetIndex).move(nextWidgetPosition - offset)
         self.widget(_nextWidgetIndex).show()
         self.widget(_nextWidgetIndex).raise_()
 
-        anim_group = QtCore.QParallelAnimationGroup(
+        anim_group = QParallelAnimationGroup(
             self, finished=self.animationDoneSlot
         )
 
@@ -200,7 +198,7 @@ class QCustomQStackedWidget(QStackedWidget):
             (currentWidgetPosition, nextWidgetPosition - offset),
             (currentWidgetPosition + offset, nextWidgetPosition)
         ):
-            animation = QtCore.QPropertyAnimation(
+            animation = QPropertyAnimation(
                 self.widget(index),
                 b"pos",
                 duration=self.transitionTime,
@@ -214,7 +212,7 @@ class QCustomQStackedWidget(QStackedWidget):
         self.currentWidget = _currentWidgetIndex
 
         self.widgetActive = True
-        anim_group.start(QtCore.QAbstractAnimation.DeleteWhenStopped)
+        anim_group.start(QAbstractAnimation.DeleteWhenStopped)
 
         # Play fade animation
         if self.fadeTransition:
@@ -223,7 +221,7 @@ class QCustomQStackedWidget(QStackedWidget):
     ########################################################################
     ## Function to hide old widget and show new widget after animation is done
     ########################################################################
-    @QtCore.Slot()
+    @Slot()
     def animationDoneSlot(self):
         self.setCurrentIndex(self.nextWidget)
         self.widget(self.currentWidget).hide()
@@ -233,7 +231,7 @@ class QCustomQStackedWidget(QStackedWidget):
     ########################################################################
     ## Function extending the QStackedWidget setCurrentWidget to animate transition
     ########################################################################
-    @QtCore.Slot()
+    @Slot()
     def setCurrentWidget(self, widget):
         currentIndex = self.currentIndex()
         nextIndex = self.indexOf(widget)

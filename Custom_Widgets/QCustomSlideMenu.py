@@ -7,10 +7,9 @@
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
-from qtpy import QtWidgets, QtGui, QtCore
+from qtpy.QtCore import QEasingCurve, QRect, QSettings, QPropertyAnimation, QSize
+from qtpy.QtGui import QColor, QPaintEvent, QPainter
+from qtpy.QtWidgets import QWidget, QGraphicsDropShadowEffect, QStyleOption, QStyle
 
 import re
 
@@ -29,7 +28,7 @@ class QCustomSlideMenu(QWidget):
         self.expandedHeight = self.defaultHeight
 
         self.animationDuration = 500
-        self.animationEasingCurve = QtCore.QEasingCurve.Linear
+        self.animationEasingCurve = QEasingCurve.Linear
 
         self.collapsingAnimationDuration = self.animationDuration
         self.collapsingAnimationEasingCurve = self.animationEasingCurve
@@ -133,7 +132,7 @@ class QCustomSlideMenu(QWidget):
                 if "position" in customValues and len(str(customValues["position"])) > 0:
                     self.floatPosition = str(customValues["position"])
 
-                effect = QtWidgets.QGraphicsDropShadowEffect(self)
+                effect = QGraphicsDropShadowEffect(self)
                 if "shadowColor" in customValues and len(str(customValues["shadowColor"])) > 0:
                     effect.setColor(QColor(str(customValues["shadowColor"])))
                 else:

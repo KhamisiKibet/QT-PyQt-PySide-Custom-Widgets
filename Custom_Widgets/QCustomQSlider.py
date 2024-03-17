@@ -7,14 +7,12 @@
 ########################################################################
 ## IMPORTS
 ########################################################################
-import os
 
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from qtpy.QtCore import Qt
+from qtpy.QtWidgets import QSlider, QStyle, QStyleOptionSlider
 
 ########################################################################
 ## CUSTOM QSLIDER
@@ -42,7 +40,7 @@ class QCustomQSlider(QSlider):
         else:
             sliderLength = sr.height()
             sliderMin = gr.y()
-            sliderMax = gr.bottom() - sliderLength + 1;
+            sliderMax = gr.bottom() - sliderLength + 1
         pr = pos - sr.center() + sr.topLeft()
         p = pr.x() if self.orientation() == Qt.Horizontal else pr.y()
         return QStyle.sliderValueFromPosition(self.minimum(), self.maximum(), p - sliderMin,

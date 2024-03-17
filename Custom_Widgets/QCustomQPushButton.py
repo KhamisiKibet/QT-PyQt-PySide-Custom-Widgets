@@ -7,18 +7,15 @@
 ########################################################################
 ## IMPORTS
 ########################################################################
-import os
 
 from Custom_Widgets import iconify as ico
-from Custom_Widgets.iconify.qt import QtGui, QtWidgets, QtCore
 
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
-from qtpy import QtCore, QtGui
+from qtpy.QtCore import QVariantAnimation, QAbstractAnimation, QSize
+from qtpy.QtGui import QColor
+from qtpy.QtWidgets import QPushButton, QGraphicsDropShadowEffect
 
 class QCustomQPushButton(QPushButton):
     def __init__(self, parent=None):
@@ -26,20 +23,20 @@ class QCustomQPushButton(QPushButton):
         ########################################################################
         ## CREATE ANIMATION
         ########################################################################
-        self._animation = QtCore.QVariantAnimation()
+        self._animation = QVariantAnimation()
         self._animation.setStartValue(0.00001)
         self._animation.setEndValue(0.9999)
         self._animation.valueChanged.connect(self._animate)
-        # self._animation.setEasingCurve(QtCore.QEasingCurve.OutQuad)
+        # self._animation.setEasingCurve(QEasingCurve.OutQuad)
 
         # DEAFAULT ANIMATION DURATION
         self._animation.setDuration(500)
 
-        self._shadowAnimation = QtCore.QVariantAnimation()
+        self._shadowAnimation = QVariantAnimation()
         self._shadowAnimation.setStartValue(0)
         self._shadowAnimation.setEndValue(10)
         self._shadowAnimation.valueChanged.connect(self._animateShadow)
-        # self._shadowAnimation.setEasingCurve(QtCore.QEasingCurve.OutQuad)
+        # self._shadowAnimation.setEasingCurve(QEasingCurve.OutQuad)
 
         # DEAFAULT ANIMATION DURATION
         self._shadowAnimation.setDuration(500)
@@ -79,44 +76,44 @@ class QCustomQPushButton(QPushButton):
     ########################################################################
     def setObjectTheme(self, theme):
         if str(theme) == "1":
-            self.color1 = QtGui.QColor(9, 27, 27, 25)
-            self.color2 = QtGui.QColor(85, 255, 255, 255)
+            self.color1 = QColor(9, 27, 27, 25)
+            self.color2 = QColor(85, 255, 255, 255)
         elif str(theme) == "2":
-            self.color1 = QtGui.QColor(240, 53, 218)
-            self.color2 = QtGui.QColor(61, 217, 245)
+            self.color1 = QColor(240, 53, 218)
+            self.color2 = QColor(61, 217, 245)
         elif str(theme) == "3":
-            self.color1 = QtGui.QColor("#C0DB50")
-            self.color2 = QtGui.QColor("#100E19")
+            self.color1 = QColor("#C0DB50")
+            self.color2 = QColor("#100E19")
         elif str(theme) == "4":
-            self.color1 = QtGui.QColor("#FF16EB")
-            self.color2 = QtGui.QColor("#100E19")
+            self.color1 = QColor("#FF16EB")
+            self.color2 = QColor("#100E19")
         elif str(theme) == "5":
-            self.color1 = QtGui.QColor("#FF4200")
-            self.color2 = QtGui.QColor("#100E19")
+            self.color1 = QColor("#FF4200")
+            self.color2 = QColor("#100E19")
         elif str(theme) == "6":
-            self.color1 = QtGui.QColor("#000046")
-            self.color2 = QtGui.QColor("#1CB5E0")
+            self.color1 = QColor("#000046")
+            self.color2 = QColor("#1CB5E0")
         elif str(theme) == "7":
-            self.color1 = QtGui.QColor("#EB5757")
-            self.color2 = QtGui.QColor("#000000")
+            self.color1 = QColor("#EB5757")
+            self.color2 = QColor("#000000")
         elif str(theme) == "8":
-            self.color1 = QtGui.QColor("#FF8235")
-            self.color2 = QtGui.QColor("#30E8BF")
+            self.color1 = QColor("#FF8235")
+            self.color2 = QColor("#30E8BF")
         elif str(theme) == "9":
-            self.color1 = QtGui.QColor("#20002c")
-            self.color2 = QtGui.QColor("#cbb4d4")
+            self.color1 = QColor("#20002c")
+            self.color2 = QColor("#cbb4d4")
         elif str(theme) == "10":
-            self.color1 = QtGui.QColor("#C33764")
-            self.color2 = QtGui.QColor("#1D2671")
+            self.color1 = QColor("#C33764")
+            self.color2 = QColor("#1D2671")
         elif str(theme) == "11":
-            self.color1 = QtGui.QColor("#ee0979")
-            self.color2 = QtGui.QColor("#ff6a00")
+            self.color1 = QColor("#ee0979")
+            self.color2 = QColor("#ff6a00")
         elif str(theme) == "12":
-            self.color1 = QtGui.QColor("#242424")
-            self.color2 = QtGui.QColor("#FA0000")
+            self.color1 = QColor("#242424")
+            self.color2 = QColor("#FA0000")
         elif str(theme) == "13":
-            self.color1 = QtGui.QColor("#25395f")
-            self.color2 = QtGui.QColor("#55ffff")
+            self.color1 = QColor("#25395f")
+            self.color2 = QColor("#55ffff")
 
         else:
             raise Exception("Unknown theme '" +str(theme)+ "'")
@@ -127,8 +124,8 @@ class QCustomQPushButton(QPushButton):
     ## SET BUTTON THEME
     ########################################################################
     def setObjectCustomTheme(self, color1, color2):
-        self.color1 = QtGui.QColor(color1)
-        self.color2 = QtGui.QColor(color2)
+        self.color1 = QColor(color1)
+        self.color2 = QColor(color2)
 
     ########################################################################
     ## SET BUTTON ANIMATION
@@ -165,7 +162,7 @@ class QCustomQPushButton(QPushButton):
     def enterEvent(self, event):
         self.mousePosition = "over"
         if self.setObjectAnimatedOn  == "hover" or self.setObjectAnimatedOn is None:
-            self._animation.setDirection(QtCore.QAbstractAnimation.Forward)
+            self._animation.setDirection(QAbstractAnimation.Forward)
             self._animation.start()
         #
         if self.setIconAnimatedOn == "hover":
@@ -173,7 +170,7 @@ class QCustomQPushButton(QPushButton):
                 self.anim.start()
         if self.applyShadowOn == "hover":
             if self.animateShadow:
-                self._shadowAnimation.setDirection(QtCore.QAbstractAnimation.Forward)
+                self._shadowAnimation.setDirection(QAbstractAnimation.Forward)
                 self._shadowAnimation.start()
 
             else:
@@ -187,13 +184,13 @@ class QCustomQPushButton(QPushButton):
     def leaveEvent(self, event):
         self.mousePosition = "out"
         if self.setObjectAnimatedOn  == "hover" or self.setObjectAnimatedOn is None:
-            self._animation.setDirection(QtCore.QAbstractAnimation.Backward)
+            self._animation.setDirection(QAbstractAnimation.Backward)
             self._animation.start()
             self._animation.finished.connect(lambda: self.applyDefaultStyle())
 
         if self.applyShadowOn == "hover":
             if self.animateShadow:
-                self._shadowAnimation.setDirection(QtCore.QAbstractAnimation.Backward)
+                self._shadowAnimation.setDirection(QAbstractAnimation.Backward)
                 self._shadowAnimation.start()
                 self._shadowAnimation.finished.connect(lambda: self.removeButtonShadow())
                 # disconnect(self._shadowAnimation.finished, self.removeButtonShadow())
@@ -207,7 +204,7 @@ class QCustomQPushButton(QPushButton):
     def mousePressEvent(self, event):
         self.clickPosition = "down"
         if self.setObjectAnimatedOn  == "click":
-            self._animation.setDirection(QtCore.QAbstractAnimation.Forward)
+            self._animation.setDirection(QAbstractAnimation.Forward)
             self._animation.start()
         #
         if self.setIconAnimatedOn == "click":
@@ -215,7 +212,7 @@ class QCustomQPushButton(QPushButton):
                 self.anim.start()
         if self.applyShadowOn == "click":
             if self.animateShadow:
-                self._shadowAnimation.setDirection(QtCore.QAbstractAnimation.Forward)
+                self._shadowAnimation.setDirection(QAbstractAnimation.Forward)
                 self._shadowAnimation.start()
             else:
                 self.setGraphicsEffect(self.shadow)
@@ -228,12 +225,12 @@ class QCustomQPushButton(QPushButton):
     def mouseReleaseEvent(self, event):
         self.clickPosition = "up"
         if self.setObjectAnimatedOn  == "click":
-            self._animation.setDirection(QtCore.QAbstractAnimation.Backward)
+            self._animation.setDirection(QAbstractAnimation.Backward)
             self._animation.start()
             self._animation.finished.connect(lambda: self.applyDefaultStyle())
         if self.applyShadowOn == "click":
             if self.animateShadow:
-                self._shadowAnimation.setDirection(QtCore.QAbstractAnimation.Backward)
+                self._shadowAnimation.setDirection(QAbstractAnimation.Backward)
                 self._shadowAnimation.start()
                 self._shadowAnimation.finished.connect(lambda: self.removeButtonShadow())
             else:
@@ -334,7 +331,7 @@ def iconify(buttonObject, **iconCustomization):
         buttonObject.buttonIcon = ico.Icon(iconCustomization['icon'])
 
         if "color" in iconCustomization and len(iconCustomization['color']) > 0:
-            buttonObject.buttonIcon = ico.Icon(iconCustomization['icon'], color=QtGui.QColor(iconCustomization['color']))
+            buttonObject.buttonIcon = ico.Icon(iconCustomization['icon'], color=QColor(iconCustomization['color']))
 
         if "animation" in iconCustomization and len(iconCustomization['animation']) > 0:
             if iconCustomization['animation'] == "spin":
@@ -346,7 +343,7 @@ def iconify(buttonObject, **iconCustomization):
             else:
                 raise Exception("Unknown value'" +iconCustomization['animation']+ "' for ico.animation(). Supported animations are 'spinn' and 'breathe'")
 
-            buttonObject.buttonIcon = ico.Icon(iconCustomization['icon'], color=QtGui.QColor(iconCustomization['color']), anim=buttonObject.anim)
+            buttonObject.buttonIcon = ico.Icon(iconCustomization['icon'], color=QColor(iconCustomization['color']), anim=buttonObject.anim)
 
         buttonObject.buttonIcon.setAsButtonIcon(buttonObject)
 

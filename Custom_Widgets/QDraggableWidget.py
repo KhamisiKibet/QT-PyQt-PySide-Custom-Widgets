@@ -111,27 +111,39 @@ class QDragWidget(QWidget):
         self._drag_target_indicator.hide()
         index = self.widgetLayout.indexOf(self._drag_target_indicator)
         
-        # Get the position of the drop event relative to the DragWidget
-        # drop_position = e.pos()
         # Get the position of the drop event relative to the parent DragWidget
         drop_position = self.mapFromGlobal(QCursor.pos())
-        
-        # Check if the drop event occurred within the bounds of the DragWidget
-        if self.rect().contains(drop_position):
-            if index is not None:
+        try:
+            # Check if the drop event occurred within the bounds of the DragWidget
+            if self.rect().contains(drop_position):
+                if index == -1:  # Target indicator not found (dropping at the end)
+                    index = self.widgetLayout.count()  # Append at the end of the layout
+                
+                # If index is greater than the length of the layout, append the widget at the end
+                if index > self.widgetLayout.count():
+                    index = self.widgetLayout.count()
+                
+                # If the drop was accepted, insert the widget at the drop location.
+                self.widgetLayout.insertWidget(index, widget)
+                self.orderChanged.emit(self.getItemData())
+                widget.show()
+                self.widgetLayout.activate()
+                
                 # Remove the drag target indicator from the layout.
                 self.widgetLayout.removeWidget(self._drag_target_indicator)
+                
+                e.accept()
+            else:
+                # If the drop occurred outside the DragWidget, return the widget to its original position.
+                widget.show()
+                e.ignore()
             
-            # If the drop was accepted, insert the widget at the drop location.
-            self.widgetLayout.insertWidget(index, widget)
-            self.orderChanged.emit(self.getItemData())
-            widget.show()
-            self.widgetLayout.activate()
+            # Ensure the event is only processed once
             e.accept()
-        else:
-            # If the drop occurred outside the DragWidget, return the widget to its original position.
-            widget.show()
-            e.ignore()
+    
+        except Exception as e:
+            print(e)
+
 
     def findDropLocation(self, e):
         pos = e.pos()

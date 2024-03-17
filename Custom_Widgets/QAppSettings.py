@@ -12,9 +12,7 @@ import os
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
-from qtpy.QtCore import *
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from qtpy.QtCore import QCoreApplication, QSettings
 
 from Custom_Widgets.Qss.SassCompiler import CompileStyleSheet
 

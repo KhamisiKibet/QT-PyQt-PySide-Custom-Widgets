@@ -1,8 +1,8 @@
 # coding:utf-8
 from qtpy.QtCore import QEasingCurve, QPropertyAnimation, Qt, QEvent, Signal
 from qtpy.QtGui import QColor, QResizeEvent, QPalette, QPaintEvent, QPainter, QMouseEvent
-from qtpy.QtWidgets import (QDialog, QGraphicsDropShadowEffect, QPushButton, QLabel, QStyleOption, QStyle, QApplication,
-                             QGraphicsOpacityEffect, QHBoxLayout, QVBoxLayout, QWidget, QFrame)
+from qtpy.QtWidgets import (QDialog, QGraphicsDropShadowEffect, QStyleOption, QStyle, QApplication,
+                             QGraphicsOpacityEffect, QWidget)
 
 from Custom_Widgets.components.python.ui_dialog import Ui_Form
 

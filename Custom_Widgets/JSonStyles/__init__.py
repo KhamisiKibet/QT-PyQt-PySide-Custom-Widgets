@@ -14,6 +14,7 @@ from Custom_Widgets.QCustomQPushButton import applyAnimationThemeStyle, applyBut
 from Custom_Widgets.QPropertyAnimation import returnAnimationEasingCurve, returnQtDirection
 
 from Custom_Widgets.Qss.colorsystem import CreateColorVariable
+from Custom_Widgets.Log import *
 
 
 ## Read JSON stylesheet
@@ -49,7 +50,7 @@ def loadJsonStyle(self, ui, update = False, **jsonFiles):
                     self.jsonStyleData.update(data)  # Update existing data with new data
                     self.jsonStyleSheets.append(file)
             else:
-                raise Exception("Error loading your JSON files: '{}' does not exist".format(file))
+                logError(self, "Error loading your JSON files: '{}' does not exist".format(file))
 
     applyJsonStyle(self, update = update)
 

@@ -1,90 +1,89 @@
-from qtpy.QtCore import *
-from qtpy import QtCore
+from qtpy.QtCore import QEasingCurve, Qt
 ########################################################################
 ##
 ########################################################################
 def returnAnimationEasingCurve(easingCurveName):
     if len(str(easingCurveName)) > 0:
         if str(easingCurveName) == "OutQuad":
-            return QtCore.QEasingCurve.OutQuad
+            return QEasingCurve.OutQuad
         elif str(easingCurveName) == "Linear":
-            return QtCore.QEasingCurve.Linear
+            return QEasingCurve.Linear
         elif str(easingCurveName) == "InQuad":
-            return QtCore.QEasingCurve.InQuad
+            return QEasingCurve.InQuad
         elif str(easingCurveName) == "InOutQuad":
-            return QtCore.QEasingCurve.InOutQuad
+            return QEasingCurve.InOutQuad
         elif str(easingCurveName) == "OutInQuad":
-            return QtCore.QEasingCurve.OutInQuad
+            return QEasingCurve.OutInQuad
         elif str(easingCurveName) == "InCubic":
-            return QtCore.QEasingCurve.InCubic
+            return QEasingCurve.InCubic
         elif str(easingCurveName) == "OutCubic":
-            return QtCore.QEasingCurve.OutCubic
+            return QEasingCurve.OutCubic
         elif str(easingCurveName) == "InOutCubic":
-            return QtCore.QEasingCurve.InOutCubic
+            return QEasingCurve.InOutCubic
         elif str(easingCurveName) == "OutInCubic":
-            return QtCore.QEasingCurve.OutInCubic
+            return QEasingCurve.OutInCubic
         elif str(easingCurveName) == "InQuart":
-            return QtCore.QEasingCurve.InQuart
+            return QEasingCurve.InQuart
         elif str(easingCurveName) == "OutQuart":
-            return QtCore.QEasingCurve.OutQuart
+            return QEasingCurve.OutQuart
         elif str(easingCurveName) == "InOutQuart":
-            return QtCore.QEasingCurve.InOutQuart
+            return QEasingCurve.InOutQuart
         elif str(easingCurveName) == "OutInQuart":
-            return QtCore.QEasingCurve.OutInQuart
+            return QEasingCurve.OutInQuart
         elif str(easingCurveName) == "InQuint":
-            return QtCore.QEasingCurve.InQuint
+            return QEasingCurve.InQuint
         elif str(easingCurveName) == "OutQuint":
-            return QtCore.QEasingCurve.OutQuint
+            return QEasingCurve.OutQuint
         elif str(easingCurveName) == "InOutQuint":
-            return QtCore.QEasingCurve.InOutQuint
+            return QEasingCurve.InOutQuint
         elif str(easingCurveName) == "InSine":
-            return QtCore.QEasingCurve.InSine
+            return QEasingCurve.InSine
         elif str(easingCurveName) == "OutSine":
-            return QtCore.QEasingCurve.OutSine
+            return QEasingCurve.OutSine
         elif str(easingCurveName) == "InOutSine":
-            return QtCore.QEasingCurve.InOutSine
+            return QEasingCurve.InOutSine
         elif str(easingCurveName) == "OutInSine":
-            return QtCore.QEasingCurve.OutInSine
+            return QEasingCurve.OutInSine
         elif str(easingCurveName) == "InExpo":
-            return QtCore.QEasingCurve.InExpo
+            return QEasingCurve.InExpo
         elif str(easingCurveName) == "OutExpo":
-            return QtCore.QEasingCurve.OutExpo
+            return QEasingCurve.OutExpo
         elif str(easingCurveName) == "InOutExpo":
-            return QtCore.QEasingCurve.InOutExpo
+            return QEasingCurve.InOutExpo
         elif str(easingCurveName) == "OutInExpo":
-            return QtCore.QEasingCurve.OutInExpo
+            return QEasingCurve.OutInExpo
         elif str(easingCurveName) == "InCirc":
-            return QtCore.QEasingCurve.InCirc
+            return QEasingCurve.InCirc
         elif str(easingCurveName) == "OutCirc":
-            return QtCore.QEasingCurve.OutCirc
+            return QEasingCurve.OutCirc
         elif str(easingCurveName) == "InOutCirc":
-            return QtCore.QEasingCurve.InOutCirc
+            return QEasingCurve.InOutCirc
         elif str(easingCurveName) == "OutInCirc":
-            return QtCore.QEasingCurve.OutInCirc
+            return QEasingCurve.OutInCirc
         elif str(easingCurveName) == "InElastic":
-            return QtCore.QEasingCurve.InElastic
+            return QEasingCurve.InElastic
         elif str(easingCurveName) == "OutElastic":
-            return QtCore.QEasingCurve.OutElastic
+            return QEasingCurve.OutElastic
         elif str(easingCurveName) == "InOutElastic":
-            return QtCore.QEasingCurve.InOutElastic
+            return QEasingCurve.InOutElastic
         elif str(easingCurveName) == "OutInElastic":
-            return QtCore.QEasingCurve.OutInElastic
+            return QEasingCurve.OutInElastic
         elif str(easingCurveName) == "InBack":
-            return QtCore.QEasingCurve.InBack
+            return QEasingCurve.InBack
         elif str(easingCurveName) == "OutBack":
-            return QtCore.QEasingCurve.OutBack
+            return QEasingCurve.OutBack
         elif str(easingCurveName) == "InOutBack":
-            return QtCore.QEasingCurve.InOutBack
+            return QEasingCurve.InOutBack
         elif str(easingCurveName) == "OutInBack":
-            return QtCore.QEasingCurve.OutInBack
+            return QEasingCurve.OutInBack
         elif str(easingCurveName) == "InBounce":
-            return QtCore.QEasingCurve.InBounce
+            return QEasingCurve.InBounce
         elif str(easingCurveName) == "OutBounce":
-            return QtCore.QEasingCurve.OutBounce
+            return QEasingCurve.OutBounce
         elif str(easingCurveName) == "InOutBounce":
-            return QtCore.QEasingCurve.InOutBounce
+            return QEasingCurve.InOutBounce
         elif str(easingCurveName) == "OutInBounce":
-            return QtCore.QEasingCurve.OutInBounce
+            return QEasingCurve.OutInBounce
         else:
             raise Exception("Unknown value'" +easingCurveName+ "' for setEasingCurve()")
 ########################################################################
@@ -97,9 +96,9 @@ def returnAnimationEasingCurve(easingCurveName):
 def returnQtDirection(direction):
     if len(str(direction)) > 0:
         if str(direction) == "horizontal":
-            return QtCore.Qt.Horizontal
+            return Qt.Horizontal
         elif str(direction) == "vertical":
-            return QtCore.Qt.Vertical
+            return Qt.Vertical
         else:
             raise Exception("Unknown direction name given ("+direction+"), please use Vertical or Horizontal direction")
 
