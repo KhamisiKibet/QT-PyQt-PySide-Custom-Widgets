@@ -222,6 +222,46 @@ class QCustomModals:
             if self.parent():
                 self.parent().installEventFilter(self)
 
+        def setIcon(self, icon):
+            self.icon = icon
+            if isinstance(icon, QIcon):
+                pixmap = icon.pixmap(QSize(32, 32))
+                self.iconlabel.setPixmap(pixmap)
+            elif isinstance(icon, str):
+                # Assuming icon is a path to an image file
+                pixmap = QPixmap(icon).scaled(QSize(32, 32))
+                self.iconlabel.setPixmap(pixmap)
+            else:
+                self.iconlabel.hide()
+
+        def setDescription(self, description):
+            self.description = description
+            if not self.description:
+                self.description.hide()
+                return
+            self.bodyLabel.setText(description)
+            self.adjustSizeToContent()
+        
+        def setTitle(self, title):
+            self.title = title
+            if not self.title:
+                self.titlelabel.hide()
+                return
+            self.titlelabel.setText(title)
+            self.adjustSizeToContent()
+
+        def loadForm(self, form):
+            self.showForm = form
+            # load form
+            if self.showForm:
+                self.form = LoadForm(self.showForm)
+                self.verticalLayout_2.addWidget(self.form) 
+            
+        def addWidget(self, widget):
+            self.widget = widget
+            if self.widget:
+                self.verticalLayout_2.addWidget(self.widget) 
+
 
     class InformationModal(BaseModal):
         def __init__(self, **kwargs):
@@ -520,6 +560,9 @@ class QCustomModalsManager(QObject):
             y = parentSize.height() - QCustomModals.height() - self.margin
         elif position == 'bottom-left':
             x = self.margin
+            y = parentSize.height() - QCustomModals.height() - self.margin
+        elif position == 'bottom-center':
+            x = (parentSize.width() - QCustomModals.width()) / 2
             y = parentSize.height() - QCustomModals.height() - self.margin
         else:
             # Default to top-right position if position is not recognized

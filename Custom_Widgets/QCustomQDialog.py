@@ -6,7 +6,7 @@ from qtpy.QtWidgets import (QDialog, QGraphicsDropShadowEffect, QStyleOption, QS
 
 from Custom_Widgets.components.python.ui_dialog import Ui_Form
 
-class MyCustomWidget(QWidget):
+class LoadForm(QWidget):
     def __init__(self, form):
         super().__init__()
         # self.ui = Ui_Form()
@@ -96,7 +96,7 @@ class QCustomQDialog(QDialog, Ui_Form):
                 self.titleBar.mouseReleaseEvent = self.mouseReleaseEvent
                 
         if showForm:
-            self.form = MyCustomWidget(showForm)
+            self.form = LoadForm(showForm)
             self.verticalLayout_2.addWidget(self.form)    
 
         self.yesButton.clicked.connect(self.__onYesButtonClicked)
