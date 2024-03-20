@@ -4,7 +4,7 @@ from typing import Union
 
 from qtpy.QtCore import Qt, QPoint, QObject, QPointF, QTimer, QPropertyAnimation, QEvent, QSize, Signal
 from qtpy.QtGui import QPainter, QColor, QPainterPath, QIcon, QPolygonF, QPixmap, QImage, QPaintEvent
-from qtpy.QtWidgets import QWidget, QGraphicsDropShadowEffect, QStyle, QStyleOption
+from qtpy.QtWidgets import QWidget, QGraphicsDropShadowEffect, QStyle, QStyleOption, QApplication
 
 from Custom_Widgets.QCustomTheme import QCustomTheme
 
@@ -48,14 +48,14 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.showForm = showForm
         self.widget = addWidget
 
-        self.manager = QCustomTipOverlayManager.make(self.tailPosition)
-
         # get default icon:
         self.closeIcon = self.style().standardIcon(QStyle.SP_TitleBarCloseButton).pixmap(QSize(32, 32))
         self.closeButton.setIcon(self.closeIcon)
         self.closeButton.setStyleSheet("background-color: transparent")
         self.closeButton.clicked.connect(self._fadeOut)
 
+        self.layout().setContentsMargins(10, 10, 10, 10)
+        self.manager = QCustomTipOverlayManager.make(self.tailPosition)
         
         self.setIcon(self.icon)
         self.setTitle(self.title)
@@ -74,7 +74,6 @@ class QCustomTipOverlay(QWidget, Ui_Form):
             parent.window().installEventFilter(self)
 
         self.setStyleSheet("background-color: transparent")
-        self.layout().setContentsMargins(10, 10, 10, 10)
 
     def _fadeOut(self):
         """ fade out """
@@ -85,11 +84,11 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.opacityAni.start()
 
     def showEvent(self, e):
+        self.adjustSizeToContent()
+        
         if self.duration >= 0:
             QTimer.singleShot(self.duration, self._fadeOut)
-
-        self.move(self.manager.position(self))
-        self.adjustSizeToContent()
+        
         self.opacityAni.setDuration(500)
         self.opacityAni.setStartValue(0)
         self.opacityAni.setEndValue(1)
@@ -104,14 +103,16 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.closed.emit()
 
     def eventFilter(self, obj, e: QEvent):
-        if self.parent() and obj is self.parent().window():
-            if e.type() in [QEvent.Resize, QEvent.WindowStateChange, QEvent.Move]:
-                self.adjustSizeToContent()
+        # if self.parent() and obj is self.parent().window():
+        if e.type() in [QEvent.Resize, QEvent.WindowStateChange, QEvent.Move, QEvent.Paint]:
+            self.adjustSizeToContent()
 
         return super().eventFilter(obj, e)
     
     def paintEvent(self, e: QPaintEvent):
         super().paintEvent(e)
+        # Move the widget to the position determined by the animation manager
+        self.move(self.manager.position(self))
 
         painter = QPainter(self)
         painter.setRenderHints(QPainter.Antialiasing)
@@ -168,17 +169,11 @@ class QCustomTipOverlay(QWidget, Ui_Form):
             self.verticalLayout_2.addWidget(self.widget) 
     
     def adjustSizeToContent(self):
-        # Move the widget to the position determined by the animation manager
-        self.move(self.manager.position(self))
-        
         # Adjust the size to fit the content
         self.adjustSize()
-        
-        # Calculate the size hint based on the description
-        content_size = self.layout().sizeHint()
-        
-        # Set the size with some padding if needed
-        # self.setFixedSize(content_size.width(), content_size.height())
+        self.move(self.manager.position(self))
+
+        self.update()
 
 
     def setGraphicsEffect(self, shadow: QGraphicsDropShadowEffect):
@@ -193,21 +188,6 @@ class QCustomTipOverlayManager(QObject):
     def __init__(self):
         super().__init__()
 
-    def position(self, tipOverlay: QCustomTipOverlay) -> QPoint:
-        pos = self._pos(tipOverlay)
-        x, y = pos.x(), pos.y()
-
-        rect = QCustomTheme.getCurrentScreenGeometry()
-        x = max(rect.left(), min(pos.x(), rect.right() - tipOverlay.width() - 4))
-        y = max(rect.top(), min(pos.y(), rect.bottom() - tipOverlay.height() - 4))
-
-        return QPoint(x, y)
-
-    def _pos(self, tipOverlay: QCustomTipOverlay):
-        """ return the poisition of tipOverlay """
-        return tipOverlay.pos()
-
-    
     @classmethod
     def register(tipOverlay, name):
         """Register menu animation manager"""
@@ -242,11 +222,12 @@ class TopTailQCustomTipOverlayManager(QCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        pos = target.mapToGlobal(QPoint(0, target.height()))
-        x = pos.x() + target.width()//2 - tipOverlay.width()
-        y = pos.y() - tipOverlay.layout().contentsMargins().top()
+        pos = target.mapToGlobal(QPoint(target.width()//2, target.height()))
+
+        x = pos.x() - tipOverlay.sizeHint().width()
+        y = pos.y()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("bottom-center")
@@ -267,14 +248,14 @@ class BottomTailQCustomTipOverlayManager(QCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        pos = target.mapToGlobal(QPoint())
-        x = pos.x() + target.width()//2 - tipOverlay.width()
-        y = pos.y() - tipOverlay.sizeHint().height() + tipOverlay.layout().contentsMargins().bottom() - target.height()
+        pos = target.mapToGlobal(QPoint(target.width()//2, 0))
+        x = pos.x() - tipOverlay.sizeHint().width()
+        y = pos.y() - tipOverlay.height()
         return QPoint(x, y)
 
-@QCustomTipOverlayManager.register("center-left")
+@QCustomTipOverlayManager.register("left-center")
 class LeftTailQCustomTipOverlayManager(QCustomTipOverlayManager):
     """ Left tail QCustomOvelay manager """
 
@@ -292,15 +273,15 @@ class LeftTailQCustomTipOverlayManager(QCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
         m = tipOverlay.layout().contentsMargins()
         pos = target.mapToGlobal(QPoint(target.width(), 0))
-        x = pos.x() - m.left()
-        y = pos.y() - tipOverlay.sizeHint().height()//2 + target.height()//2 - m.top()
+        x = pos.x()
+        y = pos.y() - tipOverlay.sizeHint().height()/2
         return QPoint(x, y)
 
-@QCustomTipOverlayManager.register("center-right")
+@QCustomTipOverlayManager.register("right-center")
 class RightTailQCustomTipOverlayManager(QCustomTipOverlayManager):
     """ Left tail QCustomOvelay manager """
 
@@ -318,12 +299,12 @@ class RightTailQCustomTipOverlayManager(QCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        m = tipOverlay.layout().contentsMargins()
         pos = target.mapToGlobal(QPoint(0, 0))
-        x = pos.x() - tipOverlay.width() - target.width() + m.right()
-        y = pos.y() - tipOverlay.sizeHint().height()//2 + target.height()//2 - m.top()
+
+        x = pos.x() - tipOverlay.width()
+        y = pos.y() - tipOverlay.sizeHint().height()/2 
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("top-left")
@@ -333,7 +314,7 @@ class TopLeftTailQCustomTipOverlayManager(TopTailQCustomTipOverlayManager):
     def draw(self, tipOverlay, painter):
         w, h = tipOverlay.width(), tipOverlay.height()
         pt = tipOverlay.layout().contentsMargins().top()
-
+        
         path = QPainterPath()
         path.addRoundedRect(1, pt, w - 2, h - pt - 1, 8, 8)
         path.addPolygon(
@@ -341,11 +322,13 @@ class TopLeftTailQCustomTipOverlayManager(TopTailQCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
         pos = target.mapToGlobal(QPoint(0, target.height()))
-        x = pos.x() - tipOverlay.layout().contentsMargins().left()
-        y = pos.y() - tipOverlay.layout().contentsMargins().top()
+        m = tipOverlay.layout().contentsMargins()
+
+        x = pos.x() 
+        y = pos.y()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("top-right")
@@ -363,11 +346,12 @@ class TopRightTailQCustomTipOverlayManager(TopTailQCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
         pos = target.mapToGlobal(QPoint(target.width(), target.height()))
-        x = pos.x() - tipOverlay.sizeHint().width()  - target.width() + tipOverlay.layout().contentsMargins().left()
-        y = pos.y() - tipOverlay.layout().contentsMargins().top()
+
+        x = pos.x() - tipOverlay.width()
+        y = pos.y()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("bottom-left")
@@ -385,11 +369,11 @@ class BottomLeftTailQCustomTipOverlayManager(BottomTailQCustomTipOverlayManager)
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        pos = target.mapToGlobal(QPoint())
-        x = pos.x() - tipOverlay.layout().contentsMargins().left()
-        y = pos.y() - tipOverlay.sizeHint().height() + tipOverlay.layout().contentsMargins().bottom() - target.height()
+        pos = target.mapToGlobal(QPoint(0, 0))
+        x = pos.x()
+        y = pos.y() - tipOverlay.height()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("bottom-right")
@@ -407,11 +391,11 @@ class BottomRightTailQCustomTipOverlayManager(BottomTailQCustomTipOverlayManager
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
         pos = target.mapToGlobal(QPoint(target.width(), 0))
-        x = pos.x() - tipOverlay.sizeHint().width()  - target.width() + tipOverlay.layout().contentsMargins().left()
-        y = pos.y() - tipOverlay.sizeHint().height() + tipOverlay.layout().contentsMargins().bottom() - target.height()
+        x = pos.x() - tipOverlay.width() 
+        y = pos.y() - tipOverlay.height()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("left-top")
@@ -429,12 +413,12 @@ class LeftTopTailQCustomTipOverlayManager(LeftTailQCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        m = tipOverlay.layout().contentsMargins()
         pos = target.mapToGlobal(QPoint(target.width(), 0))
-        x = pos.x() - m.left()
-        y = pos.y() - m.top()
+
+        x = pos.x()
+        y = pos.y()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("left-bottom")
@@ -452,12 +436,12 @@ class LeftBottomTailQCustomTipOverlayManager(LeftTailQCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        m = tipOverlay.layout().contentsMargins()
         pos = target.mapToGlobal(QPoint(target.width(), target.height()))
-        x = pos.x() - m.left()
-        y = pos.y() - tipOverlay.sizeHint().height() - target.height() + m.bottom()
+
+        x = pos.x()
+        y = pos.y() - tipOverlay.height()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("right-top")
@@ -475,12 +459,12 @@ class RightTopTailQCustomTipOverlayManager(RightTailQCustomTipOverlayManager):
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        m = tipOverlay.layout().contentsMargins()
         pos = target.mapToGlobal(QPoint(0, 0))
-        x = pos.x() - tipOverlay.sizeHint().width()  - target.width() + m.right()
-        y = pos.y() - m.top()
+        
+        x = pos.x() - tipOverlay.width()
+        y = pos.y()
         return QPoint(x, y)
 
 @QCustomTipOverlayManager.register("right-bottom")
@@ -498,10 +482,87 @@ class RightBottomTailQCustomTipOverlayManager(RightTailQCustomTipOverlayManager)
 
         painter.drawPath(path.simplified())
 
-    def _pos(self, tipOverlay: QCustomTipOverlay):
+    def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
-        m = tipOverlay.layout().contentsMargins()
         pos = target.mapToGlobal(QPoint(0, target.height()))
-        x = pos.x() - tipOverlay.sizeHint().width()  - target.width() + m.right()
-        y = pos.y() - tipOverlay.sizeHint().height() - target.height() + m.bottom()
+
+        x = pos.x() - tipOverlay.width()
+        y = pos.y() - tipOverlay.height()
         return QPoint(x, y)
+
+@QCustomTipOverlayManager.register("auto")
+class AutoPositionQCustomTipOverlayManager(QCustomTipOverlayManager):
+    """ Auto-positioning QCustomOverlay manager """
+
+    def draw(self, tipOverlay, painter):
+        manager = self.createManager(tipOverlay)
+        manager.draw(tipOverlay, painter)
+
+    def position(self, tipOverlay: QCustomTipOverlay):
+        manager = self.createManager(tipOverlay)
+        position = manager.position(tipOverlay)
+        return position
+    
+    def createManager(self, tipOverlay: QCustomTipOverlay):
+        tip_position = self.getTipOverlay(tipOverlay)
+
+        # print(tip_position)
+
+        manager = QCustomTipOverlayManager.make(tip_position)
+        return manager
+
+    
+    def getTipOverlay(self, tipOverlay: QCustomTipOverlay):
+        # Get the current screen's available geometry
+        app = QApplication.instance()
+
+        app_window = app.primaryScreen().availableGeometry()
+        target = tipOverlay.target
+        target_rect = target.geometry()
+
+        m = tipOverlay.layout().contentsMargins()
+
+        # Calculate available space around the target widget
+        top_space = target_rect.top()  - m.top()
+        bottom_space = target_rect.bottom() - m.bottom()
+        left_space = target_rect.right() - m.left()
+        right_space = app_window.width() - target_rect.right()  - m.right()
+        # print(top_space, bottom_space, tipOverlay.sizeHint().height())
+        # Determine the best position based on available space
+        if left_space >= tipOverlay.sizeHint().width() and right_space >= tipOverlay.sizeHint().width():
+            if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
+                return "bottom-center"
+            else:
+                return "top-center"
+        if top_space >= tipOverlay.sizeHint().height() + m.top() + 10 and bottom_space >= tipOverlay.sizeHint().height() + m.bottom() + 10:
+            if left_space >= tipOverlay.sizeHint().width():
+                return "right-center"
+            elif right_space >= tipOverlay.sizeHint().width():
+                return "left-center"
+        if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
+            if left_space >= tipOverlay.sizeHint().width():
+                return "bottom-right"
+            elif right_space >= tipOverlay.sizeHint().width():
+                return "bottom-left"
+        elif bottom_space >= tipOverlay.sizeHint().height() + m.bottom() + 10:
+            if left_space >= tipOverlay.sizeHint().width():
+                return "top-right"
+            elif right_space >= tipOverlay.sizeHint().width():
+                return "top-left"
+            
+        elif left_space >= tipOverlay.sizeHint().width():
+            if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
+                return "right-bottom"
+            else:
+                return "right-top"
+        elif right_space >= tipOverlay.sizeHint().width():
+            if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
+                return "left-bottom"
+            else:
+                return "left-top"
+
+        return "top-center"
+
+
+
+

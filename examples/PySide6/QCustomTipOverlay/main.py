@@ -13,18 +13,21 @@ class MainWindow(QMainWindow):
         self.layout = QHBoxLayout(self.central_widget)
 
         # Create buttons to test different tail positions
+        self.create_button("Auto", "auto")
         self.create_button("Top-Left", "top-left")
         self.create_button("Top-Center", "top-center")
         self.create_button("Top-Right", "top-right")
         self.create_button("Bottom-Left", "bottom-left")
         self.create_button("Bottom-Center", "bottom-center")
         self.create_button("Bottom-Right", "bottom-right")
+        self.create_button("Auto", "auto")
         self.create_button("Left-Top", "left-top")
         self.create_button("Left-Bottom", "left-bottom")
         self.create_button("Right-Top", "right-top")
         self.create_button("Right-Bottom", "right-bottom")
-        self.create_button("Center-Left", "center-left")
-        self.create_button("Center-Right", "center-right")
+        self.create_button("Left-Center", "left-center")
+        self.create_button("Right-Center", "right-center")
+        self.create_button("Auto", "auto")
 
         self.setStyleSheet("""
             QMainWindow, * {
@@ -62,7 +65,7 @@ class MainWindow(QMainWindow):
             isClosable=True,
             tailPosition=tail_position,
             parent=self,
-            duration=3000
+            duration=-1
         )
 
         self.addShadow(tip)
