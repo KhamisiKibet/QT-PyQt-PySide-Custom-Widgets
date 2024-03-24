@@ -7,6 +7,7 @@ import __main__
 from Custom_Widgets.Qss import SassCompiler
 
 from Custom_Widgets.Qss.colorsystem import CreateColorVariable
+from Custom_Widgets.QCustomTheme import QCustomTheme
 CompileStyleSheet = SassCompiler.CompileStyleSheet
 from Custom_Widgets.Qss.SvgToPngIcons import NewIconsGenerator
 from Custom_Widgets.Theme import setNewIcon, setNewPixmap, setNewTabIcon
@@ -70,6 +71,9 @@ class QMainWindow(QMainWindow):
         self.theme.PATH_RESOURCES = ""
 
         QCoreApplication.instance().aboutToQuit.connect(self.stopWorkers)
+
+        # theme engine
+        self.themeEngine = QCustomTheme()
     
     # Add mouse events to the window
     def mousePressEvent(self, event):
@@ -198,6 +202,9 @@ class QMainWindow(QMainWindow):
         return data
 
     def applyIcons(self, folder):
+        # Emit theme changed signal
+        self.themeEngine.themeChanged()
+        
         jsonFilesFolder = os.path.abspath(os.path.join(os.getcwd(), "generated-files/json"))
         if not os.path.exists(jsonFilesFolder):
             os.makedirs(jsonFilesFolder)

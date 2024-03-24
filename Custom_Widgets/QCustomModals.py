@@ -5,6 +5,13 @@ from qtpy.QtCore import Qt, QPoint, QSize, QEvent, QTimer, QPropertyAnimation, Q
 from qtpy.QtWidgets import QStyleOption, QWidget, QStyle, QGraphicsOpacityEffect, QApplication
 from Custom_Widgets.components.python.ui_info import Ui_Form
 
+class LoadForm(QWidget):
+    def __init__(self, form):
+        super().__init__()
+        # self.ui = Ui_Form()
+        self.form = form
+        self.form.setupUi(self)
+        
 class QCustomModals:
     class BaseModal(QWidget, Ui_Form):
         position = None

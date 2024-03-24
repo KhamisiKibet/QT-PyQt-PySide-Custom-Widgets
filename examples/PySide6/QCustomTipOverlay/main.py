@@ -33,8 +33,8 @@ class MainWindow(QMainWindow):
             QMainWindow, * {
                 background-color: #f0f0f0;
             }
-            QCustomTipOverlay > QFrame {
-                border-radius: 10px;
+            QCustomTipOverlay *{
+                color: #000
             }
             QPushButton {
                 background-color: #4CAF50;
@@ -75,7 +75,7 @@ class MainWindow(QMainWindow):
     def addShadow(self, widget):
         effect = QGraphicsDropShadowEffect(widget)
         effect.setColor(QColor(0, 0, 0, 180))
-        effect.setBlurRadius(35)
+        effect.setBlurRadius(10)
         effect.setXOffset(0)
         effect.setYOffset(0)
         widget.setGraphicsEffect(effect)
@@ -83,6 +83,6 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.resize(800, 800)
+    window.resize(500, 300)
     window.show()
     sys.exit(app.exec())

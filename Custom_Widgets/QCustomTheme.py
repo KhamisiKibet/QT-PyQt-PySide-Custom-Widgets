@@ -1,8 +1,19 @@
 from qtpy.QtWidgets import QApplication
 from qtpy.QtGui import QPalette, QCursor
-from qtpy.QtCore import QRect
+from qtpy.QtCore import QRect, Signal, QObject
 
-class QCustomTheme:
+class QCustomTheme(QObject):
+    # Define a class-level signal
+    onThemeChanged = Signal()
+
+    def __init__(self):
+        super().__init__()
+        # self.onThemeChanged.connect(print("theme changed"))
+
+    def themeChanged(self):
+        # Emit the signal from the instance
+        self.onThemeChanged.emit()
+
     @staticmethod
     def isAppDarkThemed():
         app = QApplication.instance()

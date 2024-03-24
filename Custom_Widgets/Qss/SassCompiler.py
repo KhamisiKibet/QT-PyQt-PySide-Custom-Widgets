@@ -80,7 +80,10 @@ class CompileStyleSheet():
         
         with open(css_path,"r") as css:
             stylesheet = css.read()
-            self.setStyleSheet(stylesheet)
+            # self.setStyleSheet(stylesheet)
+            # Create QApplication instance if it doesn't exist
+            app = QApplication.instance() if QApplication.instance() else QApplication([])
+            app.setStyleSheet(stylesheet)
             # newly created menus may need re-styling
             for obj in QApplication.instance().allWidgets():
                 if isinstance(obj, QMenu):

@@ -44,7 +44,6 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.title = title
         self.image = image
         self.description = description
-        self.isClosable = isClosable
 
         self.showForm = showForm
         self.widget = addWidget
@@ -54,7 +53,7 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.closeButton.setStyleSheet("background-color: transparent")
         self.closeButton.clicked.connect(self._fadeOut)
 
-        self.layout().setContentsMargins(10, 10, 10, 10)
+        self.layout().setContentsMargins(20, 20, 20, 20)
         self.manager = QCustomTipOverlayManager.make(self.tailPosition)
         
         self.setIcon(self.icon)
@@ -63,6 +62,11 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.setDescription(self.description)
         self.loadForm(self.showForm)
         self.addWidget(self.widget)
+        self.setClosable(self.isClosable)
+        self.moveButton()
+
+        # Connect the signal to a slot
+        self.parent().themeEngine.onThemeChanged.connect(self.handleThemeChanged)
 
         self.opacityAni = QPropertyAnimation(self, b'windowOpacity', self)
 
@@ -74,8 +78,14 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         if parent and parent.window():
             parent.window().installEventFilter(self)
 
-        self.setStyleSheet("background-color: transparent")
-
+        self.setStyleSheet("#frame{background-color: transparent; padding: 10px;}")
+    
+    def handleThemeChanged(self):
+        self.setIcon(None)
+        self.setIcon(self.icon)
+        self.setCloseIcon(None)
+        self.setCloseIcon(self.closeIcon)
+    
     def _fadeOut(self):
         """ fade out """
         self.opacityAni.setDuration(500)
@@ -119,6 +129,10 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.painter.setRenderHints(QPainter.Antialiasing)
         self.painter.setPen(Qt.NoPen)
 
+        # opt = QStyleOption()
+        # opt.initFrom(self)
+        # self.style().drawPrimitive(QStyle.PE_Widget, opt, self.painter, self)
+        
         # Set the brush color to the parent's background color if a parent is set
         if self.parent():
             self.painter.setBrush(self.parent().palette().window())
@@ -129,14 +143,16 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         margins = self.layout().contentsMargins()
 
         self.path = QPainterPath()
-        self.path.addRoundedRect(margins.left(), margins.top(), w - margins.right() * 2, h - margins.top() * 2, 8, 8)
+        self.path.addRoundedRect(margins.left()/2, margins.top()/2, w - margins.right(), h - margins.bottom(), 8, 8)
         
         self.manager.draw(self, self.painter, self.path)
+
+        self.moveButton()
 
         self.painter.end()
 
     def setIcon(self, icon):
-        self.icon = icon
+        self.iconlabel.show()
         if isinstance(icon, QIcon):
             pixmap = icon.pixmap(QSize(32, 32))
             self.iconlabel.setPixmap(pixmap)
@@ -147,16 +163,16 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         else:
             self.iconlabel.hide()
     
-    def setCloseIcon(self, icon):
-        self.closeIcon = icon
-        if isinstance(icon, QIcon):
+    def setCloseIcon(self, iconFile):
+        if isinstance(iconFile, QIcon):
             self.closeButton.setIcon(self.closeIcon)
-        elif isinstance(icon, str):
+        elif isinstance(iconFile, str):
             icon = QIcon()
-            icon.addFile(icon, QSize(32, 32), QIcon.Normal, QIcon.Off)
+            icon.addFile(iconFile, QSize(32, 32), QIcon.Normal, QIcon.Off)
+            self.closeButton.setIcon(icon)
         else:
-            self.closeIcon = self.style().standardIcon(QStyle.SP_TitleBarCloseButton).pixmap(QSize(32, 32))
-            self.closeButton.setIcon(self.closeIcon)
+            icon = self.style().standardIcon(QStyle.SP_TitleBarCloseButton).pixmap(QSize(32, 32))
+            self.closeButton.setIcon(icon)
 
     def setDescription(self, description):
         self.description = description
@@ -179,12 +195,12 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         # load form
         if self.showForm:
             self.form = LoadForm(self.showForm)
-            self.verticalLayout_2.addWidget(self.form) 
+            self.layout().addWidget(self.form) 
         
     def addWidget(self, widget):
         self.widget = widget
         if self.widget:
-            self.verticalLayout_2.addWidget(self.widget) 
+            self.layout().addWidget(self.widget) 
     
     def adjustSizeToContent(self):
         # Adjust the size to fit the content
@@ -194,7 +210,22 @@ class QCustomTipOverlay(QWidget, Ui_Form):
 
         self.update()
 
-        
+    def setClosable(self, clossable: bool = True):
+        self.isClosable = clossable
+        if clossable:
+            self.closeButton.show()
+        else:
+            self.closeButton.hide()
+
+    def moveButton(self):
+        # Move the button to the calculated position
+        margins = self.layout().contentsMargins()
+        x, y = margins.right() * 4, margins.top() / 2
+        w, h = self.width(), self.height()
+        self.closeButton.setParent(self)
+        self.closeButton.setLayout(None)
+        self.closeButton.move(w - x, y)
+
 
 class QCustomTipOverlayManager(QObject):
     """ QCustomOvelay manager """
@@ -230,7 +261,7 @@ class TopTailQCustomTipOverlayManager(QCustomTipOverlayManager):
         margins = tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(w/2 - margins.right(), margins.top()), QPointF(w/2, 1), QPointF(w/2 + margins.right(), margins.top())]))
+            QPolygonF([QPointF(w/2 - margins.right()/2, margins.top()/2), QPointF(w/2, 1), QPointF(w/2 + margins.right()/2, margins.top()/2)]))
 
         painter.drawPath(path.simplified())
 
@@ -253,7 +284,7 @@ class BottomTailQCustomTipOverlayManager(QCustomTipOverlayManager):
         margins = tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(w/2 - margins.right(), h - margins.top()), QPointF(w/2, h - 1), QPointF(w/2 + margins.right(), h - margins.top())]))
+            QPolygonF([QPointF(w/2 - margins.right()/2, h - margins.top()/2), QPointF(w/2, h - 1), QPointF(w/2 + margins.right()/2, h - margins.top()/2)]))
 
         painter.drawPath(path.simplified())
 
@@ -276,7 +307,7 @@ class LeftTailQCustomTipOverlayManager(QCustomTipOverlayManager):
         margins = tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(margins.right(), h/2 - margins.top()), QPointF(1, h/2), QPointF(margins.right(), h/2 + margins.top())]))
+            QPolygonF([QPointF(margins.right()/2, h/2 - margins.top()/2), QPointF(1, h/2), QPointF(margins.right()/2, h/2 + margins.top()/2)]))
 
         painter.drawPath(path.simplified())
 
@@ -297,7 +328,7 @@ class RightTailQCustomTipOverlayManager(QCustomTipOverlayManager):
         margins = tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(w - margins.right(), h/2 - margins.top()), QPointF(w - 1, h/2), QPointF(w - margins.right(), h/2 + margins.top())]))
+            QPolygonF([QPointF(w - margins.right()/2, h/2 - margins.top()/2), QPointF(w - 1, h/2), QPointF(w - margins.right()/2, h/2 + margins.top()/2)]))
 
         painter.drawPath(path.simplified())
 
@@ -318,7 +349,8 @@ class TopLeftTailQCustomTipOverlayManager(TopTailQCustomTipOverlayManager):
         margins = tipOverlay.layout().contentsMargins()
                 
         path.addPolygon(
-            QPolygonF([QPointF(20, margins.top()), QPointF(27, 1), QPointF(34, margins.top())]))
+            QPolygonF([QPointF(20, margins.top()/2), QPointF(27, 1), QPointF(34, margins.top()/2)]))
+        
 
         painter.drawPath(path.simplified())
 
@@ -339,7 +371,7 @@ class TopRightTailQCustomTipOverlayManager(TopTailQCustomTipOverlayManager):
         margins = tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(w - 20, margins.top()), QPointF(w - 27, 1), QPointF(w - 34, margins.top())]))
+            QPolygonF([QPointF(w - 20, margins.top()/2), QPointF(w - 27, 1), QPointF(w - 34, margins.top()/2)]))
 
         painter.drawPath(path.simplified())
 
@@ -360,7 +392,7 @@ class BottomLeftTailQCustomTipOverlayManager(BottomTailQCustomTipOverlayManager)
         margins =tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(20, h - margins.top()), QPointF(27, h - 1), QPointF(34, h - margins.top())]))
+            QPolygonF([QPointF(20, h - margins.top()/2), QPointF(27, h - 1), QPointF(34, h - margins.top()/2)]))
 
         painter.drawPath(path.simplified())
 
@@ -380,7 +412,7 @@ class BottomRightTailQCustomTipOverlayManager(BottomTailQCustomTipOverlayManager
         margins =tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(w - 20, h - margins.top()), QPointF(w - 27, h - 1), QPointF(w - 34, h - margins.top())]))
+            QPolygonF([QPointF(w - 20, h - margins.top()/2), QPointF(w - 27, h - 1), QPointF(w - 34, h - margins.top()/2)]))
 
         painter.drawPath(path.simplified())
 
@@ -400,7 +432,7 @@ class LeftTopTailQCustomTipOverlayManager(LeftTailQCustomTipOverlayManager):
         margins =tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(margins.right(), margins.top() * 2 ), QPointF(0, margins.top() * 2 + 7), QPointF(margins.right(), margins.top() * 2 + 14)]))
+            QPolygonF([QPointF(margins.right()/2, margins.top() ), QPointF(0, margins.top() + 7), QPointF(margins.right()/2, margins.top() + 14)]))
 
         painter.drawPath(path.simplified())
 
@@ -421,7 +453,7 @@ class LeftBottomTailQCustomTipOverlayManager(LeftTailQCustomTipOverlayManager):
         margins =tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(margins.right(), h - margins.top() * 2), QPointF(0, h - margins.top() * 2 - 7), QPointF(margins.right(), h - margins.top() * 2 - 14)]))
+            QPolygonF([QPointF(margins.right()/2, h - margins.top()), QPointF(0, h - margins.top() - 7), QPointF(margins.right()/2, h - margins.top() - 14)]))
 
         painter.drawPath(path.simplified())
 
@@ -442,7 +474,7 @@ class RightTopTailQCustomTipOverlayManager(RightTailQCustomTipOverlayManager):
         margins =tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(w - margins.right(), margins.bottom() * 2), QPointF(w, margins.top() * 2 + 7), QPointF(w - margins.right(), margins.bottom() * 2 + 14)]))
+            QPolygonF([QPointF(w - margins.right()/2, margins.bottom()), QPointF(w, margins.top() + 7), QPointF(w - margins.right()/2, margins.bottom() + 14)]))
 
         painter.drawPath(path.simplified())
 
@@ -463,7 +495,7 @@ class RightBottomTailQCustomTipOverlayManager(RightTailQCustomTipOverlayManager)
         margins =tipOverlay.layout().contentsMargins()
         
         path.addPolygon(
-            QPolygonF([QPointF(w - margins.right(), h - margins.bottom() * 2), QPointF(w, h - margins.bottom() * 2 - 7), QPointF(w - margins.right(), h - margins.bottom() * 2 - 14)]))
+            QPolygonF([QPointF(w - margins.right()/2, h - margins.bottom()), QPointF(w, h - margins.bottom() - 7), QPointF(w - margins.right()/2, h - margins.bottom() - 14)]))
 
         painter.drawPath(path.simplified())
 

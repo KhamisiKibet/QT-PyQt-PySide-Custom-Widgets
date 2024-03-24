@@ -3,10 +3,9 @@ import json
 import os
 import re
 
-from qtpy.QtCore import *
-from qtpy import QtWidgets, QtGui, QtCore
-from qtpy.QtGui import *
-from qtpy.QtWidgets import *
+from qtpy.QtCore import QThreadPool, QSettings, Qt
+from qtpy.QtGui import QColor, QFontDatabase, QIcon
+from qtpy.QtWidgets import QGraphicsDropShadowEffect, QPushButton, QSizeGrip
 
 from Custom_Widgets.FileMonitor import QSsFileMonitor
 from Custom_Widgets.QCustomQPushButtonGroup import QCustomQPushButtonGroup
@@ -196,7 +195,7 @@ def applyJsonStyle(self, update = False):
                     if "shadow" in QCard:
                         if hasattr(self.ui, str(card)):
                             cardWidget = getattr(self.ui, str(card))
-                            effect = QtWidgets.QGraphicsDropShadowEffect(cardWidget)
+                            effect = QGraphicsDropShadowEffect(cardWidget)
                             for shadow in QCard['shadow']:
                                 if "color" in shadow and len(str(shadow["color"])) > 0:
                                     effect.setColor(QColor(self.getThemeVariableValue(str(shadow["color"]))))
@@ -780,15 +779,15 @@ def applyJsonStyle(self, update = False):
 
             if "icon" in QMainWindow and len(str(QMainWindow["icon"])) > 0:  
                 # Set window Icon
-                self.setWindowIcon(QtGui.QIcon(str(QMainWindow["icon"])))
+                self.setWindowIcon(QIcon(str(QMainWindow["icon"])))
 
             if "frameless" in QMainWindow and QMainWindow["frameless"]:   
                 ## # Remove window tittle bar
-                self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+                self.setWindowFlags(Qt.FramelessWindowHint)
 
             if "transluscentBg" in QMainWindow and QMainWindow["transluscentBg"]:
                 ## # Set main background to transparent
-                self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+                self.setAttribute(Qt.WA_TranslucentBackground)
 
             if "sizeGrip" in QMainWindow and len(str(QMainWindow["sizeGrip"])) > 0:
                 # Window Size grip to resize window
