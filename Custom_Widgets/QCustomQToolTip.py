@@ -19,10 +19,13 @@ class QCustomQToolTip(QWidget, Ui_Form):
         self.icon = icon
         self.tailPosition = tailPosition
 
-        self.layout().setContentsMargins(20, 20, 20, 20)
+        self.titlelabel.setStyleSheet("background-color: transparent")
+
+        self.layout().setContentsMargins(10, 10, 10, 10)
         self.manager = QCustomQToolTipManager.make(self.tailPosition)
         
         self.setText(self.text)
+        self.setIcon(self.icon)
         
         self.opacityAni = QPropertyAnimation(self, b'windowOpacity', self)
         
@@ -30,15 +33,15 @@ class QCustomQToolTip(QWidget, Ui_Form):
         self.setBackgroundRole(QPalette.ToolTipBase)
         self.setForegroundRole(QPalette.ToolTipText)
 
-        self.setWindowFlags(self.windowFlags() | Qt.Popup | Qt.Tool | Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TranslucentBackground) 
-
         self.setShadowEffect()
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint | Qt.Popup | Qt.Tool)
+        self.setAttribute(Qt.WA_TranslucentBackground) 
 
     def handleThemeChanged(self):
         pass
 
     def setShadowEffect(self):
+        self.setGraphicsEffect(None)
         self.effect = QGraphicsDropShadowEffect(self)
         self.effect.setColor(QColor(0, 0, 0, 200))
         self.effect.setBlurRadius(10)
@@ -55,6 +58,7 @@ class QCustomQToolTip(QWidget, Ui_Form):
         self.opacityAni.start()
 
     def showEvent(self, e):
+        super().showEvent(e)
         self.adjustSizeToContent()
         self.raise_()
         
@@ -65,7 +69,6 @@ class QCustomQToolTip(QWidget, Ui_Form):
         self.opacityAni.setStartValue(0)
         self.opacityAni.setEndValue(1)
         self.opacityAni.start()
-        super().showEvent(e)
 
     def closeEvent(self, e):
         super().closeEvent(e)
@@ -85,6 +88,10 @@ class QCustomQToolTip(QWidget, Ui_Form):
         self.painter = QPainter(self)
         self.painter.setRenderHints(QPainter.Antialiasing)
         self.painter.setPen(Qt.NoPen)
+
+        # opt = QStyleOption()
+        # opt.initFrom(self)
+        # self.style().drawPrimitive(QStyle.PE_Widget, opt, self.painter, self)
         
         # Set the brush color to the parent's background color if a parent is set
         if self.parent():
@@ -96,13 +103,9 @@ class QCustomQToolTip(QWidget, Ui_Form):
         margins = self.layout().contentsMargins()
 
         self.path = QPainterPath()
-        self.path.addRoundedRect(margins.left()/2, margins.top()/2, w - margins.right(), h - margins.bottom(), 0, 0)
+        self.path.addRoundedRect(margins.left()/2, margins.top()/2, w - margins.right(), h - margins.bottom(), 8, 8)
         
         self.manager.draw(self, self.painter, self.path)
-
-        opt = QStyleOption()
-        opt.initFrom(self)
-        self.style().drawPrimitive(QStyle.PE_Widget, opt, self.painter, self)
 
         self.painter.end()
 
@@ -131,8 +134,6 @@ class QCustomQToolTip(QWidget, Ui_Form):
         self.adjustSize()
 
         self.move(self.manager.position(self))
-
-        self.update()
 
 class QCustomQToolTipManager(QObject):
     """ QCustomOvelay manager """
@@ -256,7 +257,7 @@ class TopLeftTailQCustomQToolTipManager(TopTailQCustomQToolTipManager):
         margins = tipOverlay.layout().contentsMargins()
                 
         path.addPolygon(
-            QPolygonF([QPointF(20, margins.top()/2), QPointF(27, 1), QPointF(34, margins.top()/2)]))
+            QPolygonF([QPointF(20, margins.top()/2), QPointF(27, 0), QPointF(34, margins.top()/2)]))
         
 
         painter.drawPath(path.simplified())
