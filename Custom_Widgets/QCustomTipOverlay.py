@@ -96,6 +96,7 @@ class QCustomTipOverlay(QWidget, Ui_Form):
 
     def showEvent(self, e):
         self.adjustSizeToContent()
+        self.raise_()
         
         if self.duration >= 0:
             QTimer.singleShot(self.duration, self._fadeOut)
