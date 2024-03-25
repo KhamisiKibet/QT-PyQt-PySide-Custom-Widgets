@@ -66,11 +66,7 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.moveButton()
 
         # Connect the signal to a slot
-        try:
-            self.parent().themeEngine.onThemeChanged.connect(self.handleThemeChanged)
-        except Exception as e:
-            pass
-
+        self.parent().themeEngine.onThemeChanged.connect(self.handleThemeChanged)
 
         self.opacityAni = QPropertyAnimation(self, b'windowOpacity', self)
 
