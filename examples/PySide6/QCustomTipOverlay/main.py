@@ -74,8 +74,8 @@ class MainWindow(QMainWindow):
     
     def addShadow(self, widget):
         effect = QGraphicsDropShadowEffect(widget)
-        effect.setColor(QColor(0, 0, 0, 180))
-        effect.setBlurRadius(10)
+        effect.setColor(QColor(30, 30, 30, 200))
+        effect.setBlurRadius(20)
         effect.setXOffset(0)
         effect.setYOffset(0)
         widget.setGraphicsEffect(effect)

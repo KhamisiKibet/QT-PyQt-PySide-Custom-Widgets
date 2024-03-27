@@ -1,6 +1,6 @@
 # coding:utf-8
-from qtpy.QtCore import Qt, QPoint, QObject, QPointF, QTimer, QPropertyAnimation, QEvent, QSize, Signal
-from qtpy.QtGui import QPainter, QColor, QPainterPath, QIcon, QPolygonF, QPixmap, QPaintEvent, QPalette
+from qtpy.QtCore import Qt, QPoint, QObject, QPointF, QTimer, QPropertyAnimation, QEvent, QSize, Signal, QRect
+from qtpy.QtGui import QPainter, QColor, QPainterPath, QIcon, QPolygonF, QPixmap, QPaintEvent, QPalette, QCursor
 from qtpy.QtWidgets import QWidget, QGraphicsDropShadowEffect, QStyle, QStyleOption, QApplication
 
 from Custom_Widgets.components.python.ui_tooltip import Ui_Form
@@ -56,6 +56,10 @@ class QCustomQToolTip(QWidget, Ui_Form):
         self.opacityAni.setEndValue(0)
         self.opacityAni.finished.connect(self.close)
         self.opacityAni.start()
+
+    def enterEvent(self, event):
+        # self._fadeOut()
+        self.adjustSizeToContent()
 
     def showEvent(self, e):
         super().showEvent(e)
@@ -135,6 +139,7 @@ class QCustomQToolTip(QWidget, Ui_Form):
 
         self.move(self.manager.position(self))
 
+
 class QCustomQToolTipManager(QObject):
     """ QCustomOvelay manager """
     managers = {}
@@ -179,7 +184,7 @@ class TopTailQCustomQToolTipManager(QCustomQToolTipManager):
 
         self.margins = tipOverlay.layout().contentsMargins()
 
-        x = pos.x() - tipOverlay.sizeHint().width() + self.margins.right() * 2
+        x = pos.x() - tipOverlay.width() / 2 + self.margins.right()
         y = pos.y()
         return QPoint(x, y)
 
@@ -202,7 +207,7 @@ class BottomTailQCustomQToolTipManager(QCustomQToolTipManager):
 
         self.margins = tipOverlay.layout().contentsMargins()
 
-        x = pos.x() - tipOverlay.sizeHint().width() + self.margins.right() * 2
+        x = pos.x() - tipOverlay.width() / 2 + self.margins.right()
         y = pos.y() - tipOverlay.height()
         return QPoint(x, y)
 
@@ -221,10 +226,11 @@ class LeftTailQCustomQToolTipManager(QCustomQToolTipManager):
 
     def position(self, tipOverlay: QCustomQToolTip):
         target = tipOverlay.target
-        
-        pos = target.mapToGlobal(QPoint(target.width(), 0))
+        margins = tipOverlay.layout().contentsMargins()
+
+        pos = target.mapToGlobal(QPoint(target.width(), target.height()/2))
         x = pos.x()
-        y = pos.y() - tipOverlay.sizeHint().height()/2
+        y = pos.y() - tipOverlay.height()/2
         return QPoint(x, y)
 
 @QCustomQToolTipManager.register("right-center")
@@ -242,10 +248,10 @@ class RightTailQCustomQToolTipManager(QCustomQToolTipManager):
 
     def position(self, tipOverlay: QCustomQToolTip):
         target = tipOverlay.target
-        pos = target.mapToGlobal(QPoint(0, 0))
+        pos = target.mapToGlobal(QPoint(0, target.height()/2))
 
         x = pos.x() - tipOverlay.width()
-        y = pos.y() - tipOverlay.sizeHint().height()/2 
+        y = pos.y() - tipOverlay.height()/2 
         return QPoint(x, y)
 
 @QCustomQToolTipManager.register("top-left")
@@ -442,49 +448,81 @@ class AutoPositionQCustomQToolTipManager(QCustomQToolTipManager):
         app_window = app.primaryScreen().availableGeometry()
         target = tipOverlay.target
         target_rect = target.geometry()
+        tip_rect = tipOverlay.geometry()
 
         m = tipOverlay.layout().contentsMargins()
 
         # Calculate available space around the target widget
-        top_space = target_rect.top()  - m.top()
-        bottom_space = target_rect.bottom() - m.bottom()
-        left_space = target_rect.right() - m.left()
-        right_space = app_window.width() - target_rect.right()  - m.right()
+        top_space = target_rect.top() - app_window.top() - m.top()
+        bottom_space = app_window.bottom() - target_rect.bottom() - m.bottom()
+        left_space = target_rect.left() - app_window.left() - m.left()
+        right_space = app_window.right() - target_rect.right() - m.right()
+
+        # Check if the mouse pointer is within the selected space
+        mouse_pos = QCursor.pos()
+        target_pos = target.mapFromGlobal(mouse_pos)
+
+
+        # Calculate the relative position of the mouse
+        rel_x = target_pos.x() / target_rect.width()
+        rel_y = target_pos.y() / target_rect.height()
+
+        # Check if the mouse position is within any of the spaces
+        top = False
+        bottom = False
+        left = False
+        right = False
+        center = False
+        if rel_y < 0.5:
+            top = True
+        if rel_y > 0.5:
+            bottom = True
+        if rel_x < 0.5:
+            left = True
+        if rel_x > 0.5:
+            right = True
+        if rel_x >= 0.3 and rel_y >= 0.2 and rel_x <= 0.8 and rel_y <= 0.8:
+            center = True
+
         # Determine the best position based on available space
-        if left_space >= tipOverlay.sizeHint().width() and right_space >= tipOverlay.sizeHint().width():
-            if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
-                return "bottom-center"
-            else:
-                return "top-center"
-        if top_space >= tipOverlay.sizeHint().height() + m.top() + 10 and bottom_space >= tipOverlay.sizeHint().height() + m.bottom() + 10:
-            if left_space >= tipOverlay.sizeHint().width():
-                return "right-center"
-            elif right_space >= tipOverlay.sizeHint().width():
-                return "left-center"
-        if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
-            if left_space >= tipOverlay.sizeHint().width():
-                return "bottom-right"
-            elif right_space >= tipOverlay.sizeHint().width():
-                return "bottom-left"
-        elif bottom_space >= tipOverlay.sizeHint().height() + m.bottom() + 10:
-            if left_space >= tipOverlay.sizeHint().width():
-                return "top-right"
-            elif right_space >= tipOverlay.sizeHint().width():
-                return "top-left"
-            
-        elif left_space >= tipOverlay.sizeHint().width():
-            if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
-                return "right-bottom"
-            else:
-                return "right-top"
-        elif right_space >= tipOverlay.sizeHint().width():
-            if top_space >= tipOverlay.sizeHint().height() + m.top() + 10:
-                return "left-bottom"
-            else:
-                return "left-top"
-
+        if top_space >= tipOverlay.height() and center:
+            return "bottom-center"
+        
+        if bottom_space >= tipOverlay.height() and center:
+            return "top-center"
+        
+        if top_space >= tipOverlay.height() and bottom and left: 
+            return "right-top"
+        
+        if top_space >= tipOverlay.height() and bottom and right:
+            return "left-top"
+        
+        if bottom_space >= tipOverlay.height() and bottom and right: 
+            return "top-right"
+        
+        if bottom_space >= tipOverlay.height() and bottom and left:
+            return "top-left"
+        
+        if left_space >= tipOverlay.width() and left: 
+            return "right-center"
+        
+        if right_space >= tipOverlay.width() and right:
+            return "left-center"
+        
+        if bottom_space >= tipOverlay.height() and bottom and right:
+            return "top-left"
+        
+        if bottom_space >= tipOverlay.height() and bottom and left:
+            return "top-right"
+        
+        if top_space >= tipOverlay.height() and top and left:
+            return "bottom-left"
+        
+        if top_space >= tipOverlay.height() and top and right:
+            return "bottom-right"
+        
         return "top-center"
-
+            
 
 class QCustomQToolTipFilter(QObject):
     def __init__(self, duration=1500, icon=None, tailPosition="auto"):
@@ -498,7 +536,10 @@ class QCustomQToolTipFilter(QObject):
             tooltip_text = obj.toolTip()
             QTimer.singleShot(0, lambda: self.showCustomToolTip(tooltip_text, obj))
             return True
-        return super().eventFilter(obj, event)
+        try:
+            return super().eventFilter(obj, event)
+        except:
+            return False
 
     def showCustomToolTip(self, text, target):
         if not text or hasattr(target, "customTooltip") and target.customTooltip is not None:

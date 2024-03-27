@@ -2,6 +2,7 @@
 import json
 import os
 import re
+import sys
 
 from qtpy.QtCore import QThreadPool, QSettings, Qt
 from qtpy.QtGui import QColor, QFontDatabase, QIcon
@@ -37,9 +38,9 @@ def loadJsonStyle(self, ui, update = False, **jsonFiles):
                     self.jsonStyleSheets.append(file_path)
 
     else:
-        for file in jsonFiles.get('jsonFiles', []):
-            # Construct the absolute path to the file
-            jsonFile = os.path.abspath(os.path.join(os.getcwd(), file))
+        for file_path in jsonFiles.get('jsonFiles', []):
+            current_script = os.path.dirname(os.path.realpath(sys.argv[0]))
+            jsonFile = os.path.abspath(os.path.join(str(current_script), str(file_path)))
             if os.path.isfile(jsonFile):
                 with open(jsonFile) as jsonFile:
                     data = json.load(jsonFile)
@@ -47,9 +48,9 @@ def loadJsonStyle(self, ui, update = False, **jsonFiles):
                     # self = QMainWindow class
                     # self.ui = Ui_MainWindow / user interface class
                     self.jsonStyleData.update(data)  # Update existing data with new data
-                    self.jsonStyleSheets.append(file)
+                    self.jsonStyleSheets.append(file_path)
             else:
-                logError(self, "Error loading your JSON files: '{}' does not exist".format(file))
+                logError(self, "Error loading your JSON files: '{}' does not exist".format(jsonFile))
 
     applyJsonStyle(self, update = update)
 

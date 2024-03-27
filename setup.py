@@ -33,7 +33,10 @@ setup(
         "matplotlib",
         "mock",
         "termcolor",
-        "watchdog"
+        "watchdog",
+        "lxml",
+        "setuptools",
+        "kids-cache"
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',      
