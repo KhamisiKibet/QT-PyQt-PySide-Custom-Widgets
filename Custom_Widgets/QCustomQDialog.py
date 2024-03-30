@@ -184,6 +184,10 @@ class QCustomQDialog(QDialog, Ui_Form):
     
     def hideEvent(self, e):
         super().hideEvent(e)
+        try:
+            self.maskWidget.hide()
+        except:
+            pass
 
     def done(self, code):
         """ fade out """
