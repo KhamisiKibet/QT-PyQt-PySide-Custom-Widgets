@@ -195,69 +195,6 @@ class QMainWindow(QMainWindow):
     def sassCompilationProgress(self, n):
         pass
         # self.ui.activityProgress.setValue(n)
-        
-    def readJsonFile(self, file_path):
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-        return data
-
-    def applyIcons(self, folder):
-        # Emit theme changed signal
-        self.themeEngine.themeChanged()
-        
-        jsonFilesFolder = os.path.abspath(os.path.join(os.getcwd(), "generated-files/json"))
-        if not os.path.exists(jsonFilesFolder):
-            os.makedirs(jsonFilesFolder)
-        
-        # Case insensitive version of the regular expression pattern
-        prefix_to_remove = re.compile(r'icons(.*?)icons', re.IGNORECASE)
-
-        # Define a list of widget classes and their corresponding setter methods
-        widget_classes = {
-            "QPushButton": "setNewIcon",
-            "QCheckBox": "setNewIcon",
-            "QCustomCheckBox": "setNewIcon",
-            "QWidget": None,  # No specific setter method for QWidget
-            "QLabel": "setNewPixmap",
-        }
-
-        # Iterate over each JSON file in the folder
-        for jsonFile in os.listdir(jsonFilesFolder):
-            if jsonFile.endswith(".json"):
-                jsonFilePath = os.path.join(jsonFilesFolder, jsonFile)
-
-                # Read the JSON file
-                widget_data = self.readJsonFile(jsonFilePath)
-
-                # Iterate over each widget class in the dictionary
-                for widget_class, setter_method in widget_classes.items():
-                    # Get the list of widget info for the current class
-                    widgets_info = widget_data.get(widget_class, [])
-
-                    # Iterate over each widget info
-                    for widget_info in widgets_info:
-                        widget_name = widget_info.get("name", "")
-                        icon_url = widget_info.get("icon", "") if widget_info.get("icon", "") else widget_info.get("pixmap", "")
-
-                        # Adjust the icon URL
-                        icon_url = re.sub(prefix_to_remove, 'icons/'+folder, icon_url)
-
-                        # Check if the icon URL is valid and the widget exists in the UI
-                        if icon_url != "default_icon_url" and hasattr(self.ui, str(widget_name)):
-                            widget = getattr(self.ui, str(widget_name))
-
-                            # Check if the widget is of the current class and if there's a setter method defined
-                            if isinstance(widget, globals()[widget_class]) and setter_method:
-                                # Call the setter method to apply the icon/pixmap
-                                getattr(widget, setter_method)(icon_url)
-                            
-                            # Handle QTabWidget separately
-                            elif widget_class == "QWidget" and "QTabWidget" in widget_info:
-                                parent_name = widget_info.get("QTabWidget", "")
-                                parent = getattr(self.ui, str(parent_name))
-
-                                if isinstance(parent, QTabWidget):
-                                    parent.setNewTabIcon(widget_name, icon_url)
 
     def stopWorkers(self):
         if self.iconsWorker is not None:
