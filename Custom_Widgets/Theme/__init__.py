@@ -28,4 +28,22 @@ def setNewTabIcon(self, tabName, url):
         self.setTabIcon(tab_index, icon)
 
     self.iconUrl = url
+
+def setNewToolBoxIcon(self, itemName, url):
+    icon = QIcon(url)
+
+    # Find the index of the item with the specified name
+    item_index = -1
+    for index in range(self.count()):
+        item_text = self.widget(index).objectName()
+        if item_text == itemName:
+            item_index = index
+            break
+
+    # Change icon of the item with the specified name
+    if item_index != -1:
+        self.setItemIcon(item_index, icon)
+
+    self.iconUrl = url
+
     
