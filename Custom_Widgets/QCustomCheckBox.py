@@ -93,11 +93,19 @@ class QCustomCheckBox(QCheckBox):
             self.animation.setDuration(self.animationDuration)
 
         self.update()
+    
+    def showEvent(self, e):
+        super().showEvent(e)
+        self.adjustWidgetSize()
+        self.update()
 
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
+        self.adjustWidgetSize()
 
+    def adjustWidgetSize(self):
+        # self.adjustSize()
         # Update checkbox size
         # Update label position and width
         icon_size = self._iconSize.width()
@@ -118,6 +126,7 @@ class QCustomCheckBox(QCheckBox):
     def setText(self, text):
         # super().setText(text)
         self.label.setText(text)
+        self.adjustWidgetSize()
 
     @Property(float)
     def position(self):
@@ -156,6 +165,18 @@ class QCustomCheckBox(QCheckBox):
         # Define margins
         margin = 3
 
+        # DRAW ICON (Optional)
+        if not self.icon.isNull():
+            icon_size = self.height() * 0.7 if self.icon.availableSizes() else QSize(16, 16)  
+            if self._iconSize == QSize(0, 0):
+                self._iconSize = QSize(icon_size, icon_size)
+            
+            pixmap = self.icon.pixmap(self._iconSize)
+            # Adjust horizontal position to add margin between checkbox and icon
+            icon_x = self.height() * 2.1 + margin
+            icon_y = (self.height() - self._iconSize.height()) / 2  # Center the icon vertically within the checkbox area
+            painter.drawPixmap(icon_x, icon_y, pixmap)
+
         if not self.isChecked():
             # Draw rounded rectangle for unchecked state
             painter.setBrush(QColor(self.bgColor))
@@ -172,21 +193,8 @@ class QCustomCheckBox(QCheckBox):
             # Draw circle for checked state
             painter.setBrush(QColor(self.circleColor))
             painter.drawEllipse(self.pos, 0, self.height(), self.height())
-            
-
-        # DRAW ICON (Optional)
-        if not self.icon.isNull():
-            icon_size = self.height() * 0.7 if self.icon.availableSizes() else QSize(16, 16)  
-            pixmap = self.icon.pixmap(self._iconSize)
-            # Adjust horizontal position to add margin between checkbox and icon
-            icon_x = self.height() * 2.1 + margin
-            icon_y = (self.height() - self._iconSize.height()) / 2  # Center the icon vertically within the checkbox area
-            painter.drawPixmap(icon_x, icon_y, pixmap)
+        
+        self.adjustWidgetSize()
 
         painter.end()
         
-    def showEvent(self, event):
-        super().showEvent(event)
-        # Call update() to trigger a redraw of the widget
-        self.update()
-
