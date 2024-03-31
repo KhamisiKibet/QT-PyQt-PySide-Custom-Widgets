@@ -92,6 +92,16 @@ def convert_file(path):
                         widget_info[widget_class].append({"QTabWidget": tab_name, "name": widget_name, "icon": icon_url})
                     else:
                         widget_info[widget_class] = [{"QTabWidget": tab_name, "name": widget_name, "icon": icon_url}]
+
+                elif parent_widget.tag == 'widget' and parent_widget.get('class') == 'QToolBox':
+                    # Get the tab name
+                    tab_name = parent_widget.get('name')
+                    # Add the widget info to the dictionary
+                    if widget_class in widget_info:
+                        widget_info[widget_class].append({"QToolBox": tab_name, "name": widget_name, "icon": icon_url})
+                    else:
+                        widget_info[widget_class] = [{"QToolBox": tab_name, "name": widget_name, "icon": icon_url}]
+
                 else:
                     # Add the widget info to the dictionary
                     if widget_class in widget_info:
