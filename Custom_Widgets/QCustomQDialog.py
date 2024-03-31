@@ -5,13 +5,30 @@ from qtpy.QtWidgets import (QDialog, QGraphicsDropShadowEffect, QStyleOption, QS
                              QGraphicsOpacityEffect, QWidget)
 
 from Custom_Widgets.components.python.ui_dialog import Ui_Form
+from Custom_Widgets.QCustomTheme import QCustomTheme
 
 class LoadForm(QWidget):
     def __init__(self, form):
         super().__init__()
         # self.ui = Ui_Form()
-        self.form = form
-        self.form.setupUi(self)
+        self.ui = form
+        self.ui.setupUi(self)
+
+        # Check the module name where ui is loaded from
+        ui_module_name = form.__module__.split('.')[-1]
+
+        # Replace "ui_" with empty string only at the start
+        if ui_module_name.startswith("ui_"):
+            self.ui_module_name = ui_module_name[len("ui_"):]
+
+        self.applyThemeIcons()
+        
+    def applyThemeIcons(self):
+        self.customTheme = QCustomTheme()
+        self.customTheme.applyIcons(self, ui_file_name=self.ui_module_name)
+
+        # self.customTheme.onThemeChanged.connect(lambda: print("theme changed"))
+        self.defaultTheme = self.customTheme.theme
         
 class QCustomQDialog(QDialog, Ui_Form):
     accepted = Signal()
@@ -94,10 +111,17 @@ class QCustomQDialog(QDialog, Ui_Form):
                 self.titleBar.mousePressEvent = self.mousePressEvent
                 self.titleBar.mouseMoveEvent = self.mouseMoveEvent
                 self.titleBar.mouseReleaseEvent = self.mouseReleaseEvent
-                
+
+        self.shownForm = None       
         if showForm:
             self.form = LoadForm(showForm)
-            self.verticalLayout_2.addWidget(self.form)    
+            self.verticalLayout_2.addWidget(self.form) 
+            try:
+                #older versions
+                self.form.form =  self.form.ui 
+                self.shownForm =  self.form.ui  
+            except:
+                self.shownForm = None
 
         self.yesButton.clicked.connect(self.__onYesButtonClicked)
         self.cancelButton.clicked.connect(self.__onCancelButtonClicked)
@@ -147,7 +171,7 @@ class QCustomQDialog(QDialog, Ui_Form):
     
     def paintEvent(self, e: QPaintEvent):
         super().paintEvent(e)
-        
+
         # opt = QStyleOption()
         # opt.initFrom(self)
         painter = QPainter(self)
@@ -161,6 +185,7 @@ class QCustomQDialog(QDialog, Ui_Form):
         painter.drawRoundedRect(rect, 6, 6)
         
     def showEvent(self, e):
+        self.checkAppTheme()
         if not self.maskWidget:
             self.maskWidget = MaskWidget(parent=self.parent())
             c = 0 if self.isDark() else 255
@@ -211,7 +236,17 @@ class QCustomQDialog(QDialog, Ui_Form):
         # Calculate the size hint based on the content
         self.verticalLayout.setContentsMargins(self.margin, self.margin, self.margin, self.margin)
         content_size = self.layout().sizeHint()
-        self.setFixedSize(content_size.width() + self.padding, content_size.height() + self.padding)
+        self.setMinimumSize(content_size.width() + self.padding, content_size.height() + self.padding)
+        self.adjustSize()
+
+        self.checkAppTheme()
+
+    def checkAppTheme(self):
+        # icons
+        if self.shownForm:
+            if self.form.defaultTheme != QCustomTheme().theme:
+                # theme changed
+                self.form.applyThemeIcons()
 
     def eventFilter(self, obj, e: QEvent):
         if obj is self.window():
