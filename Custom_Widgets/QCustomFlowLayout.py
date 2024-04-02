@@ -2,7 +2,7 @@ from qtpy import QtGui, QtCore, QtWidgets
 import typing
 
 # https://github.com/baoboa/pyqt5/blob/master/examples/layouts/flowlayout.py
-class QFlowLayout(QtWidgets.QLayout):
+class QCustomFlowLayout(QtWidgets.QLayout):
     def __init__(self, parent=None, margin=0, spacing=-1):
         super().__init__(parent)
 
@@ -27,9 +27,13 @@ class QFlowLayout(QtWidgets.QLayout):
         except KeyError:
             self._items.append(a0)
 
-    def addWidget(self, w: QtWidgets.QWidget, position: int = None) -> None:
-        if position:
+    def addWidget(self, w: QtWidgets.QWidget, position: int = None, align: QtCore.Qt.AlignmentFlag = None) -> None:
+        if position is not None:
             self.__pending_positions[w] = position
+        if align is not None:
+            frame_layout = w.layout()
+            if frame_layout is not None:
+                frame_layout.setAlignment(align)
         super().addWidget(w)
 
     def count(self):
@@ -111,3 +115,7 @@ class QFlowLayout(QtWidgets.QLayout):
             line_height = max(line_height, item.sizeHint().height())
 
         return y + line_height - rect.y()
+    
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._doLayout(self.geometry(), False)
