@@ -130,7 +130,7 @@ class NewIconsGenerator(QObject):
             
             settings.setValue("ICONS-COLOR", normal_color)
             iconsFolderName = normal_color.replace("#", "")
-            self.applyIcons(iconsFolderName)
+            self.themeEngine.applyIcons(self, folder=iconsFolderName)
 
             # Create normal icons
             NewIconsGenerator.generateIcons(progress_callback, normal_color, "", iconsFolderName, createQrc = False)
