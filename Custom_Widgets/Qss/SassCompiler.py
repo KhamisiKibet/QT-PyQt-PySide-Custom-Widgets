@@ -132,11 +132,11 @@ class CompileStyleSheet():
         color = CreateColorVariable.getCurrentThemeInfo(self)
         normal_color = str(color["icons-color"])
         icons_folder = normal_color.replace("#", "")
-        self.applyIcons(icons_folder)
+        self.themeEngine.applyIcons(self, folder=icons_folder)
 
         self.iconsWorker = Worker(self.compileSassTheme)
         self.iconsWorker.signals.result.connect(WorkerResponse.print_output)
-        self.iconsWorker.signals.finished.connect(lambda: self.applyIcons(icons_folder))
+        self.iconsWorker.signals.finished.connect(lambda: self.themeEngine.applyIcons(self, folder=icons_folder))
         self.iconsWorker.signals.progress.connect(self.sassCompilationProgress)
 
         # ALL THEME ICONS
