@@ -419,12 +419,11 @@ class BottomRightTailQCustomQToolTipManager(BottomTailQCustomQToolTipManager):
     def draw(self, tipOverlay, painter, path):
         w, h = tipOverlay.width(), tipOverlay.height()
         margins =tipOverlay.layout().contentsMargins()
-        
         path.addPolygon(
             QPolygonF([QPointF(w - 20, h - margins.top()/2), QPointF(w - 27, h - 1), QPointF(w - 34, h - margins.top()/2)]))
 
         painter.drawPath(path.simplified())
-
+       
     def position(self, tipOverlay: QCustomTipOverlay):
         target = tipOverlay.target
         pos = target.mapToGlobal(QPoint(target.width(), 0))

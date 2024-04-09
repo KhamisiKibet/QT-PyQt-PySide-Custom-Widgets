@@ -59,6 +59,7 @@ def convert_file(path):
 
     # Initialize an empty dictionary to store widget names and their icons
     widget_info = {}
+    table_items = 0
 
     # Iterate through each element in the UI file
     for element in root.iter():
@@ -92,6 +93,23 @@ def convert_file(path):
                         widget_info[widget_class].append({"QTabWidget": tab_name, "name": widget_name, "icon": icon_url})
                     else:
                         widget_info[widget_class] = [{"QTabWidget": tab_name, "name": widget_name, "icon": icon_url}]
+                
+                elif parent_widget.tag == 'widget' and parent_widget.get('class') == 'QTableWidget':
+                    table_name = parent_widget.get('name')
+                    if table_items > 0:
+                        widget_name = "__qtablewidgetitem" + str(table_items)
+                    else:
+                        widget_name = "__qtablewidgetitem"
+                    # set parent name
+                    widget.set('name', widget_name)
+
+                    table_items = table_items + 1
+
+                    # Add the widget info to the dictionary
+                    if widget_class in widget_info:
+                        widget_info[widget_class].append({"QTableWidget": table_name, "name": widget_name, "icon": icon_url})
+                    else:
+                        widget_info[widget_class] = [{"QTableWidget": table_name, "name": widget_name, "icon": icon_url}]
 
                 elif parent_widget.tag == 'widget' and parent_widget.get('class') == 'QToolBox':
                     # Get the tab name
@@ -146,7 +164,9 @@ def convert_file(path):
         # ("widget", "class", "QPushButton", "QPushButtonThemed"),
         # ("widget", "class", "QLabel", "QLabelThemed"),
     ]
-    root = replace_attributes_values(path, replacements_list)
+    replace_attributes_values(path, replacements_list)
+
+    
 
 def update_json(data, json_file_name):
     # Save the JSON data back to the file
@@ -216,10 +236,11 @@ def start_file_listener(file_or_folder, qt_binding="PySide6"):
 
     sys.exit(app.exec_())  # Start the application event loop
 
-def replace_attributes_values(ui_file_path, replacements):
+def replace_attributes_values(ui_file_path, replacements, root=None, tree=None):
     # Parse the XML file
-    tree = ET.parse(ui_file_path)
-    root = tree.getroot()
+    if root is None:
+        tree = ET.parse(ui_file_path)
+        root = tree.getroot()
 
     # Find and remove the <resources> element
     resources_elements = root.findall(".//resources")

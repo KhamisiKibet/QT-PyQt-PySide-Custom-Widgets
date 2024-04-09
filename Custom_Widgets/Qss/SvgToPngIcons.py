@@ -32,6 +32,8 @@ from qtpy.QtCore import *
 
 from Custom_Widgets.Log import *
 
+from PySide6.QtGui import QColor
+
 class NewIconsGenerator(QObject):
     def __init__(self, arg):
         super(NewIconsGenerator, self).__init__()
@@ -98,7 +100,7 @@ class NewIconsGenerator(QObject):
                         new_svg = content.replace(svg_color, iconsColor)
                         new_bytes = str.encode(new_svg)
 
-                        cairosvg.svg2png(bytestring=new_bytes, write_to=output_path)
+                        cairosvg.svg2png(bytestring=new_bytes, write_to=output_path, output_width=24, output_height=24)
 
                         new_icon_made = True
 
@@ -154,8 +156,11 @@ class NewIconsGenerator(QObject):
 
         for theme in themes:
             color = get_theme_color(theme)
-            if color == "" or color == settings.value("ICONS-COLOR"):
-                continue
+            try:
+                if color == "" or color == settings.value("ICONS-COLOR"):
+                    continue
+            except:
+                pass
 
             logInfo(self, f"Checking icons for {theme.name} theme. Icons color: {color}")
 

@@ -33,7 +33,6 @@ class QCustomTheme(QObject):
 
     def __init__(self):
         super().__init__()
-        # self.onThemeChanged.connect(print("theme changed"))
         self._theme = "default"
     
     @property
@@ -68,7 +67,6 @@ class QCustomTheme(QObject):
         
         # Calculate luminance using the YIQ color space formula
         luminance = (0.299 * background_color.red() + 0.587 * background_color.green() + 0.114 * background_color.blue()) / 255
-        
         # Determine if the background color is considered dark or light
         if luminance < 0.5:
             return True  # Dark theme
@@ -106,8 +104,12 @@ class QCustomTheme(QObject):
     @staticmethod
     def applyIcons(self, folder=None, ui_file_name = None):
         settings = QSettings()
+        icons_color = settings.value("ICONS-COLOR")
+        icons_color = settings.value("ICONS-COLOR")
+        if icons_color is None:
+            return
         if not folder:
-            folder = settings.value("ICONS-COLOR").replace("#", "")
+            folder = icons_color.replace("#", "")
         current_script_folder = os.path.dirname(os.path.realpath(sys.argv[0]))
         jsonFilesFolder = os.path.abspath(os.path.join(current_script_folder, "generated-files/json"))
         if not os.path.exists(jsonFilesFolder):
@@ -155,6 +157,9 @@ class QCustomTheme(QObject):
 
                         abs_icon_url = os.path.abspath(os.path.join(current_script_folder, icon_url))
 
+                        # if not icon_url.startswith('Qss/icons/'):
+                        #     continue #not a theme icon
+                        
                         # Check if the icon URL is valid and the widget exists in the UI
                         if abs_icon_url != "default_icon_url" and hasattr(self.ui, str(widget_name)):
                             widget = getattr(self.ui, str(widget_name))

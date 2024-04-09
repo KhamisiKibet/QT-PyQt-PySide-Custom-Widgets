@@ -59,7 +59,6 @@ class QCustomEmojiPicker(QCustomTipOverlay):
     def select(self) -> typing.Union[str, None]:
         """Shows this window and returns the selected emoji if a button was pressed or none, if the window was closed without choosing an emoji"""
         # should hide?
-        print(self.selected_emoji)
         return self.selected_emoji
 
     def on_input(self, text: str):

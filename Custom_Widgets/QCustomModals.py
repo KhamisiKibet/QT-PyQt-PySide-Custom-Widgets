@@ -119,6 +119,9 @@ class QCustomModals:
             if 'animationDuration' in kwargs:
                 self.animationDuration = kwargs['animationDuration']
             
+            if 'duration' in kwargs:
+                self.animationDuration = kwargs['duration']
+            
             self.closeButton.setFixedSize(20, 20)
             self.closeButton.setIconSize(QSize(self.spacing, self.spacing))
             self.closeButton.setCursor(Qt.PointingHandCursor)
@@ -197,6 +200,8 @@ class QCustomModals:
             
         def fadeOut(self):
             """ fade out """
+            if self.animationDuration < 0:
+                return
             self.opacityAni.setDuration(self.animationDuration - 500)
             self.opacityAni.setStartValue(1)
             self.opacityAni.setEndValue(0)

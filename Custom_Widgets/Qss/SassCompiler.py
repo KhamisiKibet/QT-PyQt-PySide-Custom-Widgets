@@ -90,7 +90,9 @@ class CompileStyleSheet():
                     obj.setStyleSheet(stylesheet)
         
         # QPalette
-        palette = QPalette()
+        app = QApplication.instance()
+        # palette = QPalette()
+        palette = app.palette()
 
         # Set the background color
         try:
@@ -121,9 +123,22 @@ class CompileStyleSheet():
         palette.setColor(QPalette.HighlightedText, QColor(self.theme.COLOR_ACCENT_1))
 
         # Apply the palette to the main window
-        self.setPalette(palette)
+        # self.setPalette(palette)
+
+        app.setPalette(palette)
 
         self.update()
+
+        background_color = palette.color(QPalette.Window)
+        
+        # Calculate luminance using the YIQ color space formula
+        luminance = (0.299 * background_color.red() + 0.587 * background_color.green() + 0.114 * background_color.blue()) / 255
+        
+        if luminance < 0.5:
+            self.isThemeDark =  True  # Dark theme
+        else:
+            self.isThemeDark = False  # Light theme
+            
         
         ########################################################################
         ## GENERATE NEW ICONS

@@ -524,7 +524,6 @@ class QCustomSlideMenu(QWidget):
 
         except Exception as e:
             pass
-            # print(e)
 
         self.floatMenu()
 

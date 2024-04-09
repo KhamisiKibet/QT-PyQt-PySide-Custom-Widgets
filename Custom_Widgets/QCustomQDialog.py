@@ -27,7 +27,6 @@ class LoadForm(QWidget):
         self.customTheme = QCustomTheme()
         self.customTheme.applyIcons(self, ui_file_name=self.ui_module_name)
 
-        # self.customTheme.onThemeChanged.connect(lambda: print("theme changed"))
         self.defaultTheme = self.customTheme.theme
         
 class QCustomQDialog(QDialog, Ui_Form):
@@ -63,7 +62,8 @@ class QCustomQDialog(QDialog, Ui_Form):
             self.titleLabel.setText(str(kwargs['title']))
         else:
             # set title to app title
-            self.setTitle(QApplication.instance().applicationName())
+            # self.setTitle(QApplication.instance().applicationName())
+            self.titleLabel.hide() 
             
         if 'description' in kwargs:
             self.descriptionLabel.setText(str(kwargs['description']))
