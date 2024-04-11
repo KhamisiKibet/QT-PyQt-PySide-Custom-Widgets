@@ -782,13 +782,14 @@ def applyJsonStyle(self, update = False):
                 # Set window Icon
                 self.setWindowIcon(QIcon(str(QMainWindow["icon"])))
 
-            if "frameless" in QMainWindow and QMainWindow["frameless"]:   
-                ## # Remove window tittle bar
-                self.setWindowFlags(Qt.FramelessWindowHint)
+            if not update:
+                if "frameless" in QMainWindow and QMainWindow["frameless"]:   
+                    ## # Remove window tittle bar
+                    self.setWindowFlags(Qt.FramelessWindowHint)
 
-            if "transluscentBg" in QMainWindow and QMainWindow["transluscentBg"]:
-                ## # Set main background to transparent
-                self.setAttribute(Qt.WA_TranslucentBackground)
+                if "transluscentBg" in QMainWindow and QMainWindow["transluscentBg"]:
+                    ## # Set main background to transparent
+                    self.setAttribute(Qt.WA_TranslucentBackground)
 
             if "sizeGrip" in QMainWindow and len(str(QMainWindow["sizeGrip"])) > 0:
                 # Window Size grip to resize window
@@ -840,15 +841,23 @@ def applyJsonStyle(self, update = False):
                         for restore in navigation["restore"]:
                             if "buttonName" in restore and len(str(restore["buttonName"])) > 0:
                                 if hasattr(self.ui, str(restore["buttonName"])):
-                                    getattr(self.ui, str(restore["buttonName"])).clicked.connect(lambda: self.restore_or_maximize_window())
-                                    self.restoreBtn = getattr(self.ui, str(restore["buttonName"]))
+                                    button = getattr(self.ui, str(restore["buttonName"]))
+                                    try:
+                                        button.clicked.disconnect()
+                                    except Exception as e:
+                                        pass
+                                    button.clicked.connect(lambda: self.toggleWindowSize(""))
+                                    self.restoreBtn = button
+
                             if "normalIcon" in restore and len(str(restore["normalIcon"])) > 0:
                                 self.normalIcon = replace_url_prefix(str(restore["normalIcon"]), "Qss/icons")
+                                self.normalIcon = replace_url_prefix(self.normalIcon, "PATH_RESOURCES")
                             else:
                                 self.normalIcon = ""
 
                             if "maximizedIcon" in restore and len(str(restore["maximizedIcon"])) > 0:
                                 self.maximizedIcon = replace_url_prefix(str(restore["maximizedIcon"]), "Qss/icons")
+                                self.maximizedIcon = replace_url_prefix(self.maximizedIcon, "PATH_RESOURCES")
                             else:
                                 self.maximizedIcon = ""
 
