@@ -113,24 +113,15 @@ class QMainWindow(QMainWindow):
                 self.restoreBtn.setNewIcon(str(self.normalIcon))
 
     def restore_or_maximize_window(self):
-        # If window is maximized
-        if self.isMaximized():
-            self.showNormal()
-        else:
-            # Save the current window geometry before maximizing
-            self.normalGeometry = self.geometry()
+        self.toggleWindowSize("")
 
-            self.showMaximized()
+    # def showNormal(self):
+    #     super().showNormal()
 
-        self.updateRestoreButtonIcon()
-
-    def showNormal(self):
-        super().showNormal()
-
-        # Restore the window to its previous position and size
-        if hasattr(self, 'normalGeometry'):
-            self.setGeometry(self.normalGeometry)
-            del self.normalGeometry
+    #     # Restore the window to its previous position and size
+    #     if hasattr(self, 'normalGeometry'):
+    #         self.setGeometry(self.normalGeometry)
+    #         del self.normalGeometry
 
     # Function to Move window on mouse drag event on the tittle bar
     def moveWindow(self, e):
