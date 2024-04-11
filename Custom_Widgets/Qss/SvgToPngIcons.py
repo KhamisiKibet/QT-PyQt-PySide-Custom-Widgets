@@ -55,7 +55,7 @@ class NewIconsGenerator(QObject):
                 svg_files.append(file_path)
         return svg_files
     
-    def generateIcons(progress_callback, iconsColor, suffix, iconsFolder="", createQrc=False):
+    def generateIcons(progress_callback, iconsColor, suffix, iconsFolder="", createQrc=False, output_width=None, output_height=None):
         # Base folder
         base_folder = os.path.dirname(__file__)
         icons_folder_base = os.path.join(base_folder, 'icons')
@@ -100,7 +100,11 @@ class NewIconsGenerator(QObject):
                         new_svg = content.replace(svg_color, iconsColor)
                         new_bytes = str.encode(new_svg)
 
-                        cairosvg.svg2png(bytestring=new_bytes, write_to=output_path, output_width=24, output_height=24)
+                        if output_height is not None and output_width is not None:
+                            cairosvg.svg2png(bytestring=new_bytes, write_to=output_path, output_width=output_width, output_height=output_height)
+                        
+                        else:
+                            cairosvg.svg2png(bytestring=new_bytes, write_to=output_path)
 
                         new_icon_made = True
 
@@ -170,9 +174,9 @@ class NewIconsGenerator(QObject):
         # then make icons for qt designer
         logInfo(self, f"Checking icons for qt designer app.")
         if settings.value("DESIGNER-ICONS-COLOR") is not None:
-            NewIconsGenerator.generateIcons(progress_callback, settings.value("DESIGNER-ICONS-COLOR"), "", "icons", createQrc=True)
+            NewIconsGenerator.generateIcons(progress_callback, settings.value("DESIGNER-ICONS-COLOR"), "", "icons", createQrc=True, output_width=24, output_height=24)
         else:
-            NewIconsGenerator.generateIcons(progress_callback, "#000", "", "icons", createQrc=True)
+            NewIconsGenerator.generateIcons(progress_callback, "#000", "", "icons", createQrc=True, output_width=24, output_height=24)
 
     def createQrcFile(contents, filePath):
         # Save QRC content to a file
