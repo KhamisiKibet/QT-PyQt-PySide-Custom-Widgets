@@ -129,7 +129,7 @@ class QCustomQDialog(QDialog, Ui_Form):
         self.cancelButton.setAttribute(Qt.WA_LayoutUsesWidgetRect)
         
         self.yesButton.setFocus()
-        # self.setShadowEffect()
+        self.setShadowEffect()
     
     def setShadowEffect(self, blurRadius=60, offset=(0, 10), color=QColor(0,0,0,100)):
         shadowEffect = QGraphicsDropShadowEffect(self.widget)
@@ -203,9 +203,7 @@ class QCustomQDialog(QDialog, Ui_Form):
         opacityAni.finished.connect(opacityEffect.deleteLater)
         opacityAni.start()
         super().showEvent(e)
-        
-        self.setShadowEffect()
-    
+            
     
     def hideEvent(self, e):
         super().hideEvent(e)
@@ -316,9 +314,12 @@ class MaskWidget(QWidget):
         self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
         
     def deleteLater(self):
-        if self.parent():
-            self.parent().destroyed.disconnect(self.onParentDestroyed)
-        super().deleteLater()
+        try:
+            if self.parent():
+                self.parent().destroyed.disconnect(self.onParentDestroyed)
+            super().deleteLater()
+        except:
+            pass
 
     def onParentDestroyed(self):
         self.deleteLater()
