@@ -35,8 +35,8 @@ class QCustomCheckBox(QCheckBox):
 
         # COLORS
         self.bgColor = bgColor
-        self.circleColor = circleColor
-        self.activeColor = activeColor
+        self._circleColor = circleColor
+        self._activeColor = activeColor
 
         # Animation
         self.animationEasingCurve = QEasingCurve.OutBounce
@@ -56,6 +56,30 @@ class QCustomCheckBox(QCheckBox):
         # Initialize icon
         self.icon = QIcon()
         self._iconSize = QSize(0, 0)  # Default icon size
+
+    @Property(str)
+    def backgroundColor(self):
+        return self.bgColor
+    
+    @backgroundColor.setter
+    def backgroundColor(self, color):
+        self.bgColor = color
+    
+    @Property(str)
+    def circleColor(self):
+        return self._circleColor
+    
+    @circleColor.setter
+    def circleColor(self, color):
+        self._circleColor = color
+
+    @Property(str)
+    def activeColor(self):
+        return self._activeColor
+    
+    @activeColor.setter
+    def activeColor(self, color):
+        self._activeColor = color
 
     def setIcon(self, icon):
         self.icon = icon
@@ -79,10 +103,10 @@ class QCustomCheckBox(QCheckBox):
             self.bgColor = customValues["bgColor"]
         
         if "circleColor" in customValues:
-            self.circleColor = customValues["circleColor"]
+            self._circleColor = customValues["circleColor"]
 
         if "activeColor" in customValues:
-            self.activeColor = customValues["activeColor"]
+            self._activeColor = customValues["activeColor"]
 
         if "animationEasingCurve" in customValues:
             self.animationEasingCurve = customValues["animationEasingCurve"]
@@ -114,11 +138,12 @@ class QCustomCheckBox(QCheckBox):
         label_width = self.width() - (self.height() * 2.1 + icon_size + label_margin)  # Calculate the width of the label area
         label_height = self.height()  # Use the height of the checkbox for the label height
 
+        self.label.adjustSize()
+        
         label_x = self.height() * 2.1 + icon_size + label_margin  # Calculate the x position of the label
         label_y = (self.height() - label_height) / 2  # Center the label vertically within the checkbox area
 
         self.label.setGeometry(label_x, label_y, label_width, label_height)
-        self.label.adjustSize()
         
         self.update()
 
@@ -183,15 +208,15 @@ class QCustomCheckBox(QCheckBox):
             painter.drawRoundedRect(0, 0, self.height() * 2.1, self.height(), self.height() * .5, self.height() * .5)
 
             # Draw circle for unchecked state
-            painter.setBrush(QColor(self.circleColor))
+            painter.setBrush(QColor(self._circleColor))
             painter.drawEllipse(self.pos, 0, self.height(), self.height())
         else:
             # Draw rounded rectangle for checked state
-            painter.setBrush(QColor(self.activeColor))
+            painter.setBrush(QColor(self._activeColor))
             painter.drawRoundedRect(0, 0, self.height() * 2.1, self.height(), self.height() * .5, self.height() * .5)
 
             # Draw circle for checked state
-            painter.setBrush(QColor(self.circleColor))
+            painter.setBrush(QColor(self._circleColor))
             painter.drawEllipse(self.pos, 0, self.height(), self.height())
         
         self.adjustWidgetSize()

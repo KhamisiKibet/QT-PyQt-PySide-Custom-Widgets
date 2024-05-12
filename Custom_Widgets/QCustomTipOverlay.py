@@ -46,6 +46,7 @@ class QCustomTipOverlay(QWidget, Ui_Form):
         self.description = description
 
         self.showForm = showForm
+        self.shownForm = showForm
         self.widget = addWidget
 
      

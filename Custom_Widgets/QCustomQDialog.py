@@ -28,6 +28,15 @@ class LoadForm(QWidget):
         self.customTheme.applyIcons(self, ui_file_name=self.ui_module_name)
 
         self.defaultTheme = self.customTheme.theme
+
+    def paintEvent(self, e: QPaintEvent):
+        super().paintEvent(e)
+        
+        opt = QStyleOption()
+        opt.initFrom(self)
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
         
 class QCustomQDialog(QDialog, Ui_Form):
     accepted = Signal()
@@ -157,11 +166,11 @@ class QCustomQDialog(QDialog, Ui_Form):
 
     def __onCancelButtonClicked(self):
         self.reject()
-        self.rejected.emit()
+        # self.rejected.emit()
 
     def __onYesButtonClicked(self):
         self.accept()
-        self.accepted.emit()
+        # self.accepted.emit()
 
     def hideYesButton(self):
         self.yesButton.hide()
@@ -171,16 +180,9 @@ class QCustomQDialog(QDialog, Ui_Form):
     
     def paintEvent(self, e: QPaintEvent):
         super().paintEvent(e)
-
-        # opt = QStyleOption()
-        # opt.initFrom(self)
         painter = QPainter(self)
-        # self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
-        
         painter.setRenderHints(QPainter.Antialiasing)
         painter.setPen(Qt.NoPen)
-
-        #
         rect = self.rect().adjusted(1, 1, -1, -1)
         painter.drawRoundedRect(rect, 6, 6)
         

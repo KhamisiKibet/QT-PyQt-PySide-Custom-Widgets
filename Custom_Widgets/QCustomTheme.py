@@ -124,7 +124,7 @@ class QCustomTheme(QObject):
             "QCheckBox": "setNewIcon",
             "QCustomCheckBox": "setNewIcon",
             "QWidget": None,  # No specific setter method for QWidget
-            "QLabel": "setNewPixmap"        }
+            "QLabel": "setNewPixmap"}
 
         # Iterate over each JSON file in the folder
         for jsonFile in os.listdir(jsonFilesFolder):
@@ -184,3 +184,9 @@ class QCustomTheme(QObject):
 
                                 if isinstance(parent, QToolBox):
                                     parent.setNewItemIcon(widget_name, abs_icon_url)
+
+        try:
+            self.themeEngine.themeChanged()
+        except:
+            pass
+

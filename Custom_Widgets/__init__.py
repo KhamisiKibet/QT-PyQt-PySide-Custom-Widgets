@@ -1,7 +1,6 @@
 ## SPINN DESIGN CODE
 # YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
 # WEBSITE: spinncode.com
-import os
 import __main__
 
 from Custom_Widgets.Qss import SassCompiler
@@ -17,7 +16,6 @@ from qtpy.QtGui import QCursor
 from qtpy.QtWidgets import QPushButton, QLabel, QTabWidget, QCheckBox, QMainWindow, QWidget
 from qtpy.QtCore import Signal
 
-import json
 import re
 
 from Custom_Widgets.QCustomCheckBox import QCustomCheckBox
