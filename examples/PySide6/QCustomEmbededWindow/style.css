@@ -1,0 +1,38 @@
+/* QCustomEmbededWindow styles */
+QMainWindow, QCustomEmbededWindow{
+    background-color: #ecf0f1;
+    color: black;
+}
+/* Header styles */
+QCustomEmbededWindow > #header {
+    background-color: #2c3e5022; /* Header background color */
+    /* border-radius: 10px 10px 0 0; Rounded top corners */
+    padding: 10px;
+}
+
+/* Title label styles */
+QCustomEmbededWindow >  #header QLabel {
+    /* font-size: 16px; */
+    font-weight: bold;
+}
+
+/* Close button styles */
+QCustomEmbededWindow >  #header QPushButton#close-button {
+    background-color: transparent;
+    border: none;
+    /* font-size: 20px; */
+    margin-right: 5px;
+}
+
+/* Toggle button styles */
+QCustomEmbededWindow >  #header QPushButton#hide-button {
+    background-color: transparent;
+    border: none;
+    /* font-size: 20px; */
+}
+
+/* Content area styles */
+QCustomEmbededWindow >  #content-area {
+    background-color: #ecf0f1; /* Content background color */
+    padding: 10px;
+}

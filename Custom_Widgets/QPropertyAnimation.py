@@ -1,7 +1,10 @@
 from qtpy.QtCore import QEasingCurve, Qt
 ########################################################################
-##
+## SPINN DESIGN CODE
+# YOUTUBE: (SPINN TV) https://www.youtube.com/spinnTv
+# WEBSITE: spinncode.com
 ########################################################################
+
 def returnAnimationEasingCurve(easingCurveName):
     if len(str(easingCurveName)) > 0:
         if str(easingCurveName) == "OutQuad":

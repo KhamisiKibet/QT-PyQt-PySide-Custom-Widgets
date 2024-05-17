@@ -1,6 +1,6 @@
-from PySide6.QtWidgets import QLabel, QFileDialog
-from PySide6.QtGui import QPixmap, QColor, QPainter, QImageWriter, QPolygonF, QPainterPath, QPen, QBrush
-from PySide6.QtCore import Qt, QRect, QEvent, Signal, QByteArray, QPoint, QLineF, QPointF
+from qtpy.QtWidgets import QLabel, QFileDialog
+from qtpy.QtGui import QPixmap, QColor, QPainter, QImageWriter, QPolygonF, QPainterPath, QPen, QBrush
+from qtpy.QtCore import Qt, QRect, QEvent, Signal, QByteArray, QPoint, QLineF, QPointF
 from datetime import datetime
 
 import math
