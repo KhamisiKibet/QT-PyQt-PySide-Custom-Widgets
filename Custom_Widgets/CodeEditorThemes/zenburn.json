@@ -1,0 +1,16 @@
+{
+  "background"       : "#3f3f3f",
+  "lines-background" : "#3f3f3f",
+  "lines"            : "#627483",
+
+  "identifier"   : "#e3e2d5",
+  "operator"     : "#e3e2d5",
+  "brace"        : "#e3e2d5",
+  "string"       : "#a06666",
+  "comment"      : "#627483-italic",
+  "keyword"      : "#e6bda0",
+  "numeric"      : "#9bd8dc",
+  "this"         : "#e4a1ce-italic",
+  "function"     : "#ede7a5",
+  "preprocessor" : "#e6bda0"
+}

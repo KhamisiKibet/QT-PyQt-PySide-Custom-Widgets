@@ -53,7 +53,7 @@ class QCustomQDialog(QDialog, Ui_Form):
     
     maskWidget = None
 
-    def __init__(self, showForm=None, parent=None, **kwargs):
+    def __init__(self, showForm=None, parent=None, addWidget=None, **kwargs):
         QDialog.__init__(self, parent)  # Initialize QDialog parent class
         Ui_Form.__init__(self)  # Initialize Ui_Form parent class
         
@@ -131,6 +131,9 @@ class QCustomQDialog(QDialog, Ui_Form):
                 self.shownForm =  self.form.ui  
             except:
                 self.shownForm = None
+        
+        if addWidget:
+            self.addWidget(addWidget)
 
         self.yesButton.clicked.connect(self.__onYesButtonClicked)
         self.cancelButton.clicked.connect(self.__onCancelButtonClicked)
@@ -139,6 +142,9 @@ class QCustomQDialog(QDialog, Ui_Form):
         
         self.yesButton.setFocus()
         self.setShadowEffect()
+    
+    def addWidget(self, widget):
+        self.verticalLayout_2.addWidget(widget) 
     
     def setShadowEffect(self, blurRadius=60, offset=(0, 10), color=QColor(0,0,0,100)):
         shadowEffect = QGraphicsDropShadowEffect(self.widget)

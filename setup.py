@@ -37,6 +37,7 @@ setup(
         "lxml",
         "setuptools",
         "kids-cache",
+        "perlin_noise"
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',      

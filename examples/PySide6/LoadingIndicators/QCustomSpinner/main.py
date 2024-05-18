@@ -15,13 +15,16 @@ class Demo(QWidget):
         self.hBoxLayout = QHBoxLayout()
 
         self.spinner = QCustomSpinner(lineWidth=10, lineColor="#FF0000", animationType="Bounce")
-        # self.spinner = QCustomSpinner()
-        self.spinner.setMinimumSize(50, 50)
-        self.spinner.setMaximumSize(50, 50)
+        self.spinner2 = QCustomSpinner(lineColor="#000", animationType="Smooth")
+        self.spinner.setMinimumSize(100, 100)
+        self.spinner.setMaximumSize(100, 100)
+        self.spinner2.setMinimumSize(100, 100)
+        self.spinner2.setMaximumSize(100, 100)
 
         self.vBoxLayout.setContentsMargins(30, 30, 30, 30)
         self.vBoxLayout.addLayout(self.hBoxLayout)
         self.vBoxLayout.addWidget(self.spinner, 0, Qt.AlignHCenter)
+        self.vBoxLayout.addWidget(self.spinner2, 0, Qt.AlignHCenter)
         self.resize(400, 400)
 
 

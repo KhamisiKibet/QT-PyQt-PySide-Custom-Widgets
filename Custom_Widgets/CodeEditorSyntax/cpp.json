@@ -1,0 +1,18 @@
+{
+  "keywords" : [
+      "auto", "break", "case", "char", "const", "continue", "default",
+      "double", "else", "enum", "extern", "float", "for", "goto", "if",
+      "int", "long", "register", "return", "short", "signed", "sizeof",
+      "static", "do",  "struct", "switch", "typedef", "union", "unsigned",
+      "volatile", "while", "void", "asm", "dynamic_cast", "namespace",
+      "reinterpret_cast", "bool", "explicit", "new", "static_cast",
+      "false", "catch", "operator", "template", "friend", "private",
+      "class", "inline", "public", "throw", "const_cast",
+      "delete", "mutable", "protected", "true", "try",
+      "typeid", "typename", "using", "virtual", "wchar_t"
+    ],
+
+  "this" : "this",
+
+  "comment" : "//"
+}
