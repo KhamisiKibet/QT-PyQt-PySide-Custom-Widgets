@@ -1,3 +1,4 @@
+
 [![GitHub](https://img.shields.io/github/license/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=Github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/blob/master/LICENSE) [![GitHub top language](https://img.shields.io/github/languages/top/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets) [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets) [![GitHub issues](https://img.shields.io/github/issues/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets?logo=github)](https://github.com/KhamisiKibet/QT-PyQt-PySide-Custom-Widgets/issues)
 
 ![Custom Widgets Art](https://github.com/KhamisiKibet/docs-QT-PyQt-PySide-Custom-Widgets/blob/main/images/custom_widgets_art.png?raw=true)
@@ -15,27 +16,11 @@ Upgrade/install the latest version:
 ```
 pip install --upgrade QT-PyQt-PySide-Custom-Widgets
 ```
-# Quick `CMD/Terminal` commands:
-- To launch `ProjectMaker / project wizard`, run
-```cmd
-Custom_Widgets --create-project
-```
-This will create a `Qt-python` project inside your empty folder, ready to run.
-- Easy to convert UI files to py. The cutom widgets `Theme Engine` eliminated the need for `QRC` to `python` file conversion, therefore to generate `UI-Python` files without any errors, use
-```cmd
-Custom_Widgets --convert-ui ui-path --qt-library your-lib
-```
-- Monitor changes made to UI file and generate new .py file and other necessary files for the custom widgets
-```cmd
-Custom_Widgets --monitor-ui ui-path --qt-library your-lib
-```
-Where: `ui-path` is the UI file path or folder containing UI files.
-`your-lib` is `PySide6`, `PySide2`, `PyQt5` or `PyQt6`
-
-> [Updating old GUI app to work with the current Custom Widgets module update](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/other-functions/Updating-old-GUI-app-to-work-with-the%20current-Custom-Widgets-module-update)
 
 # Testing
 The examples folder in this repository contains a few code examples you can use to test and learn about the custom widgets.
+
+![QCustomArcLoader GIF](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/raw/main/images/custom-perlin-loader.gif)
 
 # How to use it.
 
@@ -44,16 +29,28 @@ Please read the required [**project structure**](https://khamisikibet.github.io/
 ## Documentation:
 
 - Available custom widgets:
-    - `AnalogGaugeWidget` - A digital analog widget using just a single `QWidget`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-analog-gauge)
-    - `QCustomCheckBox` - Customize and animate `QCheckBox`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qcheckbox)
-    - `QCustomProgressIndicator` - Create a beautiful modern progress indicator for multiple tasks. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-progress-bar)
-    - `QCustomQPushButton` - Customize and animate `QPushButton` with preset themes and use `iconify` to animate the icons. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qpushbutton)
-    - `QCustomQSlider` - Easily move the slider to the current clicked position of a `QSlider`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qslider)
-    - `QCustomQStackedWidget` - Add beautiful transition animations and navigate through `QStackedWidget`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qstacked-widgets)
-    - `QCustomSlideMenu` - Expand and collapse the size of your `QWidgets` i.e side menu, popup notifications, floating widgets etc. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-slide-menu-widgets)
-    - `QMainWindow` - Apply custom window title bar and navigation. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qmainwindow)
-    - `QCustomModals` - Provides custom modal dialogs for PySide/PyQt applications. It includes various types of modal dialogs such as `Information`, `Success`, `Warning`, `Error`, and `Custom modals`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-modals)
-    - `QDraggableWidget` - Provides custom draggable widget functionality for PyQt/PySide applications. It includes two main classes: `QDragItem` and `QDragWidget`. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/qdragable-widgets)
+    - [`AnalogGaugeWidget`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-analog-gauge)
+    - [`QCustomCheckBox`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qcheckbox)
+    - [`QCustomProgressIndicator`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-progress-bar)
+    - [`QCustomQPushButton`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qpushbutton)
+    - [`QCustomQSlider`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qslider)
+    - [`QCustomQStackedWidget`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qstacked-widgets)
+    - [`QCustomSlideMenu`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-slide-menu-widgets)
+    - [`QMainWindow`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qmainwindow)
+    - [`QCustomModals`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-modals)
+    - [`QDraggableWidget`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/qdragable-widgets)
+    - [`QCustomTipOverlay`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-tip-overlay)
+    - [`QCustomEmbededWindow`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-embeded-window)
+    - [`QCustomQToolTip`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qtooltip)
+    - [`QCustomQDialog`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qdialog)
+    - [`QCustom3CirclesLoader`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-3-circles-loader)
+    - [`QCustomArcLoader`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-arc-loader)
+    - [`QCustomPerlinLoader`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-perlin-loader)
+    - [`QCustomQProgressBar`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qprogressbar)
+    - [`QCustomSpinner`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-spinner)
+    - [`QCustomEmojiPicker`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-emoji-picker)
+    - [`QCustomCodeEditor`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-code-editor)
+    - [`QCustomFlowLayout`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-flow-layout)
 
 
 - Other extra functions:
@@ -62,7 +59,6 @@ Please read the required [**project structure**](https://khamisikibet.github.io/
     - `QCustomQPushButtonGroup` - Create a group of `QPushButton`s with different `stylesheet`s for the current `active` or `clicked` button and other innactive buttons. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/other-functions/qpushbutton-group)
     - `Qt Theme Engine` - Beautify your app. This feature will create multiple themes for QT for Python apps. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/other-functions/qt-theme-engine)
     - `QSettings` - Easily save your app configurations that will be remembered even after restarting the app ie app theme from Qt Theme Engine`. [Watch the tutorial](https://youtu.be/mkBwInKhBsA)
-    - `JSON Stylesheet Cheatsheet` - JSON stylesheet is used to customize the appearance and behavior of PyQt/PySide custom widgets in the QT-PyQt-PySide-Custom-Widgets module. [Read more](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/json-stylesheet-cheatsheet)
 
 
 - Or watch the tutorial videos [here](https://www.youtube.com/watch?v=21Qt9p_F7Ts&list=PLJ8t3BKaQLhPKj9Mx08WAwvz7TGskefbK)
