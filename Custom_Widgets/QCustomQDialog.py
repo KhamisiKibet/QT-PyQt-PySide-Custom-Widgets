@@ -120,6 +120,8 @@ class QCustomQDialog(QDialog, Ui_Form):
                 self.titleBar.mousePressEvent = self.mousePressEvent
                 self.titleBar.mouseMoveEvent = self.mouseMoveEvent
                 self.titleBar.mouseReleaseEvent = self.mouseReleaseEvent
+            else:
+                self.setMovable(False)
 
         self.shownForm = None       
         if showForm:
@@ -143,8 +145,11 @@ class QCustomQDialog(QDialog, Ui_Form):
         self.yesButton.setFocus()
         self.setShadowEffect()
     
-    def addWidget(self, widget):
-        self.verticalLayout_2.addWidget(widget) 
+    def addWidget(self, widget, alignment = None):
+        if alignment:
+            self.verticalLayout_2.addWidget(widget, alignment=alignment) 
+        else:
+            self.verticalLayout_2.addWidget(widget) 
     
     def setShadowEffect(self, blurRadius=60, offset=(0, 10), color=QColor(0,0,0,100)):
         shadowEffect = QGraphicsDropShadowEffect(self.widget)
@@ -163,7 +168,7 @@ class QCustomQDialog(QDialog, Ui_Form):
 
     def mouseMoveEvent(self, event: QMouseEvent):
         if hasattr(self, 'offset'):
-            if self.windowFlags() & Qt.FramelessWindowHint:
+            if self.windowFlags() & Qt.FramelessWindowHint and self.windowMovable:
                 self.move(self.pos() + event.pos() - self.offset)
 
     def mouseReleaseEvent(self, event: QMouseEvent):
