@@ -46,9 +46,11 @@ Please read the required [**project structure**](https://khamisikibet.github.io/
     - [`QDraggableWidget`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/qdragable-widgets)
 
     - [`QCustomTipOverlay`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-tip-overlay)
+    - 
     ![Custom Tool Tip Overlay GIF](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/raw/main/images/custom-tool-tip-overlay.gif)
 
     - [`QCustomEmbededWindow`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-embeded-window)
+    - 
     ![Custom Embeded Window GIF](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/raw/main/images/custom-embeded-window.gif)
 
     - [`QCustomQToolTip`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qtooltip)
