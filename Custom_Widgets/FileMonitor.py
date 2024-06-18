@@ -432,14 +432,13 @@ class QSsFileMonitor():
         logInfo(self, f"File changed: {file_path}")
 
         # # Check if the file extension is '.json'
-        # if file_path.endswith('.json'):
-        #     # reload jsons
-        #     self.reloadJsonStyles(update = True)
-        # else:
-        #     # Apply compiled stylesheet
-        #     QAppSettings.updateAppSettings(self)
-
-        QAppSettings.updateAppSettings(self)
+        if file_path.endswith('.json'):
+            # reload jsons
+            # self.reloadJsonStyles(update = True)
+            QAppSettings.updateAppSettings(self, generateIcons = False, reloadJson = True)
+        else:
+            # Apply compiled stylesheet
+            QAppSettings.updateAppSettings(self, generateIcons = False)
 
     def stop_qss_file_listener(self):
         if hasattr(self, 'qss_watcher'):

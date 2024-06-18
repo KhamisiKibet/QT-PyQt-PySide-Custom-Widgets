@@ -32,6 +32,7 @@ def rgb_to_hex(rgb):
     return "#" + hex_color
 
 def hex_to_rgb(hex_color):
+    hex_color = color_to_hex(hex_color)
     # Remove '#' if present
     hex_color = hex_color.lstrip('#')
     

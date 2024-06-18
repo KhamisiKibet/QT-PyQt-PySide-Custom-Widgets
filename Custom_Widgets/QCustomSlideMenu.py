@@ -7,8 +7,8 @@
 ########################################################################
 ## MODULE UPDATED TO USE QT.PY
 ########################################################################
-from qtpy.QtCore import QEasingCurve, QRect, QSettings, QPropertyAnimation, QSize
-from qtpy.QtGui import QColor, QPaintEvent, QPainter
+from qtpy.QtCore import QEasingCurve, QRect, QSettings, QPropertyAnimation, QSize, QEvent
+from qtpy.QtGui import QColor, QPaintEvent, QPainter, QResizeEvent
 from qtpy.QtWidgets import QWidget, QGraphicsDropShadowEffect, QStyleOption, QStyle
 
 import re
@@ -16,6 +16,10 @@ import re
 class QCustomSlideMenu(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.installEventFilter(self)
+
+        if self.parent():
+            self.parent().installEventFilter(self)
 
         # SET DEFAULT SIZE
         self.defaultWidth = self.width()
@@ -44,6 +48,8 @@ class QCustomSlideMenu(QWidget):
 
         self.float = False
         self.floatPosition = ""
+
+        self.autoHide = False
 
         # Set the object name
         # self.setObjectName("QCustomSlideMenu")
@@ -155,8 +161,6 @@ class QCustomSlideMenu(QWidget):
 
                 if "autoHide" in customValues:
                     self.autoHide = customValues["autoHide"]
-                else:
-                    self.autoHide = True
 
         if "update" in customValues and not customValues["update"]:
             # self.refresh()
@@ -398,18 +402,20 @@ class QCustomSlideMenu(QWidget):
 
         self._widthAnimation.finished.connect(lambda: self.applyWidgetStyle())
 
-    def animateHeight(self, startHeight, endHeight):
+    def animateHeight(self, startHeight, endHeight):     
+        # Set the correct maximum height after the animation based on the target state
         if self.expandedHeight == "auto" or self.expandedHeight == 16777215:
             if self.collapsed:
                 self._heightAnimation.finished.connect(lambda: self.setMaximumHeight(16777215))
-            if self.expanded:
+            else:
                 self._heightAnimation.finished.connect(lambda: self.setMaximumHeight(0))
 
         self._heightAnimation.setStartValue(startHeight)
         self._heightAnimation.setEndValue(endHeight)
         self._heightAnimation.start()
-
-
+        
+        # Ensure styles are applied correctly after the animation
+        self._heightAnimation.finished.connect(self.applyWidgetStyle)
 
     def refresh(self):
         if self.isExpanded():
@@ -498,7 +504,7 @@ class QCustomSlideMenu(QWidget):
                             self.setMaximumWidth(self.parent().width())
                     if self.expanded:
                         if self.expandedWidth == "parent":
-                            # self.setMinimumWidth(self.parent().width())
+                            self.setMinimumWidth(0)
                             self.setMaximumWidth(self.parent().width())
 
 
@@ -510,7 +516,7 @@ class QCustomSlideMenu(QWidget):
                             self.setMaximumHeight(self.parent().height())
                     if self.expanded:
                         if self.expandedHeight == "parent":
-                            # self.setMinimumHeight(self.parent().height())
+                            self.setMinimumHeight(0)
                             self.setMaximumHeight(self.parent().height())
 
             if not hasattr(self, "_widthAnimation") and not hasattr(self, "_heightAnimation"):
@@ -526,6 +532,30 @@ class QCustomSlideMenu(QWidget):
             pass
 
         self.floatMenu()
+
+    def eventFilter(self, obj, event: QEvent):
+        if event.type() == QEvent.MouseButtonPress:
+            if self.autoHide:
+                local_pos = self.mapFromGlobal(event.globalPos())
+        
+                if not self.rect().contains(local_pos):
+                    self.collapseMenu()
+
+        elif event.type() in [QEvent.Resize, QEvent.WindowStateChange, QEvent.Move, QEvent.Paint]:
+            if obj is self.window():
+                resize_event = QResizeEvent(event.size(), event.oldSize())
+                self.resize(resize_event.size())
+                self.refresh()
+        return super().eventFilter(obj, event)
+    
+    def resizeEvent(self, e):
+        self.refresh()
+
+    def showEvent(self, e):
+        # self.adjustSizeToContent()
+        self.raise_()
+        
+        super().showEvent(e)
 
 
     #######################################################################

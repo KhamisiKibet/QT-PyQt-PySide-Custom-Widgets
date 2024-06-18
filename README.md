@@ -41,6 +41,7 @@ Please read the required [**project structure**](https://khamisikibet.github.io/
     - [`QMainWindow`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qmainwindow)
     
     - [`QCustomModals`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-modals)
+
     ![Screenshot_20240223_213723.png](https://www.dropbox.com/scl/fi/2q34mj8hdg6xymu6ctoyb/Screenshot_20240223_213723.png?rlkey=5bu7vo89jyohloui5rlqld5da&dl=0&raw=1)
 
     - [`QDraggableWidget`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/qdragable-widgets)
@@ -49,6 +50,7 @@ Please read the required [**project structure**](https://khamisikibet.github.io/
     ![Custom Tool Tip Overlay GIF](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/raw/main/images/custom-tool-tip-overlay.gif)
 
     - [`QCustomEmbededWindow`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-embeded-window)
+    
     ![Custom Embeded Window GIF](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/raw/main/images/custom-embeded-window.gif)
 
     - [`QCustomQToolTip`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-qtooltip)

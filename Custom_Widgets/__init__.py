@@ -82,10 +82,10 @@ class QMainWindow(QMainWindow):
         cursor = QCursor()
         xPos = cursor.pos().x()
         yPos = cursor.pos().y()
-        if hasattr(self, "floatingWidgets"):
-            for x in self.floatingWidgets:
-                if hasattr(x, "autoHide") and x.autoHide:
-                    x.collapseMenu()
+        # if hasattr(self, "floatingWidgets"):
+        #     for x in self.floatingWidgets:
+        #         if hasattr(x, "autoHide") and x.autoHide:
+        #             x.collapseMenu()
 
     # Update restore button icon on maximizing or minimizing window
     def updateRestoreButtonIcon(self):

@@ -37,7 +37,7 @@ class CompileStyleSheet():
     ########################################################################
     ## APPLY COMPILED STYLESHEET
     ########################################################################
-    def applyCompiledSass(self):
+    def applyCompiledSass(self, generateIcons: bool = True):
         settings = QSettings()
         
         qcss_folder = os.path.abspath(os.path.join(os.getcwd(), 'Qss/scss'))
@@ -123,7 +123,7 @@ class CompileStyleSheet():
         palette.setColor(QPalette.HighlightedText, QColor(self.theme.COLOR_ACCENT_1))
 
         # Apply the palette to the main window
-        # self.setPalette(palette)
+        self.setPalette(palette)
 
         app.setPalette(palette)
 
@@ -140,32 +140,33 @@ class CompileStyleSheet():
             self.isThemeDark = False  # Light theme
             
         
-        ########################################################################
-        ## GENERATE NEW ICONS
-        # START WORKER
-        # CURRENT THEME ICONS
-        color = CreateColorVariable.getCurrentThemeInfo(self)
-        normal_color = str(color["icons-color"])
-        icons_folder = normal_color.replace("#", "")
-        self.themeEngine.applyIcons(self, folder=icons_folder)
+        if generateIcons:
+            ########################################################################
+            ## GENERATE NEW ICONS
+            # START WORKER
+            # CURRENT THEME ICONS
+            color = CreateColorVariable.getCurrentThemeInfo(self)
+            normal_color = str(color["icons-color"])
+            icons_folder = normal_color.replace("#", "")
+            self.themeEngine.applyIcons(self, folder=icons_folder)
 
-        self.iconsWorker = Worker(self.compileSassTheme)
-        self.iconsWorker.signals.result.connect(WorkerResponse.print_output)
-        self.iconsWorker.signals.finished.connect(lambda: self.themeEngine.applyIcons(self, folder=icons_folder))
-        self.iconsWorker.signals.progress.connect(self.sassCompilationProgress)
+            self.iconsWorker = Worker(self.compileSassTheme)
+            self.iconsWorker.signals.result.connect(WorkerResponse.print_output)
+            self.iconsWorker.signals.finished.connect(lambda: self.themeEngine.applyIcons(self, folder=icons_folder))
+            self.iconsWorker.signals.progress.connect(self.sassCompilationProgress)
 
-        # ALL THEME ICONS
-        self.allIconsWorker = Worker(self.makeAllIcons)
-        self.allIconsWorker.signals.result.connect(WorkerResponse.print_output)
-        self.allIconsWorker.signals.finished.connect(lambda: logInfo(self, "all icons have been checked and missing icons generated!"))
-        self.allIconsWorker.signals.progress.connect(self.sassCompilationProgress)
+            # ALL THEME ICONS
+            self.allIconsWorker = Worker(self.makeAllIcons)
+            self.allIconsWorker.signals.result.connect(WorkerResponse.print_output)
+            self.allIconsWorker.signals.finished.connect(lambda: logInfo(self, "all icons have been checked and missing icons generated!"))
+            self.allIconsWorker.signals.progress.connect(self.sassCompilationProgress)
 
-        
-        if not settings.value("ICONS-COLOR") == normal_color and color["icons-color"] is not None:     
-            # Execute
-            self.customWidgetsThreadpool.start(self.iconsWorker)
-        else:
-            self.customWidgetsThreadpool.start(self.allIconsWorker)
+            
+            if not settings.value("ICONS-COLOR") == normal_color and color["icons-color"] is not None:     
+                # Execute
+                self.customWidgetsThreadpool.start(self.iconsWorker)
+            else:
+                self.customWidgetsThreadpool.start(self.allIconsWorker)
         
 
 ########################################################################

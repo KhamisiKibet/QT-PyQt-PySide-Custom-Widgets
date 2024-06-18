@@ -605,7 +605,7 @@ def applyJsonStyle(self, update = False):
                                         shadowYOffset = shadow["yOffset"]
 
                             if "autoHide" in floatPosition:
-                                if floatPosition["position"] == True:
+                                if floatPosition["autoHide"] == True:
                                     autoHide = True
                                 else:
                                     autoHide = False
