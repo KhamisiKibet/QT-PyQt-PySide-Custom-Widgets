@@ -27,8 +27,6 @@ The examples folder in this repository contains a few code examples you can use 
 Please read the required [**project structure**](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/new-features#version-069) and other important updates [here](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/new-features) before proceeding.
 
 ## Documentation:
-
-- Available custom widgets:
    
 - Available custom widgets:
     - [`AnalogGaugeWidget`](https://khamisikibet.github.io/Docs-QT-PyQt-PySide-Custom-Widgets/docs/widgets/custom-analog-gauge)
