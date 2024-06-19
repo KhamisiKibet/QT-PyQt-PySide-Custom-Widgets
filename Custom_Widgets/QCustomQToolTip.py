@@ -464,8 +464,12 @@ class AutoPositionQCustomQToolTipManager(QCustomQToolTipManager):
 
 
         # Calculate the relative position of the mouse
-        rel_x = target_pos.x() / target_rect.width()
-        rel_y = target_pos.y() / target_rect.height()
+        try:
+            rel_x = target_pos.x() / target_rect.width()
+            rel_y = target_pos.y() / target_rect.height()
+        except:
+            # division by 0
+            return "top-center" 
 
         # Check if the mouse position is within any of the spaces
         top = False

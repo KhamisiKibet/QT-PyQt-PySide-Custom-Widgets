@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'tooltiphayUYm.ui'
+## Form generated from reading UI file 'tooltipWbsliR.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.1
+## Created by: Qt User Interface Compiler version 6.7.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from qtpy.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
     QMetaObject, QObject, QPoint, QRect,
     QSize, QTime, QUrl, Qt)
-from qtpy.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from qtpy.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
+from PySide6.QtWidgets import (QApplication, QFrame, QHBoxLayout, QLabel,
     QSizePolicy, QVBoxLayout, QWidget)
 
 class Ui_Form(object):
@@ -32,8 +32,8 @@ class Ui_Form(object):
         self.verticalLayout.setContentsMargins(5, 5, 5, 5)
         self.frame = QFrame(Form)
         self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
+        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout = QHBoxLayout(self.frame)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -44,11 +44,11 @@ class Ui_Form(object):
         self.iconlabel.setMaximumSize(QSize(20, 20))
         self.iconlabel.setScaledContents(True)
 
-        self.horizontalLayout.addWidget(self.iconlabel, 0, Qt.AlignLeft)
+        self.horizontalLayout.addWidget(self.iconlabel, 0, Qt.AlignmentFlag.AlignLeft)
 
         self.titlelabel = QLabel(self.frame)
         self.titlelabel.setObjectName(u"titlelabel")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.titlelabel.sizePolicy().hasHeightForWidth())
@@ -59,10 +59,10 @@ class Ui_Form(object):
         self.titlelabel.setFont(font1)
         self.titlelabel.setWordWrap(True)
 
-        self.horizontalLayout.addWidget(self.titlelabel)
+        self.horizontalLayout.addWidget(self.titlelabel, 0, Qt.AlignmentFlag.AlignLeft)
 
 
-        self.verticalLayout.addWidget(self.frame)
+        self.verticalLayout.addWidget(self.frame, 0, Qt.AlignmentFlag.AlignHCenter)
 
 
         self.retranslateUi(Form)

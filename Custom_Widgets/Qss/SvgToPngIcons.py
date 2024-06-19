@@ -124,7 +124,7 @@ class NewIconsGenerator(QObject):
             # qrc_output_path = qrc_output_path.replace("Qss\\", "") #windows
             # NewIconsGenerator.qrcToPy(qrc_file_path, qrc_output_path)
 
-    def generateNewIcons(self, progress_callback):  
+    def generateNewIcons(self, progress_callback): 
         # Icons color
         color = CreateColorVariable.getCurrentThemeInfo(self)
         normal_color = str(color["icons-color"])
@@ -138,6 +138,10 @@ class NewIconsGenerator(QObject):
             iconsFolderName = normal_color.replace("#", "")
             self.themeEngine.applyIcons(self, folder=iconsFolderName)
 
+            if not self.checkForMissingicons:
+                # emit 100% progress
+                progress_callback.emit(100)
+                return 
             # Create normal icons
             NewIconsGenerator.generateIcons(progress_callback, normal_color, "", iconsFolderName, createQrc = False)
 

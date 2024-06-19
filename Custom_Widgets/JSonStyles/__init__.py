@@ -102,7 +102,6 @@ def applyJsonStyle(self, update = False):
                 else:
                     self.applicationName = ""
 
-
                 if "OrginizationDormain" in settings['AppSettings'] and len(str(appSettings["OrginizationDormain"])) > 0:
                     self.orginazationDomain = str(appSettings["OrginizationDormain"]).replace(" ", "")
                 else:
@@ -174,6 +173,7 @@ def applyJsonStyle(self, update = False):
             darkTheme.defaultTheme = False
             darkTheme.createNewIcons = True
             themes.append(darkTheme)
+
         if not hasattr(self.ui, "LIGHT"):
             setattr(self.ui, "LIGHT", Object())
             lightTheme = getattr(self.ui, "LIGHT")
@@ -181,12 +181,11 @@ def applyJsonStyle(self, update = False):
             lightTheme.defaultTheme = False
             lightTheme.createNewIcons = True
             themes.append(lightTheme)
-
-        # QAppSettings.updateAppSettings(self)
             
     if update:
+        # create theme color variables(check Qss\scss\_variables.scss file inside your project folder)
         CreateColorVariable.CreateVariables(self)
-
+    
     ## QCARDS
     if "QCard" in data:
         for QCard in data['QCard']:
@@ -272,8 +271,6 @@ def applyJsonStyle(self, update = False):
 
                 if update:
                     self.checkButtonGroup(button = btn)
-
-
 
     ## ANALOG GAUGE WIDGET
     if "AnalogGaugeWidget" in data:
@@ -767,7 +764,6 @@ def applyJsonStyle(self, update = False):
                                     raise Exception(str(toggleButton["buttonName"])+" toggle button could not be found")
                     if not update:
                         containerWidget.refresh()
-
 
                 else:
                     raise Exception(str(QCustomSlideMenu["name"])+" is not a QCustomSlideMenu, no widget found")

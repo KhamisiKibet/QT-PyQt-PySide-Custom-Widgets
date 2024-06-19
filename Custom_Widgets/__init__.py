@@ -200,7 +200,6 @@ class QMainWindow(QMainWindow):
             var_pattern = re.escape(var)
             # Replace the variable with its corresponding value
             stylesheet = re.sub(var_pattern, value, stylesheet)
-            
         return stylesheet
     
     def getThemeVariableValue(self, color_variable):

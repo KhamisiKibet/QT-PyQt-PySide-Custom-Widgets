@@ -438,7 +438,7 @@ class QSsFileMonitor():
             QAppSettings.updateAppSettings(self, generateIcons = False, reloadJson = True)
         else:
             # Apply compiled stylesheet
-            QAppSettings.updateAppSettings(self, generateIcons = False)
+            QAppSettings.updateAppSettings(self, generateIcons = False, reloadJson = False)
 
     def stop_qss_file_listener(self):
         if hasattr(self, 'qss_watcher'):

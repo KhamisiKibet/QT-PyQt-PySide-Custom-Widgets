@@ -26,7 +26,7 @@ class QAppSettings():
         ## CREATE APP SETTINGS
         ########################################################################
 
-    def updateAppSettings(self, generateIcons: bool = True, reloadJson: bool = False):
+    def updateAppSettings(self, generateIcons: bool = True, reloadJson: bool = True):
 
         if len(str(self.orginazationName)) > 0:
             QCoreApplication.setOrganizationName(str(self.orginazationName))
@@ -49,6 +49,7 @@ class QAppSettings():
         #######################################################################
         if reloadJson:
             self.reloadJsonStyles(update = True)
+            
         CompileStyleSheet.applyCompiledSass(self, generateIcons = generateIcons)
 
 
