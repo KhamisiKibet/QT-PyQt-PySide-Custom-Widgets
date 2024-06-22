@@ -20,7 +20,7 @@ pip install --upgrade QT-PyQt-PySide-Custom-Widgets
 # Testing
 The examples folder in this repository contains a few code examples you can use to test and learn about the custom widgets.
 
-![QCustomArcLoader GIF](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/raw/main/images/custom-perlin-loader.gif)
+![QCustomArcLoader GIF](https://github.com/KhamisiKibet/Docs-QT-PyQt-PySide-Custom-Widgets/raw/main/images/24-modern-ui.gif)
 
 # How to use it.
 
